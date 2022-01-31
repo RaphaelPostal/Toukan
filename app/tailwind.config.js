@@ -4,7 +4,9 @@ module.exports = {
     theme: {
         colors: {
             'toukan' : '#F49B22',
-            'toukan-dark' : '#F28E0C'
+            'toukan-dark' : '#F28E0C',
+            'dark-gray' : '#2E2E2E',
+            'light-gray' : '#EDEDED',
         },
         extend: {},
         fontFamily: {
