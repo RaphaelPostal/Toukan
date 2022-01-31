@@ -32,7 +32,7 @@ class Table
     private $numero;
 
     /**
-     * @ORM\OneToMany(targetEntity=Commande::class, mappedBy="num_table")
+     * @ORM\OneToMany(targetEntity=Commande::class, mappedBy="table")
      */
     private $commandes;
 
@@ -82,7 +82,7 @@ class Table
     {
         if (!$this->commandes->contains($commande)) {
             $this->commandes[] = $commande;
-            $commande->setNumTable($this);
+            $commande->setTable($this);
         }
 
         return $this;
@@ -92,8 +92,8 @@ class Table
     {
         if ($this->commandes->removeElement($commande)) {
             // set the owning side to null (unless already changed)
-            if ($commande->getNumTable() === $this) {
-                $commande->setNumTable(null);
+            if ($commande->getTable() === $this) {
+                $commande->setTable(null);
             }
         }
 
