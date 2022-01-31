@@ -32,11 +32,6 @@ class CommandeProduit
      */
     private $quantite;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $modification;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -74,18 +69,6 @@ class CommandeProduit
     public function setQuantite(int $quantite): self
     {
         $this->quantite = $quantite;
-
-        return $this;
-    }
-
-    public function getModification(): ?string
-    {
-        return $this->modification;
-    }
-
-    public function setModification(?string $modification): self
-    {
-        $this->modification = $modification;
 
         return $this;
     }
