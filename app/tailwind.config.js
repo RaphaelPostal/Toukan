@@ -4,11 +4,15 @@ module.exports = {
     theme: {
         colors: {
             'toukan' : '#F49B22',
-            'toukan-dark' : '#F28E0C'
+            'toukan-dark' : '#D68402',
+            'toukan-white' : '#FFEDD0',
+            'dark-gray' : '#2E2E2E',
+            'light-gray' : '#EDEDED',
+            'salmon' : '#FFDED0'
         },
         extend: {},
         fontFamily: {
-            toukan: ['Karla', 'sans-serif'],
+            base: ['Karla', 'sans-serif'],
         },
     },
     variants: {
