@@ -8,6 +8,7 @@
            and uncomment the following Encore helpers to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         {% endblock %}
 
         {% block javascripts %}
@@ -15,7 +16,15 @@
         {% endblock %}
     </head>
     <body class="{{ app.request.attributes.get('_route') == 'home' ? 'bg-salmon' }}">
-        <nav></nav>
+        <nav class="w-full flex justify-evenly text-light-grey py-2">
+            <div class="flex flex-row justify-evenly items-center bg-toukan w-1/6 rounded-2xl">
+                <img class="w-1/6" src="{{ asset("assets/img/toukan_sans_fond.png") }}">
+                <span>Toukan</span>
+            </div>
+            <div class="flex flex-row justify-center items-center bg-toukan w-1/6 rounded-2xl">
+                <a href="{{ path('home') }}">Mon Espace</a>
+            </div>
+        </nav>
         <div class="px-12">
             {% block body %}{% endblock %}
         </div>
