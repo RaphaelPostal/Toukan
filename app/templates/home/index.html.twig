@@ -3,9 +3,45 @@
 {% block title %}Accueil - Toukan{% endblock %}
 
 {% block body %}
-    <h1 class="text-toukan title-etablissement-app text-center">Toukan</h1>
-    <p class="text-base-app">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi eius excepturi impedit laboriosam magni officia provident quaerat quos, temporibus! Ad aperiam beatae fuga necessitatibus nemo obcaecati odio possimus ratione veniam.</p>
-    <p class="text-base-back">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi eius excepturi impedit laboriosam magni officia provident quaerat quos, temporibus! Ad aperiam beatae fuga necessitatibus nemo obcaecati odio possimus ratione veniam.</p>
+    <section class="flex flex-row justify-between py-10">
+        <div class="w-4/6 pr-8">
+            <p class="text-base-back pb-4">Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression.</p>
+            <p class="text-base-back pb-4">Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu</p>
+            <div class="flex w-full justify-end items-center">
+                <div class="flex justify-center items-center bg-toukan w-52 h-8 rounded-3xl text-toukan-white">
+                    <a href="">S'abonner</a>
+                </div>
+            </div>
+        </div>
+        <div class="w-2/6 flex justify-center">
+            <img class="w-1/2" src="{{ asset('assets/img/mobile_and_meuf.svg') }}">
+        </div>
+    </section>
+    <section class="flex flex-row justify-between py-10">
+        <div class="w-1/4 flex flex-col bg-toukan-white rounded-2xl p-8">
+            <img class="h-1/2" src="{{ asset('assets/img/burger_and_mec.svg') }}">
+            <hr class="my-8">
+            <p class="text-base-back pb-4">Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu</p>
+        </div>
+        <div class="w-1/4 flex flex-col bg-toukan-white rounded-2xl p-8">
+            <img class="h-1/2" src="{{ asset('assets/img/la_maxi_binouze.svg') }}">
+            <hr class="my-8">
+            <p class="text-base-back pb-4">Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu</p>
+        </div>
+        <div class="w-1/4 flex flex-col bg-toukan-white rounded-2xl p-8">
+            <img class="h-1/2" src="{{ asset('assets/img/le_mec_toque.svg') }}">
+            <hr class="my-8">
+            <p class="text-base-back pb-4">Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu</p>
+        </div>
+    </section>
+    <section class="flex flex-row justify-center py-10">
+        <div class="w-2/6 flex justify-center items-center pr-8">
+            <p class="font-bold text-3xl"><span class="text-toukan">153</span> établissements nous font confiance partout en France</p>
+        </div>
+        <div class="w-2/6 flex justify-center">
+            <img class="w-1/2" src="{{ asset('assets/img/serrage_de_main.svg') }}">
+        </div>
+    </section>
 {% endblock %}
 
 
