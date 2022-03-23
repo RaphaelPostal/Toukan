@@ -1,0 +1,11 @@
+body {
+    @apply font-base !important;
+}
+
+.text-base-app {
+    font-size: 14px;
+}
+
+.text-base-back {
+    font-size: 18px;
+}

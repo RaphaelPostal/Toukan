@@ -3,3 +3,6 @@
 @import "~tailwindcss/utilities.css";
 
 @import url('https://fonts.googleapis.com/css2?family=Karla&display=swap');
+
+/*Dans ce fichier se trouvent les classes prédéfinies pour chaque type texte*/
+@import "font-class.css";
