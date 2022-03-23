@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:8.1-apache
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
 \
@@ -15,7 +15,7 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
 \
     &&  curl -sS https://get.symfony.com/cli/installer | bash \
     &&  mv /root/.symfony/bin/symfony /usr/local/bin \
-\ 
+\
     &&  docker-php-ext-configure \
             intl \
     &&  docker-php-ext-install \
@@ -24,9 +24,13 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     &&  pecl install apcu && docker-php-ext-enable apcu
 
 RUN curl https://deb.nodesource.com/setup_12.x | bash
-RUN curl https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
-RUN apt-get update && apt-get install -y nodejs yarn postgresql-client
+RUN apt-get update && apt-get install -y nodejs postgresql-client cron
+
+COPY cronjobs/cronjobs /etc/cron.d/cronjobs
+RUN chmod 0744 /etc/cron.d/cronjobs && crontab /etc/cron.d/cronjobs
+
+COPY init.sh /var/init.sh
+ENTRYPOINT ["bash", "/var/init.sh"]
 
 WORKDIR /var/www/
