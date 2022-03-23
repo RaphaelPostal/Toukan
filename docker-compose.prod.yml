@@ -3,6 +3,7 @@ services:
     db:
         image: mysql
         container_name: db_docker_toukan
+        restart: always
         volumes:
             - toukan-db-data:/var/lib/mysql
         environment:
@@ -25,18 +26,10 @@ services:
         networks:
             - dev
 
-    maildev:
-        image: maildev/maildev
-        container_name: maildev_docker_toukan
-        command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
-        ports:
-            - "8081:80"
-        networks:
-            - dev
-
     www:
         build: docker/php
         container_name: www_docker_toukan
+        restart: always
         ports:
             - "8080:80"
         volumes:
