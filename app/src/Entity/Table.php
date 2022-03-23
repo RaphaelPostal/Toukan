@@ -21,24 +21,24 @@ class Table
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Etablissement::class, inversedBy="tables")
+     * @ORM\ManyToOne(targetEntity=Establishment::class, inversedBy="tables")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $etablissement;
+    private $establishment;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="integer")
      */
-    private $numero;
+    private $number;
 
     /**
-     * @ORM\OneToMany(targetEntity=Commande::class, mappedBy="table")
+     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="establishmentTable", orphanRemoval=true)
      */
-    private $commandes;
+    private $orders;
 
     public function __construct()
     {
-        $this->commandes = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -46,54 +46,54 @@ class Table
         return $this->id;
     }
 
-    public function getEtablissement(): ?Etablissement
+    public function getEstablishment(): ?Establishment
     {
-        return $this->etablissement;
+        return $this->establishment;
     }
 
-    public function setEtablissement(?Etablissement $etablissement): self
+    public function setEstablishment(?Establishment $establishment): self
     {
-        $this->etablissement = $etablissement;
+        $this->establishment = $establishment;
 
         return $this;
     }
 
-    public function getNumero(): ?string
+    public function getNumber(): ?int
     {
-        return $this->numero;
+        return $this->number;
     }
 
-    public function setNumero(?string $numero): self
+    public function setNumber(int $number): self
     {
-        $this->numero = $numero;
+        $this->number = $number;
 
         return $this;
     }
 
     /**
-     * @return Collection|Commande[]
+     * @return Collection<int, Order>
      */
-    public function getCommandes(): Collection
+    public function getOrders(): Collection
     {
-        return $this->commandes;
+        return $this->orders;
     }
 
-    public function addCommande(Commande $commande): self
+    public function addOrder(Order $order): self
     {
-        if (!$this->commandes->contains($commande)) {
-            $this->commandes[] = $commande;
-            $commande->setTable($this);
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->setEstablishmentTable($this);
         }
 
         return $this;
     }
 
-    public function removeCommande(Commande $commande): self
+    public function removeOrder(Order $order): self
     {
-        if ($this->commandes->removeElement($commande)) {
+        if ($this->orders->removeElement($order)) {
             // set the owning side to null (unless already changed)
-            if ($commande->getTable() === $this) {
-                $commande->setTable(null);
+            if ($order->getEstablishmentTable() === $this) {
+                $order->setEstablishmentTable(null);
             }
         }
 

@@ -2,30 +2,30 @@
 
 namespace App\Repository;
 
-use App\Entity\Table;
+use App\Entity\Card;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Table|null find($id, $lockMode = null, $lockVersion = null)
- * @method Table|null findOneBy(array $criteria, array $orderBy = null)
- * @method Table[]    findAll()
- * @method Table[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Card|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Card|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Card[]    findAll()
+ * @method Card[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TableRepository extends ServiceEntityRepository
+class CardRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Table::class);
+        parent::__construct($registry, Card::class);
     }
 
     /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(Table $entity, bool $flush = true): void
+    public function add(Card $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
         if ($flush) {
@@ -37,7 +37,7 @@ class TableRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(Table $entity, bool $flush = true): void
+    public function remove(Card $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
         if ($flush) {
@@ -46,15 +46,15 @@ class TableRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return Table[] Returns an array of Table objects
+    //  * @return Card[] Returns an array of Card objects
     //  */
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.exampleField = :val')
             ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
+            ->orderBy('c.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
@@ -63,10 +63,10 @@ class TableRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Table
+    public function findOneBySomeField($value): ?Card
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()

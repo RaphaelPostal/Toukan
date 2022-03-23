@@ -38,13 +38,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Etablissement::class, inversedBy="users")
+     * @ORM\ManyToMany(targetEntity=Establishment::class, mappedBy="users")
      */
-    private $etablissement;
+    private $establishments;
 
     public function __construct()
     {
-        $this->etablissement = new ArrayCollection();
+        $this->establishments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -137,25 +137,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|Etablissement[]
+     * @return Collection<int, Establishment>
      */
-    public function getEtablissement(): Collection
+    public function getEstablishments(): Collection
     {
-        return $this->etablissement;
+        return $this->establishments;
     }
 
-    public function addEtablissement(Etablissement $etablissement): self
+    public function addEstablishment(Establishment $establishment): self
     {
-        if (!$this->etablissement->contains($etablissement)) {
-            $this->etablissement[] = $etablissement;
+        if (!$this->establishments->contains($establishment)) {
+            $this->establishments[] = $establishment;
+            $establishment->addUser($this);
         }
 
         return $this;
     }
 
-    public function removeEtablissement(Etablissement $etablissement): self
+    public function removeEstablishment(Establishment $establishment): self
     {
-        $this->etablissement->removeElement($etablissement);
+        if ($this->establishments->removeElement($establishment)) {
+            $establishment->removeUser($this);
+        }
 
         return $this;
     }
