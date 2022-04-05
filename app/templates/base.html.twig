@@ -17,12 +17,14 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body class="{{ app.request.attributes.get('_route') == 'home' ? 'bg-salmon' }} md:px-20 px-2">
+    <body class="{{ app.request.attributes.get('_route') == 'home' ? 'bg-salmon' }}">
 
     {% include 'home/navbar.html.twig' %}
 
-        <main>
+        <main class="md:px-20 px-4">
             {% block body %}{% endblock %}
         </main>
+
+    {% include 'home/footer.html.twig' %}
     </body>
 </html>
