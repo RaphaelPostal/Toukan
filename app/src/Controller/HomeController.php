@@ -18,6 +18,18 @@ class HomeController extends AbstractController
         ]);
     }
 
+    //create route to register user in database
+
+    /**
+     * @Route("/register", name="register")
+     */
+    public function register(): Response
+    {
+        return $this->render('home/register.html.twig', [
+            'controller_name' => 'HomeController',
+        ]);
+    }
+
     /**
      * @Route("/profile", name="profile")
      */
