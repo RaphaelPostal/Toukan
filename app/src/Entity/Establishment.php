@@ -40,9 +40,9 @@ class Establishment
     private $phone;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="establishments")
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="establishment")
      */
-    private $users;
+    private $user;
 
     /**
      * @ORM\OneToMany(targetEntity=Card::class, mappedBy="establishment", orphanRemoval=true)
@@ -56,7 +56,6 @@ class Establishment
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
         $this->cards = new ArrayCollection();
         $this->tables = new ArrayCollection();
     }
@@ -117,23 +116,14 @@ class Establishment
     /**
      * @return Collection<int, User>
      */
-    public function getUsers(): Collection
+    public function getUser(): Collection
     {
-        return $this->users;
+        return $this->user;
     }
 
-    public function addUser(User $user): self
+    public function setUser(User $user): self
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        $this->users->removeElement($user);
+        $this->user = $user;
 
         return $this;
     }
