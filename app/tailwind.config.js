@@ -13,6 +13,7 @@ module.exports = {
             yellow: colors.amber,
             green: colors.green,
             blue: colors.blue,
+
             'toukan' : '#F49B22',
             'toukan-dark' : '#D68402',
             'toukan-white' : '#FFEDD0',
