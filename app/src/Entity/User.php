@@ -38,14 +38,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Etablissement::class, inversedBy="users")
+     * @ORM\OneToOne(targetEntity=Establishment::class, mappedBy="user")
      */
-    private $etablissement;
-
-    public function __construct()
-    {
-        $this->etablissement = new ArrayCollection();
-    }
+    private $establishment;
 
     public function getId(): ?int
     {
@@ -137,25 +132,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|Etablissement[]
+     * @return Collection<int, Establishment>
      */
-    public function getEtablissement(): Collection
+    public function getEstablishment(): Collection
     {
-        return $this->etablissement;
+        return $this->establishment;
     }
 
-    public function addEtablissement(Etablissement $etablissement): self
+    public function setEstablishment(Establishment $establishment): self
     {
-        if (!$this->etablissement->contains($etablissement)) {
-            $this->etablissement[] = $etablissement;
+        $this->establishment = $establishment;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $establishment->getUser()) {
+            $establishment->setUser($this);
         }
-
-        return $this;
-    }
-
-    public function removeEtablissement(Etablissement $etablissement): self
-    {
-        $this->etablissement->removeElement($etablissement);
 
         return $this;
     }
