@@ -13,6 +13,7 @@ class CardController extends AbstractController
 {
     /**
      * @param EntityManagerInterface $entityManager
+     * @param CardRepository $cardRepository
      * @return Response
      */
     #[Route('', name: 'establishment_card_index')]
