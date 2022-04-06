@@ -28,6 +28,7 @@ class OrderController extends AbstractController
             'tableId' => $tableId,
             'order' => $order,
             'productOrders' => $productOrders,
+            'total' => 0
         ]);
     }
 
