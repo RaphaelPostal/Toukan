@@ -3,10 +3,36 @@
 {% block title %}Ma carte{% endblock %}
 
 {% block body %}
-    <h1>Ma carte</h1>
-    <table>
-        <tr>
-            <td></td>
-        </tr>
-    </table>
+    <h1 class="border-2 border-gray-300">Ma carte</h1>
+    {% for section in card.sections %}
+        <table>
+            <tr>
+                {{ section.title }}
+            </tr>
+            <tr>
+                Ajouter un produit
+            </tr>
+            <tr>
+                Modifier
+            </tr>
+            <tr>
+                Supprimer
+            </tr>
+            <tbody>
+            {% for product in section.products %}
+                <tr>
+                    <td>
+                        {{ product.title }}
+                    </td>
+                    <td>
+                        Modifier
+                    </td>
+                    <td>
+                        Supprimer
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
 {% endblock %}

@@ -11,6 +11,8 @@ module.exports = {
             indigo: colors.indigo,
             red: colors.rose,
             yellow: colors.amber,
+            green: colors.green,
+            blue: colors.blue,
 
             'toukan' : '#F49B22',
             'toukan-dark' : '#D68402',
@@ -23,6 +25,9 @@ module.exports = {
         fontFamily: {
             base: ['Karla', 'sans-serif'],
         },
+        plugins: [
+            require('@tailwindcss/forms'),
+        ],
     },
     variants: {
         extend: {},
