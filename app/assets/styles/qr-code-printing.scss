@@ -1,0 +1,14 @@
+body {
+  height: 297mm;
+  width: 210mm;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  #qr-code-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 2rem;
+  }
+}

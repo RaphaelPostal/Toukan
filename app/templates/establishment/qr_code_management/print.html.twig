@@ -1,0 +1,54 @@
+{% extends 'base_printing.html.twig' %}
+
+{% block title %}QR Code printing page{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <link rel="stylesheet" href="{{ asset("build/qr-code-printing.css") }}">
+{% endblock %}
+
+{% block body %}
+    <div id="qr-code-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded',()=>{
+            for (let i = 1; i < 15; i++) {
+                const qrCode = new QRCodeStyling({
+                    width: 190,
+                    height: 190,
+                    type: "svg",
+                    data: "https://toukan.fr/restaurant/teamjb/table/"+i,
+                    image: "{{ absolute_url(asset('assets/img/toukan_orange.png')) }}",
+                    qrOptions:{
+                        errorCorrectionLevel:"H"
+                    },
+                    dotsOptions: {
+                        color: "#F49B22",
+                        type: "dots"
+                    },
+                    cornersSquareOptions:{
+                        type:"extra-rounded",
+                        color:"#F49B22"
+                    },
+                    cornersDotOptions:{
+                        type:"dot",
+                        color:"#F49B22"
+                    },
+                    backgroundOptions: {
+                        color: "white",
+                    },
+                    imageOptions: {
+                        crossOrigin: "anonymous",
+                        margin: 0,
+                        imageSize:0.5,
+                    }
+                })
+
+                qrCode.append(document.getElementById('qr-code-container'))
+            }
+            setTimeout(()=>{
+                window.print()
+            },1000)
+        })
+    </script>
+{% endblock %}
