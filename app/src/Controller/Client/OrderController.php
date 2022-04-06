@@ -48,4 +48,27 @@ class OrderController extends AbstractController
             'orderId' => $orderId,
         ]);
     }
+
+    //update quantity of productOrder
+    #[Route('/client/establishment/{establishmentId}/table/{tableId}/order/{orderId}/product/{productOrderId}/quantity/{quantityAction}', name: 'client_order_update_product_quantity')]
+    public function updateProductQuantity(EntityManagerInterface $em, ProductOrderRepository $productOrderRepository,
+                                          $establishmentId,
+                                          $tableId,
+                                          $orderId,
+                                          $productOrderId,
+                                          $quantityAction): Response
+    {
+        $productOrder = $productOrderRepository->findOneById($productOrderId);
+        if($quantityAction == 'add'){
+            $productOrder->setQuantity($productOrder->getQuantity() + 1);
+        } else {
+            $productOrder->setQuantity($productOrder->getQuantity() - 1);
+        }
+        $em->flush();
+        return $this->redirectToRoute('client_order_basket', [
+            'establishmentId' => $establishmentId,
+            'tableId' => $tableId,
+            'orderId' => $orderId,
+        ]);
+    }
 }

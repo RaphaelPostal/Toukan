@@ -5,6 +5,9 @@
 {% block body %}
     {% for productOrder in productOrders %}
         {{ productOrder.getProduct().getTitle() }}
+        <a href=" {{ path('client_order_update_product_quantity', {'establishmentId': establishmentId, 'tableId': tableId, 'orderId': order.id, 'productOrderId': productOrder.getId(), 'quantityAction': 'remove' }) }}">-</a>
+        {{ productOrder.getQuantity() }}
+        <a href=" {{ path('client_order_update_product_quantity', {'establishmentId': establishmentId, 'tableId': tableId, 'orderId': order.id, 'productOrderId': productOrder.getId(), 'quantityAction': 'add' }) }}">+</a>
         <a href=" {{ path('client_order_remove_product', {'establishmentId': establishmentId, 'tableId': tableId, 'orderId': order.id, 'productOrderId': productOrder.getId()}) }}">Supprimer</a><br>
     {% endfor %}
 {% endblock %}
