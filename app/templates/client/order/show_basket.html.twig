@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello OrderController!{% endblock %}
+
+{% block body %}
+    {% for productOrder in productOrders %}
+        {{ productOrder.getProduct().getTitle() }}
+        <a href=" {{ path('client_order_remove_product', {'establishmentId': establishmentId, 'tableId': tableId, 'orderId': order.id, 'productOrderId': productOrder.getId()}) }}">Supprimer</a><br>
+    {% endfor %}
+{% endblock %}
