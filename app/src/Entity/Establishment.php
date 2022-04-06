@@ -114,9 +114,9 @@ class Establishment
     }
 
     /**
-     * @return Collection<int, User>
+     * @return User|null
      */
-    public function getUser(): Collection
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -129,9 +129,9 @@ class Establishment
     }
 
     /**
-     * @return Collection<int, Card>
+     * @return Card|null
      */
-    public function getCard(): Collection
+    public function getCard(): ?Card
     {
         return $this->card;
     }
