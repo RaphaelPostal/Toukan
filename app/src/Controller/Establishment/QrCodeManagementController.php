@@ -19,6 +19,6 @@ class QrCodeManagementController extends AbstractController
     #[Route('/qr-code/print', name: 'app_qr_code_management')]
     public function printQrCode(): Response
     {
-        return $this->render('establishment/qr_code_management/print.html.twig', []);
+        return $this->render('establishment/qr_code_management/print.html.twig', ['establishmentId' => 1]);
     }
 }

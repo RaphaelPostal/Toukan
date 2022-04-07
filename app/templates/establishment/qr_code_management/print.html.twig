@@ -11,44 +11,50 @@
     <div id="qr-code-container"></div>
 
     <script>
-        document.addEventListener('DOMContentLoaded',()=>{
-            for (let i = 1; i < 15; i++) {
-                const qrCode = new QRCodeStyling({
-                    width: 190,
-                    height: 190,
-                    type: "svg",
-                    data: "https://toukan.fr/restaurant/teamjb/table/"+i,
-                    image: "{{ absolute_url(asset('assets/img/toukan_orange.png')) }}",
-                    qrOptions:{
-                        errorCorrectionLevel:"H"
-                    },
-                    dotsOptions: {
-                        color: "#F49B22",
-                        type: "dots"
-                    },
-                    cornersSquareOptions:{
-                        type:"extra-rounded",
-                        color:"#F49B22"
-                    },
-                    cornersDotOptions:{
-                        type:"dot",
-                        color:"#F49B22"
-                    },
-                    backgroundOptions: {
-                        color: "white",
-                    },
-                    imageOptions: {
-                        crossOrigin: "anonymous",
-                        margin: 0,
-                        imageSize:0.5,
-                    }
-                })
+        document.addEventListener('DOMContentLoaded',()=> {
+            fetch('{{ path("api_qr_code", {establishmentId: establishmentId}) }}')
+                .then(response => response.json())
+                .then(data => {
+                    let establishmentId = data.establishmentId;
+                    let establishmentImg = data.establishmentImg;
+                    let establishmentColor = data.establishmentColor;
+                    let qrCodeOptions = data.qrCodeOptions;
+                    let tables = data.tables;
 
-                qrCode.append(document.getElementById('qr-code-container'))
-            }
-            setTimeout(()=>{
-                window.print()
-            },1000)
+                    tables.forEach(tableId => {
+                        const qrCode = new QRCodeStyling({
+                            width: 500,
+                            height: 500,
+                            type: "canvas",
+                            data: `https://toukan.fr/restaurant/${establishmentId}/table/${tableId}`,
+                            image: establishmentImg,
+                            qrOptions: {
+                                errorCorrectionLevel: "H"
+                            },
+                            dotsOptions: {
+                                color: establishmentColor,
+                                type: qrCodeOptions.dotsOption
+                            },
+                            cornersSquareOptions: {
+                                type: qrCodeOptions.cornerSquareOption,
+                                color: establishmentColor
+                            },
+                            cornersDotOptions: {
+                                type: qrCodeOptions.cornerDotsOption,
+                                color: establishmentColor
+                            },
+                            backgroundOptions: {
+                                color: "white",
+                            },
+                            imageOptions: {
+                                crossOrigin: "anonymous",
+                                margin: 0,
+                                imageSize: 0.5,
+                            }
+                        })
+                        qrCode.append(document.getElementById('qr-code-container'))
+                    });
+                })
         })
     </script>
 {% endblock %}
