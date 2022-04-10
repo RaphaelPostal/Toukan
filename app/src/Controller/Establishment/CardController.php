@@ -33,4 +33,13 @@ class CardController extends AbstractController
             'card' => $card,
         ]);
     }
+
+    #[Route('/load', name: 'load_establishment_card')]
+    public function renderEstablishmentCard(CardRepository $cardRepository) :Response
+    {
+        $card = $cardRepository->find(1);
+        return $this->render('establishment/partials/card.html.twig', [
+            'card' => $card,
+        ]);
+    }
 }

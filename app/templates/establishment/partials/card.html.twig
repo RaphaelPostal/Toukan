@@ -1,33 +1,35 @@
-<div>
-    {% for section in card.sections %}
-        <table>
-            <tr>
-                {{ section.title }}
-            </tr>
-            <tr>
-                Ajouter un produit
-            </tr>
-            <tr>
-                Modifier
-            </tr>
-            <tr>
-                Supprimer
-            </tr>
-            <tbody>
-            {% for product in section.products %}
+<turbo-frame id="establishment-card">
+    <div>
+        {% for section in card.sections %}
+            <table>
                 <tr>
-                    <td>
-                        {{ product.title }}
-                    </td>
-                    <td>
-                        Modifier
-                    </td>
-                    <td>
-                        Supprimer
-                    </td>
+                    {{ section.title }}
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% endfor %}
-</div>
+                <tr>
+                    Ajouter un produit
+                </tr>
+                <tr>
+                    Modifier
+                </tr>
+                <tr>
+                    Supprimer
+                </tr>
+                <tbody>
+                {% for product in section.products %}
+                    <tr>
+                        <td>
+                            {{ product.title }}
+                        </td>
+                        <td>
+                            Modifier
+                        </td>
+                        <td>
+                            Supprimer
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    </div>
+</turbo-frame>

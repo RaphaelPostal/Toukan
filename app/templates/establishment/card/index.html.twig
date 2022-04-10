@@ -4,15 +4,16 @@
 
 {% block body %}
     <h1 class="border-2 border-gray-300">Ma carte</h1>
-    <div id="establishment-card">
-        {% include 'establishment/stream/card.stream.html.twig' with {'card' : card} %}
-    </div>
+    <turbo-frame id="establishment-card" src="{{ path('load_establishment_card') }}">
+        Chargement de la carte...
+    </turbo-frame>
 
     <button id="button-add-section" class="admin-button-add">Ajouter une section</button>
     <turbo-frame id="form-add-section">
 
     </turbo-frame>
 {#    <a href="{{ path('app_section_create') }}">Ajouter une section</a>#}
+
     <script>
         //onclick on button-add-section
         document.getElementById('button-add-section').onclick = function() {

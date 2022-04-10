@@ -15,14 +15,6 @@ use Symfony\UX\Turbo\TurboBundle;
 #[Route('/establishment/card/{card}/section')]
 class SectionController extends AbstractController
 {
-//    #[Route('/', name: 'app_section_index', methods: ['GET'])]
-//    public function index(SectionRepository $sectionRepository): Response
-//    {
-//        return $this->stream('establishment/section/index.html.twig', [
-//            'sections' => $sectionRepository->findAll(),
-//        ]);
-//    }
-
     #[Route('/create', name: 'app_section_create', methods: ['GET', 'POST'])]
     public function new(Request $request, SectionRepository $sectionRepository, Card $card): Response
     {
