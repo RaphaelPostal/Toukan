@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Product
 {
+
+    CONST TYPE_BOISSON = 'Boisson';
+    CONST TYPE_PLAT = 'Boisson';
+    CONST TYPE_MENU = 'Boisson';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -49,6 +54,21 @@ class Product
      * @ORM\ManyToOne(targetEntity=Section::class, inversedBy="products")
      */
     private $section;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $ingredients;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $allergens;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
 
     public function __construct()
     {
@@ -146,6 +166,42 @@ class Product
     public function setSection(?Section $section): self
     {
         $this->section = $section;
+
+        return $this;
+    }
+
+    public function getIngredients(): ?string
+    {
+        return $this->ingredients;
+    }
+
+    public function setIngredients(?string $ingredients): self
+    {
+        $this->ingredients = $ingredients;
+
+        return $this;
+    }
+
+    public function getAllergens(): ?string
+    {
+        return $this->allergens;
+    }
+
+    public function setAllergens(string $allergens): self
+    {
+        $this->allergens = $allergens;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

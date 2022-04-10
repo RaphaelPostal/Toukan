@@ -25,7 +25,7 @@ class Card
     private $products;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Establishment::class, inversedBy="cards")
+     * @ORM\OneToOne(targetEntity=Establishment::class, inversedBy="card")
      * @ORM\JoinColumn(nullable=false)
      */
     private $establishment;

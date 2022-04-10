@@ -40,14 +40,14 @@ class Establishment
     private $phone;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="establishments")
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="establishment")
      */
-    private $users;
+    private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=Card::class, mappedBy="establishment", orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity=Card::class, mappedBy="establishment")
      */
-    private $cards;
+    private $card;
 
     /**
      * @ORM\OneToMany(targetEntity=Table::class, mappedBy="establishment", orphanRemoval=true)
@@ -56,7 +56,6 @@ class Establishment
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
         $this->cards = new ArrayCollection();
         $this->tables = new ArrayCollection();
     }
@@ -115,57 +114,26 @@ class Establishment
     }
 
     /**
-     * @return Collection<int, User>
+     * @return User|null
      */
-    public function getUsers(): Collection
+    public function getUser(): ?User
     {
-        return $this->users;
+        return $this->user;
     }
 
-    public function addUser(User $user): self
+    public function setUser(User $user): self
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        $this->users->removeElement($user);
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Card>
+     * @return Card|null
      */
-    public function getCards(): Collection
+    public function getCard(): ?Card
     {
-        return $this->cards;
-    }
-
-    public function addCard(Card $card): self
-    {
-        if (!$this->cards->contains($card)) {
-            $this->cards[] = $card;
-            $card->setEstablishment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCard(Card $card): self
-    {
-        if ($this->cards->removeElement($card)) {
-            // set the owning side to null (unless already changed)
-            if ($card->getEstablishment() === $this) {
-                $card->setEstablishment(null);
-            }
-        }
-
-        return $this;
+        return $this->card;
     }
 
     /**
