@@ -18,7 +18,6 @@ class SectionController extends AbstractController
     #[Route('/create', name: 'app_section_create', methods: ['GET', 'POST'])]
     public function new(Request $request, SectionRepository $sectionRepository, Card $card): Response
     {
-
         $section = new Section();
         $section->setCard($card);
         $form = $this->createForm(SectionType::class, $section, [
@@ -28,6 +27,8 @@ class SectionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sectionRepository->add($section);
+            $this->addFlash('success', 'Section ajoutée !');
+
             if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
                 // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
                 $request->setRequestFormat(TurboBundle::STREAM_FORMAT);

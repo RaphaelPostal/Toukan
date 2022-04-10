@@ -30,6 +30,8 @@
                             data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body relative p-4">
+                    <div id="flash-messages">
+                    </div>
                     <turbo-frame id="form-add-section">
                     </turbo-frame>
                 </div>
@@ -57,6 +59,7 @@
                     //after 100ms, set the value of section_title input to null
                     setTimeout(function() {
                         document.getElementById('section_title').value = '';
+
                     }, 100);
                 }
             });
