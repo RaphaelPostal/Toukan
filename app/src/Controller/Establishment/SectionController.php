@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\UX\Turbo\TurboBundle;
 
 #[Route('/establishment/card/{card}/section')]
 class SectionController extends AbstractController
@@ -17,7 +18,7 @@ class SectionController extends AbstractController
 //    #[Route('/', name: 'app_section_index', methods: ['GET'])]
 //    public function index(SectionRepository $sectionRepository): Response
 //    {
-//        return $this->render('establishment/section/index.html.twig', [
+//        return $this->stream('establishment/section/index.html.twig', [
 //            'sections' => $sectionRepository->findAll(),
 //        ]);
 //    }
@@ -35,6 +36,11 @@ class SectionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sectionRepository->add($section);
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/card.stream.html.twig', ['card' => $card]);
+            }
             return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
         }
 
