@@ -9,14 +9,14 @@
 
 @layer components {
     .form-text {
-        @apply mt-1 block w-full border-b-2 border-toukan;
+        @apply mt-1 block w-full border-b-2 border-toukan !important;
     }
 
     .form-label {
-        @apply block mt-4 text-gray-500 tracking-wider text-sm font-bold;
+        @apply block mt-4 text-gray-500 tracking-wider text-sm font-bold !important;
     }
 
     .admin-button-add {
-        @apply bg-green
+        @apply bg-green !important;
     }
 }

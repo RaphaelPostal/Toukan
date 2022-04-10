@@ -13,11 +13,14 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
     </head>
     <body class="{{ app.request.attributes.get('_route') == 'home' ? 'bg-salmon' }}">
         <nav></nav>
         <div class="px-12">
             {% block body %}{% endblock %}
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
+
     </body>
 </html>
