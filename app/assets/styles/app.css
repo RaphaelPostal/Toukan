@@ -15,4 +15,8 @@
     .form-label {
         @apply block mt-4 text-gray-500 tracking-wider text-sm font-bold;
     }
+
+    .admin-button-add {
+        @apply bg-green
+    }
 }

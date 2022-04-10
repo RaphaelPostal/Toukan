@@ -42,7 +42,7 @@ class SectionController extends AbstractController
     #[Route('/{id}', name: 'app_section_show', methods: ['GET'])]
     public function show(Section $section): Response
     {
-        return $this->render('establishment/section/show.html.twig', [
+        return $this->render('section/show.html.twig', [
             'section' => $section,
         ]);
     }
@@ -58,7 +58,7 @@ class SectionController extends AbstractController
             return $this->redirectToRoute('app_section_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('establishment/section/edit.html.twig', [
+        return $this->renderForm('section/edit.html.twig', [
             'section' => $section,
             'form' => $form,
         ]);
