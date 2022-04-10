@@ -36,5 +36,7 @@
         </table>
     {% endfor %}
 
-    <button class="" onclick="">Ajouter une section</button>
+    <button id="button-add-section" class="admin-button-add">Ajouter une section</button>
+    <a href="{{ path('app_section_create') }}">Ajouter une section</a>
+    
 {% endblock %}
