@@ -2,6 +2,7 @@
 
 namespace App\Controller\Establishment;
 
+use App\Entity\Card;
 use App\Entity\Section;
 use App\Form\SectionType;
 use App\Repository\SectionRepository;
@@ -10,27 +11,31 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/establishment/card/section')]
+#[Route('/establishment/card/{card}/section')]
 class SectionController extends AbstractController
 {
-    #[Route('/', name: 'app_section_index', methods: ['GET'])]
-    public function index(SectionRepository $sectionRepository): Response
-    {
-        return $this->render('establishment/section/index.html.twig', [
-            'sections' => $sectionRepository->findAll(),
-        ]);
-    }
+//    #[Route('/', name: 'app_section_index', methods: ['GET'])]
+//    public function index(SectionRepository $sectionRepository): Response
+//    {
+//        return $this->render('establishment/section/index.html.twig', [
+//            'sections' => $sectionRepository->findAll(),
+//        ]);
+//    }
 
     #[Route('/create', name: 'app_section_create', methods: ['GET', 'POST'])]
-    public function new(Request $request, SectionRepository $sectionRepository): Response
+    public function new(Request $request, SectionRepository $sectionRepository, Card $card): Response
     {
+
         $section = new Section();
-        $form = $this->createForm(SectionType::class, $section);
+        $section->setCard($card);
+        $form = $this->createForm(SectionType::class, $section, [
+            'action' => $this->generateUrl('app_section_create', ['card' => $card->getId()]),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sectionRepository->add($section);
-            return $this->redirectToRoute('app_section_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('establishment/section/new.html.twig', [

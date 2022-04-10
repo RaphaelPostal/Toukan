@@ -37,6 +37,16 @@
     {% endfor %}
 
     <button id="button-add-section" class="admin-button-add">Ajouter une section</button>
-    <a href="{{ path('app_section_create') }}">Ajouter une section</a>
-    
+    <turbo-frame id="form-add-section">
+
+    </turbo-frame>
+{#    <a href="{{ path('app_section_create') }}">Ajouter une section</a>#}
+    <script>
+        //onclick on button-add-section
+        document.getElementById('button-add-section').onclick = function() {
+            //set src attribute of trubo-frame
+            document.getElementById('form-add-section').src = '{{ path('app_section_create', {'card' : card.id}) }}';
+        }
+    </script>
 {% endblock %}
+
