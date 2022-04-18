@@ -79,12 +79,18 @@ class SectionController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_section_delete', methods: ['POST'])]
-    public function delete(Request $request, Section $section, SectionRepository $sectionRepository): Response
+    public function delete(Request $request, Card $card, Section $section, SectionRepository $sectionRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$section->getId(), $request->request->get('_token'))) {
             $sectionRepository->remove($section);
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/card.stream.html.twig', ['card' => $card]);
+            }
         }
 
-        return $this->redirectToRoute('app_section_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
+
     }
 }

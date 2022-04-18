@@ -14,4 +14,12 @@
     #section div, #section label {
         @apply mt-0 !important;
     }
+
+    .admin-button-edit {
+        @apply bg-light-blue !important;
+    }
+
+    .admin-button-delete {
+        @apply bg-red !important;
+    }
 }
