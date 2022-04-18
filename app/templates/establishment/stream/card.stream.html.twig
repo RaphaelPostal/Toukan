@@ -11,8 +11,8 @@
 {#    </template>#}
 {#</turbo-stream>#}
 
-<turbo-stream action="update" target="form-add-section">
+<turbo-stream action="update" target="form-create-section">
     <template>
-        <p>C BON</p>
+        {{ render(controller('App\\Controller\\Establishment\\SectionController::new', {card:card.id})) }}
     </template>
 </turbo-stream>
