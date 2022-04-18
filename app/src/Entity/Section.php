@@ -25,7 +25,7 @@ class Section
     private $title;
 
     /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="section")
+     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="section", fetch="EAGER")
      */
     private $products;
 

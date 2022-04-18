@@ -29,16 +29,6 @@ class CardController extends AbstractController
         //find the first card in database
         $card = $cardRepository->find(1);
 
-        $section = new Section();
-        $form = $this->createForm(SectionType::class, $section);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $section->setCard($card);
-            $entityManager->persist($section);
-            $entityManager->flush();
-        }
-
         return $this->render('establishment/card/index.html.twig', [
             'card' => $card,
         ]);

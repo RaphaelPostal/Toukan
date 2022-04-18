@@ -7,12 +7,8 @@
 /*Dans ce fichier se trouvent les classes prédéfinies pour chaque type texte*/
 @import "font-class.css";
 
-@layer components {
-    .form-text {
-        @apply mt-1 block w-full border-b-2 border-toukan;
-    }
-
-    .form-label {
-        @apply block mt-4 text-gray-500 tracking-wider text-sm font-bold;
-    }
+.turbo-progress-bar {
+    @apply bg-toukan !important;
 }
+
+@import "establishment/index.css";

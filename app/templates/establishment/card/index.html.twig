@@ -4,35 +4,26 @@
 
 {% block body %}
     <h1 class="border-2 border-gray-300">Ma carte</h1>
-    {% for section in card.sections %}
-        <table>
-            <tr>
-                {{ section.title }}
-            </tr>
-            <tr>
-                Ajouter un produit
-            </tr>
-            <tr>
-                Modifier
-            </tr>
-            <tr>
-                Supprimer
-            </tr>
-            <tbody>
-            {% for product in section.products %}
-                <tr>
-                    <td>
-                        {{ product.title }}
-                    </td>
-                    <td>
-                        Modifier
-                    </td>
-                    <td>
-                        Supprimer
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% endfor %}
+    <div id="establishment-card">
+        {% include 'establishment/partials/card.html.twig' %}
+    </div>
+
+    <!-- Button trigger modal -->
+    <button id="button-add-section" type="button" class="transition duration-150 ease-in-out admin-button-add" data-bs-toggle="modal" data-bs-target="#modal-form-create-section">
+        Ajouter une section
+    </button>
+    <!-- Modals -->
+    {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-create-section', 'modal_title' : 'Section', 'context' : 'section-create'} %}
+    {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-section', 'modal_title' : 'Section', 'context' : 'section-edit'} %}
+
+    <script>
+        function set_frame_src(section_id){
+            console.log(section_id)
+            let path = '{{ path('app_section_edit', {'card' : card.id, 'id' : 'id'}) }}'
+            path = path.replace('id', section_id)
+            document.getElementById('frame-edit-section').src = path;
+        }
+    </script>
+
 {% endblock %}
+
