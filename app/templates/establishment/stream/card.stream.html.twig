@@ -3,16 +3,16 @@
         {% include 'establishment/partials/card.html.twig' with {'card' : card} %}
     </template>
 </turbo-stream>
-{#<turbo-stream action="update" target="flash-messages">#}
-{#    <template>#}
-{#            {% for message in app.flashes('success') %}#}
-{#                <p class="text-green">{{ message }}</p>#}
-{#            {% endfor %}#}
-{#    </template>#}
-{#</turbo-stream>#}
 
 <turbo-stream action="update" target="form-create-section">
     <template>
         {{ render(controller('App\\Controller\\Establishment\\SectionController::new', {card:card.id})) }}
     </template>
 </turbo-stream>
+{% if section is defined %}
+    <turbo-stream action="update" target="form-edit-section">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\SectionController::edit', {card:card.id, id: section.id})) }}
+        </template>
+    </turbo-stream>
+{% endif %}

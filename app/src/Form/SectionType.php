@@ -24,7 +24,7 @@ class SectionType extends AbstractType
             ])
 
             ->add('save', SubmitType::class, [
-                'label' => 'Ajouter',
+                'label' => $options['save-label'],
                 'attr' => [
                     'id' => 'btn-section-save',
                     'class' => 'btn btn-primary btn-section-save',
@@ -37,6 +37,7 @@ class SectionType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Section::class,
+            'save-label' => null
         ]);
     }
 }

@@ -1,6 +1,4 @@
-<div id="form-create-section">
-    {% for message in app.flashes('success') %}
+    {% for message in app.flashes('success-create') %}
         <p class="text-green">{{ message }}</p>
     {% endfor %}
     {{ include('establishment/section/_form.html.twig') }}
-</div>

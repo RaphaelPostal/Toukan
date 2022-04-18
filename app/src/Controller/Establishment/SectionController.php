@@ -22,12 +22,13 @@ class SectionController extends AbstractController
         $section->setCard($card);
         $form = $this->createForm(SectionType::class, $section, [
             'action' => $this->generateUrl('app_section_create', ['card' => $card->getId()]),
+            'save-label' => 'Ajouter',
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sectionRepository->add($section);
-            $this->addFlash('success', 'Section ajoutée !');
+            $this->addFlash('success-create', 'Section ajoutée !');
 
             if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
                 // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
@@ -52,17 +53,26 @@ class SectionController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_section_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Section $section, SectionRepository $sectionRepository): Response
+    public function edit(Request $request, Card $card, Section $section, SectionRepository $sectionRepository): Response
     {
-        $form = $this->createForm(SectionType::class, $section);
+        $form = $this->createForm(SectionType::class, $section, [
+            'action' => $this->generateUrl('app_section_edit', ['card' => $card->getId(), 'id' => $section->getId()]),
+            'save-label' => 'Enregistrer',
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sectionRepository->add($section);
-            return $this->redirectToRoute('app_section_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success-edit', 'Section modifiée !');
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/card.stream.html.twig', ['card' => $card, 'section' => $section]);
+            }
+            return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('section/edit.html.twig', [
+        return $this->renderForm('establishment/section/edit.html.twig', [
             'section' => $section,
             'form' => $form,
         ]);
