@@ -32,8 +32,9 @@
                 <div class="modal-body relative p-4">
                     <div id="flash-messages">
                     </div>
-                    <turbo-frame id="form-add-section">
-                    </turbo-frame>
+                    {{ render(controller('App\\Controller\\Establishment\\SectionController::new', {card:card.id})) }}
+{#                    <turbo-frame id="form-add-section">#}
+{#                    </turbo-frame>#}
                 </div>
             </div>
         </div>
@@ -50,20 +51,20 @@
         }
 
         //onclick on button-add-section
-        document.getElementById('button-add-section').onclick = function() {
-            //set src attribute of trubo-frame
-            document.getElementById('form-add-section').src = '{{ path('app_section_create', {'card' : card.id}) }}';
+        {#document.getElementById('button-add-section').onclick = function() {#}
+        {#    //set src attribute of trubo-frame#}
+        {#    document.getElementById('form-add-section').src = '{{ path('app_section_create', {'card' : card.id}) }}';#}
 
-            onElementLoaded('section_save', function() {
-                document.getElementById('section_save').onclick = function() {
-                    //after 100ms, set the value of section_title input to null
-                    setTimeout(function() {
-                        document.getElementById('section_title').value = '';
+        {#    onElementLoaded('section_save', function() {#}
+        {#        document.getElementById('section_save').onclick = function() {#}
+        {#            //after 100ms, set the value of section_title input to null#}
+        {#            setTimeout(function() {#}
+        {#                document.getElementById('section_title').value = '';#}
 
-                    }, 100);
-                }
-            });
-        }
+        {#            }, 100);#}
+        {#        }#}
+        {#    });#}
+        {#}#}
 
 
 

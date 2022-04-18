@@ -1,13 +1,2 @@
-{% extends 'base.html.twig' %}
 
-{% block title %}New Section{% endblock %}
-
-{% block body %}
-    <h1>Create new Section</h1>
-
-    <turbo-frame id="form-add-section">
-        {{ include('establishment/section/_form.html.twig') }}
-    </turbo-frame>
-
-{#    <a href="{{ path('app_section_index') }}">back to list</a>#}
-{% endblock %}
+{{ include('establishment/section/_form.html.twig') }}
