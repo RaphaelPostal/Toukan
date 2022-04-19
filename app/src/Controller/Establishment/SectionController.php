@@ -3,8 +3,11 @@
 namespace App\Controller\Establishment;
 
 use App\Entity\Card;
+use App\Entity\Product;
 use App\Entity\Section;
+use App\Form\ProductType;
 use App\Form\SectionType;
+use App\Repository\ProductRepository;
 use App\Repository\SectionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -92,5 +95,23 @@ class SectionController extends AbstractController
 
         return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
 
+    }
+
+    #[Route('/{id}/product/new', name: 'app_section_product_new', methods: ['GET', 'POST'])]
+    public function newProduct(Request $request, Card $card, Section $section, ProductRepository $productRepository): Response
+    {
+        $product = new Product();
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $productRepository->add($product);
+            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('product/new.html.twig', [
+            'product' => $product,
+            'form' => $form,
+        ]);
     }
 }
