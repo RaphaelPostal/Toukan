@@ -105,7 +105,6 @@ class SectionController extends AbstractController
     {
         $product = new Product();
         $section->addProduct($product);
-        $card->addProduct($product);
         $form = $this->createForm(ProductType::class, $product, [
             'action' => $this->generateUrl('app_section_product_create', ['card' => $card->getId(), 'id' => $section->getId()]),
             'save-label' => 'Ajouter',

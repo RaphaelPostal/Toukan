@@ -41,17 +41,18 @@ class Product
 
     /**
      * @ORM\ManyToOne(targetEntity=Card::class, inversedBy="products")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $card;
 
     /**
-     * @ORM\OneToMany(targetEntity=ProductOrder::class, mappedBy="product", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=ProductOrder::class, mappedBy="product")
      */
     private $productOrders;
 
     /**
      * @ORM\ManyToOne(targetEntity=Section::class, inversedBy="products")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $section;
 
