@@ -22,7 +22,7 @@ class SectionController extends AbstractController
     public function new(Request $request, SectionRepository $sectionRepository, Card $card): Response
     {
         $section = new Section();
-        $section->setCard($card);
+        $card->addSection($section);
         $form = $this->createForm(SectionType::class, $section, [
             'action' => $this->generateUrl('app_section_create', ['card' => $card->getId()]),
             'save-label' => 'Ajouter',
@@ -101,8 +101,8 @@ class SectionController extends AbstractController
     public function newProduct(Request $request, Card $card, Section $section, ProductRepository $productRepository): Response
     {
         $product = new Product();
-        $product->setSection($section);
-        $product->setCard($card);
+        $section->addProduct($product);
+        $card->addProduct($product);
         $form = $this->createForm(ProductType::class, $product, [
             'action' => $this->generateUrl('app_section_product_new', ['card' => $card->getId(), 'id' => $section->getId()]),
         ]);
