@@ -13,9 +13,9 @@ class CardController extends AbstractController
     #[Route('/{id}/card', name: 'app_client_card')]
     public function index(Establishment $establishment): Response
     {   
-        $card = $establishment->getCards();
+        $card = $establishment->getCard();
 
-        return $this->render('card/index.html.twig', [
+        return $this->render('client/card/index.html.twig', [
             'card' => $card,
             'controller_name' => 'CardController',
         ]);
