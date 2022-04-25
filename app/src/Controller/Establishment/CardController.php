@@ -2,9 +2,13 @@
 
 namespace App\Controller\Establishment;
 
+use App\Entity\Section;
+use App\Form\SectionType;
 use App\Repository\CardRepository;
+use App\Repository\SectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -17,7 +21,7 @@ class CardController extends AbstractController
      * @return Response
      */
     #[Route('', name: 'establishment_card_index')]
-    public function index(EntityManagerInterface $entityManager, CardRepository $cardRepository): Response
+    public function index(EntityManagerInterface $entityManager, CardRepository $cardRepository, SectionRepository $sectionRepository, Request $request): Response
     {
         //use when project is more advanced
         // $card = $this->getUser()->getEstablishment()->getCard();

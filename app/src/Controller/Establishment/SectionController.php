@@ -2,6 +2,7 @@
 
 namespace App\Controller\Establishment;
 
+use App\Entity\Card;
 use App\Entity\Section;
 use App\Form\SectionType;
 use App\Repository\SectionRepository;
@@ -9,28 +10,32 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\UX\Turbo\TurboBundle;
 
-#[Route('/establishment/card/section')]
+#[Route('/establishment/card/{card}/section')]
 class SectionController extends AbstractController
 {
-    #[Route('/', name: 'app_section_index', methods: ['GET'])]
-    public function index(SectionRepository $sectionRepository): Response
-    {
-        return $this->render('establishment/section/index.html.twig', [
-            'sections' => $sectionRepository->findAll(),
-        ]);
-    }
-
     #[Route('/create', name: 'app_section_create', methods: ['GET', 'POST'])]
-    public function new(Request $request, SectionRepository $sectionRepository): Response
+    public function new(Request $request, SectionRepository $sectionRepository, Card $card): Response
     {
         $section = new Section();
-        $form = $this->createForm(SectionType::class, $section);
+        $section->setCard($card);
+        $form = $this->createForm(SectionType::class, $section, [
+            'action' => $this->generateUrl('app_section_create', ['card' => $card->getId()]),
+            'save-label' => 'Ajouter',
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sectionRepository->add($section);
-            return $this->redirectToRoute('app_section_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success-create', 'Section ajoutée !');
+
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/card.stream.html.twig', ['card' => $card]);
+            }
+            return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('establishment/section/new.html.twig', [
@@ -42,20 +47,29 @@ class SectionController extends AbstractController
     #[Route('/{id}', name: 'app_section_show', methods: ['GET'])]
     public function show(Section $section): Response
     {
-        return $this->render('establishment/section/show.html.twig', [
+        return $this->render('section/show.html.twig', [
             'section' => $section,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_section_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Section $section, SectionRepository $sectionRepository): Response
+    public function edit(Request $request, Card $card, Section $section, SectionRepository $sectionRepository): Response
     {
-        $form = $this->createForm(SectionType::class, $section);
+        $form = $this->createForm(SectionType::class, $section, [
+            'action' => $this->generateUrl('app_section_edit', ['card' => $card->getId(), 'id' => $section->getId()]),
+            'save-label' => 'Enregistrer',
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sectionRepository->add($section);
-            return $this->redirectToRoute('app_section_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success-edit', 'Section modifiée !');
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/card.stream.html.twig', ['card' => $card, 'section' => $section]);
+            }
+            return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('establishment/section/edit.html.twig', [
@@ -65,12 +79,18 @@ class SectionController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_section_delete', methods: ['POST'])]
-    public function delete(Request $request, Section $section, SectionRepository $sectionRepository): Response
+    public function delete(Request $request, Card $card, Section $section, SectionRepository $sectionRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$section->getId(), $request->request->get('_token'))) {
             $sectionRepository->remove($section);
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/card.stream.html.twig', ['card' => $card]);
+            }
         }
 
-        return $this->redirectToRoute('app_section_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
+
     }
 }
