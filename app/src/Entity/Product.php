@@ -61,7 +61,7 @@ class Product
     private $ingredients;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $allergens;
 
