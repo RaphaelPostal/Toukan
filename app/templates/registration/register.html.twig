@@ -12,11 +12,17 @@
         {{ form_row(registrationForm.name, {
             label: 'Nom de l\'établissement'
         }) }}
-        {{ form_row(registrationForm.password) }}
-        {{ form_row(registrationForm.password_confirm) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Mot de passe'
+        {{ form_row(registrationForm.type, {
+            label: 'Type de l\'établissement'
         }) }}
+        {{ form_row(registrationForm.address, {
+            label: 'Adresse postale'
+        }) }}
+        {{ form_row(registrationForm.phone, {
+            label: 'Téléphone'
+        }) }}
+        {{ form_row(registrationForm.password) }}
+
         {{ form_row(registrationForm.agreeTerms,{
             label: 'Accepter les conditions d\'utilisation : '
         }) }}

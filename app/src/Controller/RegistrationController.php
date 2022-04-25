@@ -6,9 +6,11 @@ use App\Entity\Establishment;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -17,25 +19,35 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
-    private EmailVerifier $emailVerifier;
 
-    public function __construct(EmailVerifier $emailVerifier)
+    private Request $request;
+
+    public function __construct(
+        private EmailVerifier $emailVerifier,
+        private RequestStack $requestStack,
+        private EntityManagerInterface $entityManager,
+    )
     {
-        $this->emailVerifier = $emailVerifier;
+        $this->request = $this->requestStack->getCurrentRequest();
     }
 
     #[Route('/subscribe', name: 'subscribe')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface): Response
+    public function register(UserPasswordHasherInterface $userPasswordHasherInterface): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
+        $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             $establishment = new Establishment();
+
             $establishment->setUser($user);
+
             $establishment->setName($form->get('name')->getData());
+            $establishment->setType($form->get('type')->getData());
+            $establishment->setAddress($form->get('address')->getData());
+            $establishment->setPhone($form->get('phone')->getData());
 
             // encode the plain password
             $user->setPassword(
@@ -45,16 +57,16 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $this->entityManager->persist($user);
+            $this->entityManager->persist($establishment);
+            $this->entityManager->flush();
 
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('verify_email', $user,
                 (new TemplatedEmail())
-                    ->from(new Address('welcome@toukan.fr', 'Toukan'))
+                    ->from(new Address('contact@toukan.fr', 'Toukan'))
                     ->to($user->getEmail())
-                    ->subject('Confirmer votre adresse email')
+                    ->subject('Confirmez votre adresse email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
@@ -68,13 +80,13 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/verify/email', name: 'verify_email')]
-    public function verifyUserEmail(Request $request): Response
+    public function verifyUserEmail(): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+            $this->emailVerifier->handleEmailConfirmation($this->request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $exception->getReason());
 
