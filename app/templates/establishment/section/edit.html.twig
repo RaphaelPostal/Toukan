@@ -1,5 +1,5 @@
 <turbo-frame id="frame-edit-section">
-    {% for message in app.flashes('success-edit') %}
+    {% for message in app.flashes('success') %}
         <p class="text-green">{{ message }}</p>
     {% endfor %}
     {{ include('establishment/section/_form.html.twig') }}

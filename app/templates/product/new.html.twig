@@ -1,9 +1,7 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}New Product{% endblock %}
-
-{% block body %}
-
+<turbo-frame id="frame-section-create-product">
+    {% for message in app.flashes('success') %}
+        <p class="text-green">{{ message }}</p>
+    {% endfor %}
     {{ include('product/_form.html.twig') }}
+</turbo-frame>
 
-{% endblock %}

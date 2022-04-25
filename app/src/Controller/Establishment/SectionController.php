@@ -31,7 +31,7 @@ class SectionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sectionRepository->add($section);
-            $this->addFlash('success-create', 'Section ajoutée !');
+            $this->addFlash('success', 'Section ajoutée !');
 
             if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
                 // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
@@ -66,7 +66,7 @@ class SectionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sectionRepository->add($section);
-            $this->addFlash('success-edit', 'Section modifiée !');
+            $this->addFlash('success', 'Section modifiée !');
             if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
                 // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
                 $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
@@ -101,11 +101,22 @@ class SectionController extends AbstractController
     public function newProduct(Request $request, Card $card, Section $section, ProductRepository $productRepository): Response
     {
         $product = new Product();
-        $form = $this->createForm(ProductType::class, $product);
+        $form = $this->createForm(ProductType::class, $product, [
+            'action' => $this->generateUrl('app_section_product_new', ['card' => $card->getId(), 'id' => $section->getId()]),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $product->setSection($section);
+            $product->setCard($card);
             $productRepository->add($product);
+            $this->addFlash('success', 'Produit ajouté !');
+
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/card.stream.html.twig', ['card' => $card, 'section' => $section, 'context']);
+            }
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
