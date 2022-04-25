@@ -1,11 +1,4 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}New Section{% endblock %}
-
-{% block body %}
-    <h1>Create new Section</h1>
-
+    {% for message in app.flashes('success-create') %}
+        <p class="text-green">{{ message }}</p>
+    {% endfor %}
     {{ include('establishment/section/_form.html.twig') }}
-
-    <a href="{{ path('app_section_index') }}">back to list</a>
-{% endblock %}

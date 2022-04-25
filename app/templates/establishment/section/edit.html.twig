@@ -1,13 +1,6 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Edit Section{% endblock %}
-
-{% block body %}
-    <h1>Edit Section</h1>
-
-    {{ include('establishment/section/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_section_index') }}">back to list</a>
-
-    {{ include('establishment/section/_delete_form.html.twig') }}
-{% endblock %}
+<turbo-frame id="frame-edit-section">
+    {% for message in app.flashes('success-edit') %}
+        <p class="text-green">{{ message }}</p>
+    {% endfor %}
+    {{ include('establishment/section/_form.html.twig') }}
+</turbo-frame>
