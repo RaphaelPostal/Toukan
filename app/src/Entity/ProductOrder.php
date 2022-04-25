@@ -19,13 +19,13 @@ class ProductOrder
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="productOrders")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $product;
 
     /**
      * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="productOrders")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $orderEntity;
 

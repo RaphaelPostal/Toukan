@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\UX\Turbo\TurboBundle;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/establishment/card/{card}/section')]
 class SectionController extends AbstractController
@@ -22,7 +25,7 @@ class SectionController extends AbstractController
     public function new(Request $request, SectionRepository $sectionRepository, Card $card): Response
     {
         $section = new Section();
-        $section->setCard($card);
+        $card->addSection($section);
         $form = $this->createForm(SectionType::class, $section, [
             'action' => $this->generateUrl('app_section_create', ['card' => $card->getId()]),
             'save-label' => 'Ajouter',
@@ -97,20 +100,47 @@ class SectionController extends AbstractController
 
     }
 
-    #[Route('/{id}/product/new', name: 'app_section_product_new', methods: ['GET', 'POST'])]
-    public function newProduct(Request $request, Card $card, Section $section, ProductRepository $productRepository): Response
+    #[Route('/{id}/product/new', name: 'app_section_product_create', methods: ['GET', 'POST'])]
+    public function newProduct(Request $request, Card $card, Section $section, ProductRepository $productRepository, SluggerInterface $slugger): Response
     {
         $product = new Product();
-        $product->setSection($section);
-        $product->setCard($card);
+        $section->addProduct($product);
         $form = $this->createForm(ProductType::class, $product, [
-            'action' => $this->generateUrl('app_section_product_new', ['card' => $card->getId(), 'id' => $section->getId()]),
+            'action' => $this->generateUrl('app_section_product_create', ['card' => $card->getId(), 'id' => $section->getId()]),
+            'save-label' => 'Ajouter',
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+                dump($this->getParameter('products_directory'));
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $imageFile->move(
+                        $this->getParameter('products_directory').'/'.$card->getEstablishment()->getId(),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    dump('impossible de déplacer le fichier');
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $product->setImage($newFilename);
+            }
+
             $productRepository->add($product);
+
+
+
             $this->addFlash('success', 'Produit ajouté !');
 
             if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {

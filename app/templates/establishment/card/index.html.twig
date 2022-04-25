@@ -28,7 +28,7 @@
                     document.getElementById('frame-edit-section').src = path;
                     break;
                 case 'section_product_create' :
-                    path = '{{ path('app_section_product_new', {'card' : card.id, 'id' : 'id'}) }}'
+                    path = '{{ path('app_section_product_create', {'card' : card.id, 'id' : 'id'}) }}'
                     path = path.replace('id', section_id)
                     document.getElementById('frame-section-create-product').src = path;
                     break;
