@@ -3,13 +3,15 @@
             <table>
                 <thead>
                     <th>
-                        {{ section.id }} {{ section.title }}
+                        {{ section.title }}
                     </th>
                     <th>
-                        Ajouter un produit
+                        <button type="button" onclick="set_frame_src({{ section.id }}, 'section_product_create')" class="transition duration-150 ease-in-out admin-button-add" data-bs-toggle="modal" data-bs-target="#modal-form-section-create-product">
+                            Ajouter un produit
+                        </button>
                     </th>
                     <th>
-                        <button type="button" onclick="set_frame_src({{ section.id }})" class="transition duration-150 ease-in-out admin-button-edit" data-bs-toggle="modal" data-bs-target="#modal-form-edit-section">
+                        <button type="button" onclick="set_frame_src({{ section.id }}, 'section_edit')" class="transition duration-150 ease-in-out admin-button-edit" data-bs-toggle="modal" data-bs-target="#modal-form-edit-section">
                             Modifier
                         </button>
                     </th>
@@ -37,5 +39,6 @@
                 {% endfor %}
                 </tbody>
             </table>
+
         {% endfor %}
 </turbo-frame>

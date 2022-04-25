@@ -3,8 +3,11 @@
 namespace App\Controller\Establishment;
 
 use App\Entity\Card;
+use App\Entity\Product;
 use App\Entity\Section;
+use App\Form\ProductType;
 use App\Form\SectionType;
+use App\Repository\ProductRepository;
 use App\Repository\SectionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +31,7 @@ class SectionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sectionRepository->add($section);
-            $this->addFlash('success-create', 'Section ajoutée !');
+            $this->addFlash('success', 'Section ajoutée !');
 
             if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
                 // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
@@ -63,7 +66,7 @@ class SectionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sectionRepository->add($section);
-            $this->addFlash('success-edit', 'Section modifiée !');
+            $this->addFlash('success', 'Section modifiée !');
             if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
                 // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
                 $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
@@ -92,5 +95,35 @@ class SectionController extends AbstractController
 
         return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
 
+    }
+
+    #[Route('/{id}/product/new', name: 'app_section_product_new', methods: ['GET', 'POST'])]
+    public function newProduct(Request $request, Card $card, Section $section, ProductRepository $productRepository): Response
+    {
+        $product = new Product();
+        $product->setSection($section);
+        $product->setCard($card);
+        $form = $this->createForm(ProductType::class, $product, [
+            'action' => $this->generateUrl('app_section_product_new', ['card' => $card->getId(), 'id' => $section->getId()]),
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $productRepository->add($product);
+            $this->addFlash('success', 'Produit ajouté !');
+
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/card.stream.html.twig', ['card' => $card, 'section' => $section]);
+            }
+            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('product/new.html.twig', [
+            'product' => $product,
+            'form' => $form,
+        ]);
     }
 }

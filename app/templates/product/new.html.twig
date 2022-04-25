@@ -1,6 +1,7 @@
-<turbo-frame id="frame-edit-section">
+<turbo-frame id="frame-section-create-product">
     {% for message in app.flashes('success') %}
         <p class="text-green">{{ message }}</p>
     {% endfor %}
-    {{ include('establishment/section/_form.html.twig') }}
+    {{ include('product/_form.html.twig') }}
 </turbo-frame>
+

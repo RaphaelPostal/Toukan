@@ -15,13 +15,24 @@
     <!-- Modals -->
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-create-section', 'modal_title' : 'Section', 'context' : 'section-create'} %}
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-section', 'modal_title' : 'Section', 'context' : 'section-edit'} %}
+    {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-section-create-product', 'modal_title' : 'Produit', 'context' : 'product-create'} %}
 
     <script>
-        function set_frame_src(section_id){
-            console.log(section_id)
-            let path = '{{ path('app_section_edit', {'card' : card.id, 'id' : 'id'}) }}'
-            path = path.replace('id', section_id)
-            document.getElementById('frame-edit-section').src = path;
+        function set_frame_src(section_id, context){
+            let path = ''
+            console.log(section_id, context)
+            switch(context) {
+                case 'section_edit':
+                    path = '{{ path('app_section_edit', {'card' : card.id, 'id' : 'id'}) }}'
+                    path = path.replace('id', section_id)
+                    document.getElementById('frame-edit-section').src = path;
+                    break;
+                case 'section_product_create' :
+                    path = '{{ path('app_section_product_new', {'card' : card.id, 'id' : 'id'}) }}'
+                    path = path.replace('id', section_id)
+                    document.getElementById('frame-section-create-product').src = path;
+                    break;
+            }
         }
     </script>
 
