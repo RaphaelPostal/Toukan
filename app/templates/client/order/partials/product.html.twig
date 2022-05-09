@@ -1,4 +1,4 @@
-<turbo-frame id="product-card">
+<turbo-frame id="product-card" target="_top">
     {% for product in order.getProductOrders() %}
     <div id="product-card">
     {{ product.getProduct().getTitle() }} |
@@ -8,4 +8,6 @@
         <a href="{{ path('client_order_basket_product_delete', {'productOrderId':product.id, 'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}">Supprimer</a>
     </div>
     {% endfor %}
+    {{ form_start(form) }}
+    {{ form_end(form) }}
 </turbo-frame>

@@ -2,16 +2,10 @@
 
 namespace App\Controller\Client;
 
-use App\Entity\Establishment;
-use App\Entity\Order;
-use App\Entity\ProductOrder;
-use App\Entity\Table;
-use App\Form\ProductOrderEdit;
+use App\Form\OrderCommentsType;
 use App\Repository\OrderRepository;
 use App\Repository\ProductOrderRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use JetBrains\PhpStorm\NoReturn;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,19 +18,34 @@ class OrderController extends AbstractController
 {
     #[Route('/', name: 'client_order_basket')]
     public function showBasket(OrderRepository $orderRepository,
+                               EntityManagerInterface $entityManager,
+                               Request $request,
                                $establishmentId,
                                $tableId,
                                $orderId): Response
     {
         $order = $orderRepository->findOneById($orderId);
+        $form = $this->createForm(OrderCommentsType::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $order->setCustomInfos($form->get('custom_infos')->getData());
+            $order->setCreatedAt(new \DateTime('now'));
+            $entityManager->persist($order);
+            $entityManager->flush();
+            return $this->redirectToRoute('client_order_confirm', [
+                'establishmentId' => $establishmentId,
+                'tableId' => $tableId,
+                'orderId' => $orderId
+            ]);
+        }
 
         return $this->render('client/order/show_basket.html.twig', [
-            'controller_name' => 'OrderController',
             'establishmentId' => $establishmentId,
             'tableId' => $tableId,
             'order' => $order,
             'orderId' => $orderId,
-            'total' => 0
+            'total' => 0,
+            'form' => $form->createView()
         ]);
     }
 
@@ -83,6 +92,13 @@ class OrderController extends AbstractController
 
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
         return $this->render('client/order/stream/product.stream.html.twig', ['productOrder' => $productOrder, 'orderId' => $orderId, 'order' => $productOrder->getOrderEntity(), 'tableId' => $tableId, 'establishmentId' => $establishmentId]);
+
+    }
+
+    #[Route('/confirm', name: 'client_order_confirm')]
+    public function confirmOrder($orderId, $tableId, $establishmentId): Response
+    {
+        return $this->render('client/order/confirm.html.twig');
 
     }
 
