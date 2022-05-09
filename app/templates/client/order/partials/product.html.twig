@@ -1,0 +1,11 @@
+<turbo-frame id="product-card">
+    {% for product in order.getProductOrders() %}
+    <div id="product-card">
+    {{ product.getProduct().getTitle() }} |
+        <a href="{{ path('client_order_basket_product_minus', {'productOrderId':product.id, 'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}">-</a>
+        {{ product.getQuantity() }}
+        <a href="{{ path('client_order_basket_product_plus', {'productOrderId':product.id, 'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}">+</a>
+        <a href="{{ path('client_order_basket_product_delete', {'productOrderId':product.id, 'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}">Supprimer</a>
+    </div>
+    {% endfor %}
+</turbo-frame>

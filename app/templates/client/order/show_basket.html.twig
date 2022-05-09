@@ -1,18 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello OrderController!{% endblock %}
+{% block title %}Ma commande{% endblock %}
 
 {% block body %}
-    {% for productOrder in productOrders %}
-        <a href=" {{ path('client_order_update_product_quantity', {'establishmentId': establishmentId, 'tableId': tableId, 'orderId': order.id, 'productOrderId': productOrder.getId(), 'quantityAction': 'remove' }) }}">-</a>
-        {{ productOrder.getQuantity() }}
-        <a href=" {{ path('client_order_update_product_quantity', {'establishmentId': establishmentId, 'tableId': tableId, 'orderId': order.id, 'productOrderId': productOrder.getId(), 'quantityAction': 'add' }) }}">+</a>
-        {{ productOrder.getProduct().getTitle() }}
-        =
 
-        {{ productOrder.getProduct().getPrice() * productOrder.getQuantity()}}€
-        {% set total = total + productOrder.getProduct().getPrice() * productOrder.getQuantity() %}
-        <a href=" {{ path('client_order_remove_product', {'establishmentId': establishmentId, 'tableId': tableId, 'orderId': order.id, 'productOrderId': productOrder.getId()}) }}">Supprimer</a><br>
-    {% endfor %}
-        TOTAL {{ total }}
+            {% include 'client/order/partials/product.html.twig' %}
+            <br>
+
 {% endblock %}
+
