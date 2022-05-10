@@ -28,7 +28,8 @@ class EmailVerifier
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
             $user->getId(),
-            $user->getEmail()
+            $user->getEmail(),
+            ['id' => $user->getId()]
         );
 
         $context = $email->getContext();
@@ -50,7 +51,6 @@ class EmailVerifier
 
         $user->setIsVerified(true);
 
-        $this->entityManager->persist($user);
         $this->entityManager->flush();
     }
 }

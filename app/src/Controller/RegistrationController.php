@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Establishment;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -80,13 +81,25 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/verify/email', name: 'verify_email')]
-    public function verifyUserEmail(): Response
+    public function verifyUserEmail(Request $request, UserRepository $repository): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        $id = $request->get('id');
+        if (!$id) {
+            $this->addFlash('error', 'Le lien de vérification est invalide');
+
+            return $this->redirectToRoute('login');
+        }
+
+        $user = $repository->find($id);
+        if (!$user) {
+            $this->addFlash('error', 'Aucun utilisateur trouvé');
+
+            return $this->redirectToRoute('login');
+        }
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $this->emailVerifier->handleEmailConfirmation($this->request, $this->getUser());
+            $this->emailVerifier->handleEmailConfirmation($this->request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $exception->getReason());
 
