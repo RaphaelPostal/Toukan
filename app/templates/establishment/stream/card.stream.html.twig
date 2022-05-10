@@ -4,15 +4,26 @@
     </template>
 </turbo-stream>
 
-<turbo-stream action="update" target="form-create-section">
-    <template>
-        {{ render(controller('App\\Controller\\Establishment\\SectionController::new', {card:card.id})) }}
-    </template>
-</turbo-stream>
-{% if section is defined %}
+{% if app.request.get('_route') == 'app_section_create' %}
+    <turbo-stream action="update" target="form-create-section">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\SectionController::new', {card:card.id})) }}
+        </template>
+    </turbo-stream>
+{% endif %}
+
+{% if app.request.get('_route') == 'app_section_edit' %}
     <turbo-stream action="update" target="form-edit-section">
         <template>
             {{ render(controller('App\\Controller\\Establishment\\SectionController::edit', {card:card.id, id: section.id})) }}
+        </template>
+    </turbo-stream>
+{% endif %}
+
+{% if app.request.get('_route') == 'app_section_product_create' %}
+    <turbo-stream action="update" target="form-section-create-product">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\SectionController::newProduct', {card:card.id, id: section.id})) }}
         </template>
     </turbo-stream>
 {% endif %}
