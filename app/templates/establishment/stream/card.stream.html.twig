@@ -23,7 +23,17 @@
 {% if app.request.get('_route') == 'app_section_product_create' %}
     <turbo-stream action="update" target="form-section-create-product">
         <template>
-            {{ render(controller('App\\Controller\\Establishment\\SectionController::newProduct', {card:card.id, id: section.id})) }}
+            {{ render(controller('App\\Controller\\Establishment\\SectionController::newProductInSection', {card:card.id, id: section.id})) }}
+        </template>
+    </turbo-stream>
+{% endif %}
+
+{{ random() }}
+
+{% if app.request.get('_route') == 'app_section_product_edit' %}
+    <turbo-stream action="update" target="form-section-edit-product">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\SectionController::editProduct', {card:card.id, product: product.id})) }}
         </template>
     </turbo-stream>
 {% endif %}

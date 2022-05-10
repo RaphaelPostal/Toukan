@@ -30,7 +30,9 @@
                             {{ product.title }}
                         </td>
                         <td>
-                            Modifier
+                            <button type="button" onclick="set_frame_src({{ product.id }}, 'section_product_edit')" class="transition duration-150 ease-in-out admin-button-edit" data-bs-toggle="modal" data-bs-target="#modal-form-edit-product">
+                                Modifier
+                            </button>
                         </td>
                         <td>
                             Supprimer

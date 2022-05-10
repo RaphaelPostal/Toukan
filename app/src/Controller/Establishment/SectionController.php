@@ -101,7 +101,7 @@ class SectionController extends AbstractController
     }
 
     #[Route('/{id}/product/new', name: 'app_section_product_create', methods: ['GET', 'POST'])]
-    public function newProduct(Request $request, Card $card, Section $section, ProductRepository $productRepository, SluggerInterface $slugger): Response
+    public function newProductInSection(Request $request, Card $card, Section $section, ProductRepository $productRepository, SluggerInterface $slugger): Response
     {
         $product = new Product();
         $section->addProduct($product);
@@ -139,8 +139,6 @@ class SectionController extends AbstractController
 
             $productRepository->add($product);
 
-
-
             $this->addFlash('success', 'Produit ajouté !');
 
             if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
@@ -152,6 +150,59 @@ class SectionController extends AbstractController
         }
 
         return $this->renderForm('product/new.html.twig', [
+            'product' => $product,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/product/{product}/edit', name: 'app_section_product_edit', methods: ['GET', 'POST'])]
+    public function editProduct(Request $request, Card $card, Product $product, ProductRepository $productRepository, SluggerInterface $slugger): Response
+    {
+        $form = $this->createForm(ProductType::class, $product, [
+            'action' => $this->generateUrl('app_section_product_edit', ['card' => $card->getId(), 'product' => $product->getId()]),
+            'save-label' => 'Enregistrer',
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+                dump($this->getParameter('products_directory'));
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $imageFile->move(
+                        $this->getParameter('products_directory').'/'.$card->getEstablishment()->getId(),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    dump('impossible de déplacer le fichier');
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $product->setImage($newFilename);
+            }
+
+            $productRepository->add($product);
+
+            $this->addFlash('success', 'Produit modifié !');
+
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/card.stream.html.twig', ['card' => $card, 'product' => $product]);
+            }
+            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('product/edit.html.twig', [
             'product' => $product,
             'form' => $form,
         ]);

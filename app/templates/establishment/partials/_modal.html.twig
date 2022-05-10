@@ -23,10 +23,14 @@
 
                         </turbo-frame>
                     </div>
-                {% elseif context == 'product-create' %}
+                {% elseif context == 'section-product-create' %}
                     <div id="form-section-create-product">
                         <turbo-frame id="frame-section-create-product"></turbo-frame>
 {#                        {{ render(controller('App\\Controller\\Establishment\\SectionController::newProduct', {card:card.id, section})) }}#}
+                    </div>
+                {% elseif context == 'section-product-edit' %}
+                    <div id="form-section-edit-product">
+                        <turbo-frame id="frame-section-edit-product"></turbo-frame>
                     </div>
                 {% endif %}
             </div>
