@@ -35,7 +35,10 @@
                             </button>
                         </td>
                         <td>
-                            Supprimer
+                            <form method="post" action="{{ path('app_product_delete', {'card' : card.id, 'id': product.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+                                <button class="btn admin-button-delete">Supprimer</button>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}

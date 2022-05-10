@@ -207,4 +207,19 @@ class SectionController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #[Route('/product/{id}', name: 'app_product_delete', methods: ['POST'])]
+    public function deleteProduct(Request $request, Card $card, Product $product, ProductRepository $productRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
+            $productRepository->remove($product);
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/card.stream.html.twig', ['card' => $card]);
+            }
+        }
+
+        return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
+    }
 }
