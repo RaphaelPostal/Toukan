@@ -2,6 +2,7 @@
 
 namespace App\Controller\Client;
 
+use App\Entity\Order;
 use App\Form\OrderCommentsType;
 use App\Repository\OrderRepository;
 use App\Repository\ProductOrderRepository;
@@ -29,7 +30,8 @@ class OrderController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
             $order->setCustomInfos($form->get('custom_infos')->getData());
-            $order->setCreatedAt(new \DateTime('now'));
+            $order->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+            $order->setStatus(Order::STATUS_IN_PROGRESS);
             $entityManager->persist($order);
             $entityManager->flush();
             return $this->redirectToRoute('client_order_confirm', [
@@ -96,10 +98,28 @@ class OrderController extends AbstractController
     }
 
     #[Route('/confirm', name: 'client_order_confirm')]
-    public function confirmOrder($orderId, $tableId, $establishmentId): Response
+    public function confirmOrder($orderId, $tableId, $establishmentId, OrderRepository $orderRepository): Response
     {
-        return $this->render('client/order/confirm.html.twig');
+        $waitingListRank = count($orderRepository->getPreviousOrders($orderRepository->find($orderId))) + 1;
+        return $this->render('client/order/confirm.html.twig', [
+            'waitingListRank' => $waitingListRank,
+            'orderId' => $orderId,
+            'tableId' => $tableId,
+            'establishmentId' => $establishmentId
+        ]);
 
+    }
+
+    #[Route('/confirm/update', name: 'client_order_confirm_update')]
+    public function confirmOrderUpdate($orderId, $tableId, $establishmentId, OrderRepository $orderRepository, Request $request)
+    {
+        $waitingListRank = count($orderRepository->getPreviousOrders($orderRepository->find($orderId))) + 1;
+        return $this->render('client/order/waiting-list.html.twig', [
+            'waitingListRank' => $waitingListRank,
+            'orderId' => $orderId,
+            'tableId' => $tableId,
+            'establishmentId' => $establishmentId
+        ]);
     }
 
 }
