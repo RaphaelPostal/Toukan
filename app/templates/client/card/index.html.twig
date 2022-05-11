@@ -30,10 +30,26 @@
                     {% if product.type %}
                         <p class="text-center w-11/12 m-auto">{{product.type}}</p>
                     {% endif %}
-                    <a class="bg-toukan flex w-full text-center p-2 rounded-b-2xl text-white justify-center" href="">Ajouter au panier</a>
+                    <a id="add-product" class="bg-toukan flex w-full text-center p-2 rounded-b-2xl text-white justify-center" aria-valuetext="{{ product.id }}" href="">Ajouter au panier</a>
                 </div>
             {% endfor %}
         </div>
     <div>
 {% endfor %}
+        <div id="client-basket" class="text-3xl">{{ nbrProducts }}</div>
+
+        <script>
+            document.getElementById("add-product").addEventListener('click', makeRequest);
+
+            function makeRequest() {
+                let product = this.getAttribute("aria-valuetext");
+                let blankUrl = `{{ path('client_order_add_product', {'establishment':establishment.id, 'table':table.id, 'order':order.id, 'product':'productId'}) }}`
+                let url = blankUrl.replace('productId', product);
+                console.log(url);
+
+                fetch(url).then(function (data) {
+                    document.getElementById("client-basket").innerHTML = data['nbrProducts'];
+                })
+            }
+        </script>
 {% endblock %}
