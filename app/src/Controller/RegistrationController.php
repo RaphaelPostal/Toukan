@@ -8,6 +8,8 @@ use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
+use Stripe\Customer;
+use Stripe\Stripe;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +34,7 @@ class RegistrationController extends AbstractController
         $this->request = $this->requestStack->getCurrentRequest();
     }
 
-    #[Route('/subscribe', name: 'subscribe')]
+    #[Route('/register', name: 'subscribe')]
     public function register(UserPasswordHasherInterface $userPasswordHasherInterface): Response
     {
         $user = new User();
@@ -40,6 +42,9 @@ class RegistrationController extends AbstractController
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $address['street'] = $form->get('street')->getData();
+            $address['city'] = $form->get('city')->getData();
+            $address['zipcode'] = $form->get('zipcode')->getData();
 
             $establishment = new Establishment();
 
@@ -47,7 +52,7 @@ class RegistrationController extends AbstractController
 
             $establishment->setName($form->get('name')->getData());
             $establishment->setType($form->get('type')->getData());
-            $establishment->setAddress($form->get('address')->getData());
+            $establishment->setAddress($address);
             $establishment->setPhone($form->get('phone')->getData());
 
             // encode the plain password
@@ -81,7 +86,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/verify/email', name: 'verify_email')]
-    public function verifyUserEmail(Request $request, UserRepository $repository): Response
+    public function verifyUserEmail(Request $request, UserRepository $repository, EntityManagerInterface $entityManager): Response
     {
 
         $id = $request->get('id');
@@ -97,6 +102,11 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('login');
         }
+
+        if ($user->isVerified()) {
+            $this->addFlash('error', 'Votre adresse email est déjà vérifiée');
+            return $this->redirectToRoute('login');
+        }
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
             $this->emailVerifier->handleEmailConfirmation($this->request, $user);
@@ -105,6 +115,24 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('login');
         }
+
+        Stripe::setApiKey($this->getParameter('stripe_api_key'));
+
+        $newCustomer = Customer::create([
+            'email' => $user->getEmail(),
+            'name' => $user->getEstablishment()->getName(),
+            'phone' => $user->getEstablishment()->getPhone(),
+            'address' => [
+                'line1' => $user->getEstablishment()->getAddress()['street'],
+                'city' => $user->getEstablishment()->getAddress()['city'],
+                'postal_code' => $user->getEstablishment()->getAddress()['zipcode'],
+                'state' => '',
+                'country' => 'FR',
+            ],
+        ]);
+
+        $user->setSessionId($newCustomer->id);
+        $entityManager->flush();
 
         $this->addFlash('success', 'Your email address has been verified.');
 

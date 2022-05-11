@@ -30,7 +30,7 @@ class CheckoutSubscriptionController extends AbstractController
     #[Route('/test', name: 'test')]
     public function test()
     {
-        $customer = Customer::retrieve('cus_LfXMaZEnbidJzt');
+        $customer = Customer::retrieve($this->getUser()->getSessionId(), ['expand' => ['subscriptions']]);
 //        $customer = Customer::create([
 //            'email' => 'admin@admin.fr',
 //            'name' => 'admin',
@@ -44,7 +44,7 @@ class CheckoutSubscriptionController extends AbstractController
 //            ],
 //        ]);
 
-        dd($customer->name);
+        dd($customer);
         return $this->render('subscription/test.html.twig');
     }
 
@@ -60,12 +60,10 @@ class CheckoutSubscriptionController extends AbstractController
     #[Route('/checkout', name: 'app_subscription_checkout')]
     public function index(): Response
     {
-        $stripeCheckoutSession = new Session;
+        $customer = Customer::retrieve($this->getUser()->getSessionId());
 
-        $customer = Session::retrieve('cs_test_a1oeQG0YPxWLYfNsihtwVjaBja49mvC9pA5aWxPalKNlEuwk6IoNHLJXLY');
-
-        $session = $stripeCheckoutSession->create([
-            'customer' => $customer->customer,
+        $session = Session::create([
+            'customer' => $customer->id,
             'mode'=>'subscription',
             'line_items' => [
                 [
@@ -74,24 +72,23 @@ class CheckoutSubscriptionController extends AbstractController
                     'quantity' => 1,
                 ],
             ],
-            'success_url' => $this->generateUrl('app_customer_portal', referenceType: UrlGenerator::ABSOLUTE_URL)."?session_id={CHECKOUT_SESSION_ID}",
+            'success_url' => $this->generateUrl('app_subscription_checkout_success', referenceType: UrlGenerator::ABSOLUTE_URL),
             'cancel_url' => $this->generateUrl('app_subscription_checkout_cancel', referenceType:  UrlGenerator::ABSOLUTE_URL),
         ]);
 
         return $this->redirect($session->url);
     }
 
-    #[Route('/portal', name:'app_customer_portal')]
+    #[Route('/portal', name:'app_establishment_portal')]
     public function handlePortal(Request $request)
     {
-        $sessionId = $request->query->get('session_id');
         try {
-            $checkout_session = Session::retrieve($sessionId);
-            $return_url = $this->generateUrl('home', referenceType: UrlGenerator::ABSOLUTE_URL);
+            $customer = Customer::retrieve($this->getUser()->getSessionId());
+            $return_url = $this->generateUrl('profile', referenceType: UrlGenerator::ABSOLUTE_URL);
 
             // Authenticate your user.
             $session = \Stripe\BillingPortal\Session::create([
-                'customer' => $checkout_session->customer,
+                'customer' => $customer,
                 'return_url' => $return_url,
             ]);
 

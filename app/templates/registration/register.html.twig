@@ -15,8 +15,14 @@
         {{ form_row(registrationForm.type, {
             label: 'Type de l\'établissement'
         }) }}
-        {{ form_row(registrationForm.address, {
+        {{ form_row(registrationForm.street, {
             label: 'Adresse postale'
+        }) }}
+        {{ form_row(registrationForm.city, {
+            label: 'Ville'
+        }) }}
+        {{ form_row(registrationForm.zipcode, {
+            label: 'Code postal'
         }) }}
         {{ form_row(registrationForm.phone, {
             label: 'Téléphone'

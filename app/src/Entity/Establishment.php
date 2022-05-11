@@ -30,7 +30,7 @@ class Establishment
     private $type;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="array", length=255, nullable=true)
      */
     private $address;
 
@@ -94,12 +94,12 @@ class Establishment
         return $this;
     }
 
-    public function getAddress(): ?string
+    public function getAddress(): ?array
     {
         return $this->address;
     }
 
-    public function setAddress(?string $address): self
+    public function setAddress(?array $address): self
     {
         $this->address = $address;
 
@@ -142,9 +142,9 @@ class Establishment
     }
 
     /**
-     * @return Collection<int, Table>
+     * @return ArrayCollection
      */
-    public function getTables(): Collection
+    public function getTables(): ArrayCollection
     {
         return $this->tables;
     }
