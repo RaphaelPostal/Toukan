@@ -21,13 +21,28 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('email', EmailType::class, [
+                'required' => true,
+                'label' => 'Email',
+                'attr' => [
+                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2 w-full',
+                ],
+            ])
             ->add('name', TextType::class, [
                 'mapped' => false,
                 'required' => true,
+                'label' => 'Nom de l\'établissement',
+                'attr' => [
+                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2 w-full',
+                ]
             ])
             ->add('type', ChoiceType::class, [
                 'mapped' => false,
                 'required' => true,
+                'label' => 'Type de l\'établissement',
+                'attr' => [
+                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2 w-full',
+                ],
                 'choices' => [
                     'Restaurant' => 'restaurant',
                     'Bar' => 'bar',
@@ -37,6 +52,10 @@ class RegistrationFormType extends AbstractType
             ->add('address', TextType::class, [
                 'mapped' => false,
                 'required' => true,
+                'label' => 'Adresse postale',
+                'attr' => [
+                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2 w-full',
+                ],
             ])
             ->add('phone', TextType::class, [
                 'constraints' => [
@@ -49,17 +68,9 @@ class RegistrationFormType extends AbstractType
                 ],
                 'mapped' => false,
                 'required' => true,
-            ])
-            ->add('email', EmailType::class, [
-                'required' => true,
-            ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'required' => true,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'Veuillez accepter nos conditions d\'utilisation.',
-                    ]),
+                'label' => 'Téléphone',
+                'attr' => [
+                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2 w-full',
                 ],
             ])
             ->add('password', RepeatedType::class, [
@@ -67,8 +78,12 @@ class RegistrationFormType extends AbstractType
                 // this is read and encoded in the controller
                 'mapped' => false,
                 'required' => true,
+                'label' => 'Mot de passe',
                 'type' => PasswordType::class,
-                'attr' => ['autocomplete' => 'new-password'],
+                'attr' => [
+                    'autocomplete' => 'new-password',
+                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2 w-full',
+                ],
                 'first_options' => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmation du mot de passe'],
                 'invalid_message' => 'Les mots de passe ne correspondent pas.',
@@ -81,6 +96,19 @@ class RegistrationFormType extends AbstractType
                         'minMessage' => 'Votre mot de passe doit avoir au moins {{ limit }} caractères.',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
+                    ]),
+                ],
+            ])
+            ->add('agreeTerms', CheckboxType::class, [
+                'mapped' => false,
+                'required' => true,
+                'label' => 'Accepter les conditions d\'utilisation',
+                'attr' => [
+                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2',
+                ],
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Veuillez accepter nos conditions d\'utilisation.',
                     ]),
                 ],
             ]);
