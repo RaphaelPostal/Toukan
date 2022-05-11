@@ -4,11 +4,13 @@ namespace App\Controller\Subscription;
 
 use Psr\Log\LoggerInterface;
 use Stripe\Checkout\Session;
+use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Price;
 use Stripe\Webhook;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -20,14 +22,33 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 class CheckoutSubscriptionController extends AbstractController
 {
 
-    public function __construct()
+    public function __construct(RequestStack $requestStack, LoggerInterface $logger, MailerInterface $mailer)
     {
         Stripe::setApiKey('sk_test_51KxngZDUppKYGFFMwSQ6vrRxE3jHwBor5MzPQ5z53ahJdaWU0GAtoSXfF2zHGIIMxYr86iw5ClkxEW4NDgZYFWz400fuhYRXrW');
+    }
 
+    #[Route('/test', name: 'test')]
+    public function test()
+    {
+        $customer = Customer::retrieve('cus_LfXMaZEnbidJzt');
+//        $customer = Customer::create([
+//            'email' => 'admin@admin.fr',
+//            'name' => 'admin',
+//            'phone' => '+32456456789',
+//            'address' => [
+//                'line1' => '1 Main St',
+//                'city' => 'San Francisco',
+//                'state' => 'CA',
+//                'postal_code' => '94105',
+//                'country' => 'US',
+//            ],
+//        ]);
+
+        dd($customer->name);
+        return $this->render('subscription/test.html.twig');
     }
 
     #[Route('/pricing', name: 'app_subscription_pricing')]
-
     public function getPricing()
     {
         $prices = Price::all([
@@ -39,7 +60,6 @@ class CheckoutSubscriptionController extends AbstractController
     #[Route('/checkout', name: 'app_subscription_checkout')]
     public function index(): Response
     {
-
         $stripeCheckoutSession = new Session;
 
         $customer = Session::retrieve('cs_test_a1oeQG0YPxWLYfNsihtwVjaBja49mvC9pA5aWxPalKNlEuwk6IoNHLJXLY');
@@ -115,42 +135,40 @@ class CheckoutSubscriptionController extends AbstractController
         $type = $event['type'];
         $object = $event['data']['object'];
 
+        //get stripe customer from stripe id
+        if (array_key_exists('customer', $object)) {
+            $customer = Customer::retrieve($object['customer']);
+        }
+
         switch ($type) {
 
             case 'checkout.session.completed':
-                $email = (new Email())
-                    // email address as a simple string
-                    ->from('fabien@example.com')
-                    ->to('suce@admin.fr');
-                $email->text("Bienvenue mon chef !");
-                $mailer->send($email);
+                $mail_template = 'mail_template/subscription/welcome.html.twig';
                 break;
             case 'invoice.paid':
-                $email = (new Email())
-                    // email address as a simple string
-                    ->from('fabien@example.com')
-                    ->to('suce@admin.fr');
-                $email->text("C'est payé chef !");
-                $mailer->send($email);
+                $mail_template = 'invoice/subscription_checkout_success.html.twig';
                 break;
             case 'invoice.payment_failed':
-                $email = (new Email())
-                    // email address as a simple string
-                    ->from('fabien@example.com')
-                    ->to('suce@admin.fr');
-                $email->text("C'est pas payé chef !");
-                $mailer->send($email);
+                $mail_template = 'invoice/subscription_checkout_failed.html.twig';
                 break;
             case 'customer.subscription.updated':
-                $email = (new Email())
-                    // email address as a simple string
-                    ->from('fabien@example.com')
-                    ->to('suce@admin.fr');
-                $email->text($object['cancel_at_period_end']?"Nous avons bien pris en compte votre annulation":"Votre plan a bien été mis à jour");
-                $mailer->send($email);
+                $mail_template = $object['cancel_at_period_end'] ? 'mail_template/subscription/cancelled.html.twig' : 'mail_template/subscription/updated.html.twig';
                 break;
             default:
-                // Unhandled event type
+                $mail_template = null;
+        }
+
+        if ($mail_template){
+            $email = (new Email())
+                // email address as a simple string
+                ->from('contact@toukan-app.fr')
+                ->to('admin@admin.fr')
+                ->html($this->renderView($mail_template, [
+                    'object' => $object,
+//                    'user' => $this->getUser(),
+                ]));
+
+            $mailer->send($email);
         }
 
         return $this->json([ 'status' => 'success' ]);
