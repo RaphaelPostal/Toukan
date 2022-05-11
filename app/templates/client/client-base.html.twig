@@ -20,6 +20,11 @@
     <body class="{{ app.request.attributes.get('_route') == 'home' ? 'bg-salmon' }}">
 
         <main class="">
+            <header class="bg-cover h-96" style="background-image:url('{{asset('assets/uploads/'~establishment.id~'/'~establishment.image)}}'); box-shadow: inset 0px -127px 131px -25px rgba(0,0,0,0.69);">
+                <h1 class="text-white text-5xl font-bold">{{establishment.name}}</h1>
+                <h2 class="text-white text-2xl font-bold">{{establishment.address}}</h2>
+                <div class="bg-light-gray" style="clip-path: ellipse(49% 20% at 50% 80%)"></div>
+            </header>
             {% block body %}{% endblock %}
         </main>
 

@@ -10,7 +10,7 @@
     .max-height { height:150px; width:auto;}
 </style>
 
-<ul class="flex m-3 font-bold bg-light-gray">
+<ul class="flex sticky w-full z-10 p-3 font-bold bg-light-gray">
     {% for section in card.sections %}
         <li class="m-1"><a href="#{{section.title}}">{{section.title}}</a></li>
     {% endfor %}
@@ -19,8 +19,8 @@
 
 {% for section in card.sections %}
     <div id="{{section.title}}">
-        <h3 class="border-toukan w-min border-2 text-2xl border-solid rounded-2xl pl-2 pr-2">{{section.title}}</h3>
-        <div class="flex justify-around">
+        <h3 class="border-toukan w-min m-3 border-2 text-2xl border-solid rounded-2xl pl-2 pr-2">{{section.title}}</h3>
+        <div class="flex justify-around flex-wrap">
             {% for product in section.products %}
                 <div class="relative flex justify-between flex-col rounded-2xl custom-shadow m-2 w-5/12">
                     <img class="text-center w-11/12 m-auto max-height" src="{{asset('assets/uploads/'~card.establishment.id~'/'~product.image)}}">
@@ -36,23 +36,4 @@
         </div>
     <div>
 {% endfor %}
-
-<h3 class="border-toukan w-min border-2 text-2xl border-solid rounded-2xl pl-2 pr-2">Autres</h3>
-<div id="autres" class="flex justify-around">
-{% for product in card.products %}
-        {% if product.section == "" %}
-            <div class="relative flex justify-between flex-col rounded-2xl custom-shadow m-2 w-5/12">
-                    <img class="text-center w-11/12 m-auto max-height" src="{{asset('assets/uploads/'~card.establishment.id~'/'~product.image)}}">
-                    <div class="h-px w-9/12 bg-black m-auto"></div>
-                    <h4 class="text-center w-11/12 m-auto">{{product.title}}</h4>
-                    <p class="border-solid bg-white border-toukan rounded-2xl pl-2 pr-2 border-2 absolute top-2 left-2">{{product.price|number_format(2, '.', ',')}} €</p>
-                    {% if product.type %}
-                        <p class="text-center w-11/12 m-auto">{{product.type}}</p>
-                    {% endif %}
-                    <a class="bg-toukan flex w-full text-center p-2 rounded-b-2xl text-white justify-center" href="">Ajouter au panier</a>
-                </div>
-        {% endif %}
-{% endfor %}
-</div>
-
 {% endblock %}
