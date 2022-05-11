@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Toukan{% endblock %}</title>
+        <link rel="icon" type="image/png" href="{{ asset("assets/img/toukan.png") }}" />
+        {# Run `composer require symfony/webpack-encore-bundle`
+           and uncomment the following Encore helpers to start using Symfony UX #}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+            <link rel="stylesheet" href="{{ asset("assets/css/style.css") }}"/>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <body class="{{ app.request.attributes.get('_route') == 'home' ? 'bg-salmon' }}">
+
+        <main class="">
+            <header class="bg-cover h-96" style="background-image:url('{{asset('assets/uploads/'~establishment.id~'/'~establishment.image)}}'); box-shadow: inset 0px -127px 131px -25px rgba(0,0,0,0.69);">
+                <h1 class="text-white text-5xl font-bold">{{establishment.name}}</h1>
+                <h2 class="text-white text-2xl font-bold">{{establishment.address}}</h2>
+                <div class="bg-light-gray" style="clip-path: ellipse(49% 20% at 50% 80%)"></div>
+            </header>
+            {% block body %}{% endblock %}
+        </main>
+
+    </body>
+</html>

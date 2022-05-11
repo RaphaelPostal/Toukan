@@ -34,6 +34,11 @@ class ProductOrder
      */
     private $quantity;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Sauce::class, inversedBy="ProductOrder")
+     */
+    private $sauce;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +76,18 @@ class ProductOrder
     public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getSauce(): ?Sauce
+    {
+        return $this->sauce;
+    }
+
+    public function setSauce(?Sauce $sauce): self
+    {
+        $this->sauce = $sauce;
 
         return $this;
     }
