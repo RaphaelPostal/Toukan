@@ -1,0 +1,17 @@
+<turbo-frame id="product-card" target="_top">
+    {% set total = 0 %}
+    {% for product in order.getProductOrders() %}
+    <div id="product-card">
+    {{ product.getProduct().getTitle() }}
+        <a href="{{ path('client_order_basket_product_minus', {'productOrderId':product.id, 'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}">-</a>
+        {{ product.getQuantity() }}
+        <a href="{{ path('client_order_basket_product_plus', {'productOrderId':product.id, 'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}">+</a>
+        = {{ product.getProduct().getPrice() * product.getQuantity() }}€
+        <a href="{{ path('client_order_basket_product_delete', {'productOrderId':product.id, 'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}">Supprimer</a>
+        {% set total = total + product.getProduct().getPrice() * product.getQuantity() %}
+    </div>
+    {% endfor %}
+    TOTAL : {{ total }}€
+    {{ form_start(form) }}
+    {{ form_end(form) }}
+</turbo-frame>
