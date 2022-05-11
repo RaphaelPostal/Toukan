@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription - Toukan{% endblock %}
+
+{% block body %}
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.email) }}
+        {{ form_row(registrationForm.name, {
+            label: 'Nom de l\'établissement'
+        }) }}
+        {{ form_row(registrationForm.type, {
+            label: 'Type de l\'établissement'
+        }) }}
+        {{ form_row(registrationForm.address, {
+            label: 'Adresse postale'
+        }) }}
+        {{ form_row(registrationForm.phone, {
+            label: 'Téléphone'
+        }) }}
+        {{ form_row(registrationForm.password) }}
+
+        {{ form_row(registrationForm.agreeTerms,{
+            label: 'Accepter les conditions d\'utilisation : '
+        }) }}
+
+        <button type="submit" class="btn">S'inscrire</button>
+
+        <a href="{{ path('login') }}" class="btn btn-lg btn-primary">
+            Se connecter
+        </a>
+    {{ form_end(registrationForm) }}
+{% endblock %}

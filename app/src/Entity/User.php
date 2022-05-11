@@ -6,11 +6,13 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"email"}, message="Il y a déjà un compte avec cette adresse email")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -41,6 +43,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\OneToOne(targetEntity=Establishment::class, mappedBy="user")
      */
     private $establishment;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isVerified = false;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -137,9 +144,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Establishment|null
+     * @return Collection<int, Establishment>
      */
-    public function getEstablishment(): ?Establishment
+    public function getEstablishment(): Collection
     {
         return $this->establishment;
     }
@@ -152,6 +159,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this !== $establishment->getUser()) {
             $establishment->setUser($this);
         }
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }
