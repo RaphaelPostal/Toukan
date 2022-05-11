@@ -39,9 +39,9 @@ class RegistrationFormType extends AbstractType
             ->add('type', ChoiceType::class, [
                 'mapped' => false,
                 'required' => true,
-                'label' => 'Type de l\'établissement',
+                'label' => 'Type d\'établissement',
                 'attr' => [
-                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2 w-full',
+                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2 pb-2.5 w-full',
                 ],
                 'choices' => [
                     'Restaurant' => 'restaurant',
