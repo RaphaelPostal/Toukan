@@ -100,7 +100,7 @@ class SectionController extends AbstractController
 
     }
 
-    #[Route('/{id}/product/new', name: 'app_section_product_create', methods: ['GET', 'POST'])]
+    #[Route('/{id}/product/create', name: 'app_section_product_create', methods: ['GET', 'POST'])]
     public function newProductInSection(Request $request, Card $card, Section $section, ProductRepository $productRepository, SluggerInterface $slugger): Response
     {
         $product = new Product();

@@ -36,3 +36,11 @@
         </template>
     </turbo-stream>
 {% endif %}
+
+{% if app.request.get('_route') == 'app_sauce_create' %}
+    <turbo-stream action="update" target="form-create-sauce">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\SauceController::new', {card:card.id})) }}
+        </template>
+    </turbo-stream>
+{% endif %}

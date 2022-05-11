@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Sauce{% endblock %}
+
+{% block body %}
+    <h1>Edit Sauce</h1>
+
+    {{ include('sauce/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_sauce_index') }}">back to list</a>
+
+    {{ include('sauce/_delete_form.html.twig') }}
+{% endblock %}

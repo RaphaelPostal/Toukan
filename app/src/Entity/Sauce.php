@@ -24,15 +24,16 @@ class Sauce
      */
     private $Card;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Section::class, inversedBy="sauces")
-     */
-    private $Section;
 
     /**
      * @ORM\OneToMany(targetEntity=ProductOrder::class, mappedBy="sauce")
      */
     private $ProductOrder;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $title;
 
     public function __construct()
     {
@@ -52,18 +53,6 @@ class Sauce
     public function setCard(?Card $Card): self
     {
         $this->Card = $Card;
-
-        return $this;
-    }
-
-    public function getSection(): ?Section
-    {
-        return $this->Section;
-    }
-
-    public function setSection(?Section $Section): self
-    {
-        $this->Section = $Section;
 
         return $this;
     }
@@ -94,6 +83,18 @@ class Sauce
                 $productOrder->setSauce(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
 
         return $this;
     }
