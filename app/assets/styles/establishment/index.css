@@ -22,4 +22,8 @@
     .admin-button-delete {
         @apply bg-red !important;
     }
+
+    .custom-icon{
+        @apply w-6 h-6 !important;
+    }
 }
