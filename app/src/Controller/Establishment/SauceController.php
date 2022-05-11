@@ -4,8 +4,11 @@ namespace App\Controller\Establishment;
 
 use App\Entity\Card;
 use App\Entity\Sauce;
+use App\Entity\Section;
 use App\Form\SauceType;
 use App\Repository\SauceRepository;
+use App\Repository\SectionRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +27,7 @@ class SauceController extends AbstractController
     }
 
     #[Route('/create', name: 'app_sauce_create', methods: ['GET', 'POST'])]
-    public function new(Request $request, Card $card, SauceRepository $sauceRepository): Response
+    public function new(Request $request, Card $card, SauceRepository $sauceRepository, SectionRepository $sectionRepository, EntityManagerInterface$entityManager): Response
     {
         $sauce = new Sauce();
         $form = $this->createForm(SauceType::class, $sauce, [
@@ -34,6 +37,19 @@ class SauceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            //if a section named "sauce" exists, we add the sauce to it
+            $section_sauce = $sectionRepository->findOneBy(['title' => 'Sauces']);
+            if($section_sauce){
+                $section_sauce->addSauce($sauce);
+            } else {
+                //else, we create a new section named "sauce" and add the sauce to it
+                $section_sauce = new Section();
+                $section_sauce->setTitle('Sauces');
+                $section_sauce->addSauce($sauce);
+                $section_sauce->setCard($card);
+                $entityManager->persist($section_sauce);
+
+            };
             $card->addSauce($sauce);
             $sauceRepository->add($sauce);
             if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
@@ -61,13 +77,24 @@ class SauceController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_sauce_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Sauce $sauce, SauceRepository $sauceRepository): Response
+    public function edit(Request $request, Card $card, Sauce $sauce, SauceRepository $sauceRepository): Response
     {
-        $form = $this->createForm(SauceType::class, $sauce);
+        $form = $this->createForm(SauceType::class, $sauce, [
+            'action' => $this->generateUrl('app_sauce_edit', ['card' => $card->getId(), 'id' => $sauce->getId()]),
+            'save-label' => 'Enregistrer',
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $sauceRepository->add($sauce);
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                $this->addFlash('success', 'Sauce modifiée !');
+                return $this->render('establishment/stream/card.stream.html.twig', ['card' => $card, 'sauce' => $sauce]);
+
+            }
             return $this->redirectToRoute('app_sauce_index', [], Response::HTTP_SEE_OTHER);
         }
 

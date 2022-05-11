@@ -22,6 +22,7 @@
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-section-create-product', 'modal_title' : 'Produit', 'context' : 'section-product-create'} %}
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-product', 'modal_title' : 'Produit', 'context' : 'section-product-edit'} %}
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-create-sauce', 'modal_title' : 'Sauce', 'context' : 'sauce-create'} %}
+    {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-sauce', 'modal_title' : 'Sauce', 'context' : 'sauce-edit'} %}
 
     <script>
         function set_frame_src(entity_id, context){
@@ -41,6 +42,12 @@
                     path = '{{ path('app_section_product_edit', {'card' : card.id, 'product' : 'id'}) }}'
                     path = path.replace('id', entity_id)
                     document.getElementById('frame-section-edit-product').src = path;
+                    break;
+
+                case 'section_sauce_edit':
+                    path = '{{ path('app_sauce_edit', {'card' : card.id, 'id' : 'sauce_id'}) }}'
+                    path = path.replace('sauce_id', entity_id)
+                    document.getElementById('frame-edit-sauce').src = path;
                     break;
             }
         }

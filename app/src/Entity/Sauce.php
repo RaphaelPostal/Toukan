@@ -35,6 +35,12 @@ class Sauce
      */
     private $title;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Section::class, inversedBy="sauces")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $Section;
+
     public function __construct()
     {
         $this->ProductOrder = new ArrayCollection();
@@ -95,6 +101,18 @@ class Sauce
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getSection(): ?Section
+    {
+        return $this->Section;
+    }
+
+    public function setSection(?Section $Section): self
+    {
+        $this->Section = $Section;
 
         return $this;
     }
