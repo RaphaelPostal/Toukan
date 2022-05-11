@@ -116,9 +116,6 @@ class OrderController extends AbstractController
         $waitingListRank = count($orderRepository->getPreviousOrders($orderRepository->find($orderId))) + 1;
         return $this->render('client/order/waiting-list.html.twig', [
             'waitingListRank' => $waitingListRank,
-            'orderId' => $orderId,
-            'tableId' => $tableId,
-            'establishmentId' => $establishmentId
         ]);
     }
 
