@@ -18,13 +18,7 @@ use Symfony\UX\Turbo\TurboBundle;
 #[Route('establishment/card/{card}/sauce')]
 class SauceController extends AbstractController
 {
-    #[Route('/', name: 'app_sauce_index', methods: ['GET'])]
-    public function index(SauceRepository $sauceRepository, Card $card): Response
-    {
-        return $this->render('sauce/index.html.twig', [
-            'sauces' => $sauceRepository->findAll(),
-        ]);
-    }
+
 
     #[Route('/create', name: 'app_sauce_create', methods: ['GET', 'POST'])]
     public function new(Request $request, Card $card, SauceRepository $sauceRepository, SectionRepository $sectionRepository, EntityManagerInterface$entityManager): Response
@@ -68,14 +62,6 @@ class SauceController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_sauce_show', methods: ['GET'])]
-    public function show(Sauce $sauce): Response
-    {
-        return $this->render('sauce/show.html.twig', [
-            'sauce' => $sauce,
-        ]);
-    }
-
     #[Route('/{id}/edit', name: 'app_sauce_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Card $card, Sauce $sauce, SauceRepository $sauceRepository): Response
     {
@@ -93,9 +79,8 @@ class SauceController extends AbstractController
                 $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
                 $this->addFlash('success', 'Sauce modifiée !');
                 return $this->render('establishment/stream/card.stream.html.twig', ['card' => $card, 'sauce' => $sauce]);
-
             }
-            return $this->redirectToRoute('app_sauce_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('sauce/edit.html.twig', [
@@ -105,12 +90,18 @@ class SauceController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_sauce_delete', methods: ['POST'])]
-    public function delete(Request $request, Sauce $sauce, SauceRepository $sauceRepository): Response
+    public function delete(Request $request, Card $card, Sauce $sauce, SauceRepository $sauceRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$sauce->getId(), $request->request->get('_token'))) {
             $sauceRepository->remove($sauce);
+
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/card.stream.html.twig', ['card' => $card, 'sauce' => $sauce]);
+            }
         }
 
-        return $this->redirectToRoute('app_sauce_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
     }
 }
