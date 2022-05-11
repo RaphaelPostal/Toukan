@@ -15,7 +15,7 @@ class QrCodeApi extends AbstractController
     public function getQrCode(EstablishmentRepository $establishmentRepository, $establishmentId): JsonResponse
     {
 //        $qrCodes = $establishmentRepository->find($establishmentId);
-        $qrCodeTemplate = QrCodeTemplate::ROUNDED;
+        $qrCodeTemplate = QrCodeTemplate::BASIC;
         $infos = [
             'qrCodeOptions'=>[
                 'dotsOption'=>$qrCodeTemplate->getDotsOption(),
@@ -30,7 +30,7 @@ class QrCodeApi extends AbstractController
 //            'establishmentImg' => "/assets/img/netto_logo.png",
 //            'establishmentColor' => "#fc3503",
             'tables'=>[
-                1,2,3,5,6,7,8,9
+                1,2,3,5,6,7,8,9,9,9,9,9
             ]
         ];
         return new JsonResponse($infos, Response::HTTP_OK);
