@@ -35,15 +35,10 @@ class Section
      */
     private $card;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Sauce::class, mappedBy="Section")
-     */
-    private $sauces;
 
     public function __construct()
     {
         $this->products = new ArrayCollection();
-        $this->sauces = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,36 +96,6 @@ class Section
     public function setCard(?Card $card): self
     {
         $this->card = $card;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Sauce>
-     */
-    public function getSauces(): Collection
-    {
-        return $this->sauces;
-    }
-
-    public function addSauce(Sauce $sauce): self
-    {
-        if (!$this->sauces->contains($sauce)) {
-            $this->sauces[] = $sauce;
-            $sauce->setSection($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSauce(Sauce $sauce): self
-    {
-        if ($this->sauces->removeElement($sauce)) {
-            // set the owning side to null (unless already changed)
-            if ($sauce->getSection() === $this) {
-                $sauce->setSection(null);
-            }
-        }
 
         return $this;
     }
