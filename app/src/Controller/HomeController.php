@@ -19,11 +19,21 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/profile", name="profile")
+     * @Route("/profile", name="establishment_profile")
      */
     public function profile(): Response
     {
         return $this->render('establishment/profile/index.html.twig', [
+            'controller_name' => 'HomeController',
+        ]);
+    }
+
+    /**
+     * @Route("/dashboard", name="establishment_dashboard")
+     */
+    public function dashboard(): Response
+    {
+        return $this->render('establishment/dashboard/index.html.twig', [
             'controller_name' => 'HomeController',
         ]);
     }

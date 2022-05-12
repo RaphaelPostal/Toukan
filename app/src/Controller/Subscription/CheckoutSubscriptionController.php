@@ -10,26 +10,29 @@ use Stripe\Price;
 use Stripe\Webhook;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Stripe\Stripe;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/subscription')]
 class CheckoutSubscriptionController extends AbstractController
 {
 
-    public function __construct(RequestStack $requestStack, LoggerInterface $logger, MailerInterface $mailer)
-    {
-        Stripe::setApiKey('sk_test_51KxngZDUppKYGFFMwSQ6vrRxE3jHwBor5MzPQ5z53ahJdaWU0GAtoSXfF2zHGIIMxYr86iw5ClkxEW4NDgZYFWz400fuhYRXrW');
-    }
+    public function __construct(
+        private TranslatorInterface $translator,
+        )
+    {}
 
     #[Route('/test', name: 'test')]
     public function test()
     {
+        Stripe::setApiKey($this->getParameter('stripe_api_key'));
+
         $customer = Customer::retrieve($this->getUser()->getSessionId(), ['expand' => ['subscriptions']]);
 //        $customer = Customer::create([
 //            'email' => 'admin@admin.fr',
@@ -51,6 +54,8 @@ class CheckoutSubscriptionController extends AbstractController
     #[Route('/pricing', name: 'app_subscription_pricing')]
     public function getPricing()
     {
+        Stripe::setApiKey($this->getParameter('stripe_api_key'));
+
         $prices = Price::all([
             'active' => true,
             ]);
@@ -60,6 +65,8 @@ class CheckoutSubscriptionController extends AbstractController
     #[Route('/checkout', name: 'app_subscription_checkout')]
     public function index(): Response
     {
+        Stripe::setApiKey($this->getParameter('stripe_api_key'));
+
         $customer = Customer::retrieve($this->getUser()->getSessionId());
 
         $session = Session::create([
@@ -82,9 +89,11 @@ class CheckoutSubscriptionController extends AbstractController
     #[Route('/portal', name:'app_establishment_portal')]
     public function handlePortal(Request $request)
     {
+        Stripe::setApiKey($this->getParameter('stripe_api_key'));
+
         try {
             $customer = Customer::retrieve($this->getUser()->getSessionId());
-            $return_url = $this->generateUrl('profile', referenceType: UrlGenerator::ABSOLUTE_URL);
+            $return_url = $this->generateUrl('establishment_profile', referenceType: UrlGenerator::ABSOLUTE_URL);
 
             // Authenticate your user.
             $session = \Stripe\BillingPortal\Session::create([
@@ -113,6 +122,8 @@ class CheckoutSubscriptionController extends AbstractController
     #[Route('/webhook', name: 'app_subscription_webhook')]
     public function handleWebhook(Request $request, LoggerInterface $logger, MailerInterface $mailer): Response
     {
+        Stripe::setApiKey($this->getParameter('stripe_api_key'));
+
         $event = $request->getContent();
         // Parse the message body and check the signature
         $webhookSecret = "";
@@ -133,36 +144,56 @@ class CheckoutSubscriptionController extends AbstractController
         $object = $event['data']['object'];
 
         //get stripe customer from stripe id
-        if (array_key_exists('customer', $object)) {
-            $customer = Customer::retrieve($object['customer']);
+        if (!array_key_exists('customer', $object)) {
+            return $this->json([ 'error' => 'No customer found' ])->setStatusCode(403);
         }
+
+        $customer = Customer::retrieve($object['customer']);
 
         switch ($type) {
 
             case 'checkout.session.completed':
+                $mail_subject = $this->translator->trans('subject.received_payment', domain: 'mail');
                 $mail_template = 'mail_template/subscription/welcome.html.twig';
                 break;
+            case 'invoice.created':
+                $mail_subject = null;
+                $mail_template = null;
+                break;
             case 'invoice.paid':
+                $mail_subject = $this->translator->trans('subject.paid_invoice', domain: 'mail');
                 $mail_template = 'invoice/subscription_checkout_success.html.twig';
                 break;
             case 'invoice.payment_failed':
+                $mail_subject = $this->translator->trans('subject.failed_payment', domain: 'mail');
                 $mail_template = 'invoice/subscription_checkout_failed.html.twig';
                 break;
+            case 'invoice.payment_action_required':
+                $mail_subject = null;
+                $mail_template = null;
+                break;
             case 'customer.subscription.updated':
+                $mail_subject = $this->translator->trans('subject.subscription_updated', domain: 'mail');
                 $mail_template = $object['cancel_at_period_end'] ? 'mail_template/subscription/cancelled.html.twig' : 'mail_template/subscription/updated.html.twig';
+                break;
+            case 'customer.subscription.deleted':
+                $mail_template = null;
+                $mail_subject = null;
                 break;
             default:
                 $mail_template = null;
+                $mail_subject = null;
         }
 
         if ($mail_template){
             $email = (new Email())
                 // email address as a simple string
-                ->from('contact@toukan-app.fr')
-                ->to('admin@admin.fr')
+                ->from(new Address('contact@toukan-app.fr', 'Toukan App'))
+                ->to($customer->email)
+                ->subject($mail_subject)
                 ->html($this->renderView($mail_template, [
                     'object' => $object,
-//                    'user' => $this->getUser(),
+                    'user' => $customer,
                 ]));
 
             $mailer->send($email);

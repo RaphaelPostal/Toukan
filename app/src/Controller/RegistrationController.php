@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
@@ -29,6 +30,7 @@ class RegistrationController extends AbstractController
         private EmailVerifier $emailVerifier,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
+        private TranslatorInterface $translator,
     )
     {
         $this->request = $this->requestStack->getCurrentRequest();
@@ -72,7 +74,7 @@ class RegistrationController extends AbstractController
                 (new TemplatedEmail())
                     ->from(new Address('contact@toukan.fr', 'Toukan'))
                     ->to($user->getEmail())
-                    ->subject('Confirmez votre adresse email')
+                    ->subject($this->translator->trans('confirm_address', domain: 'mail'))
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
@@ -91,20 +93,20 @@ class RegistrationController extends AbstractController
 
         $id = $request->get('id');
         if (!$id) {
-            $this->addFlash('error', 'Le lien de vérification est invalide');
+            $this->addFlash('error', $this->translator->trans('invalid_verification_link', domain: 'security'));
 
             return $this->redirectToRoute('login');
         }
 
         $user = $repository->find($id);
         if (!$user) {
-            $this->addFlash('error', 'Aucun utilisateur trouvé');
+            $this->addFlash('error', $this->translator->trans('user_not_find', domain: 'security'));
 
             return $this->redirectToRoute('login');
         }
 
         if ($user->isVerified()) {
-            $this->addFlash('error', 'Votre adresse email est déjà vérifiée');
+            $this->addFlash('error', $this->translator->trans('already_verified_mail', domain: 'security'));
             return $this->redirectToRoute('login');
         }
         // validate email confirmation link, sets User::isVerified=true and persists
@@ -128,13 +130,14 @@ class RegistrationController extends AbstractController
                 'postal_code' => $user->getEstablishment()->getAddress()['zipcode'],
                 'state' => '',
                 'country' => 'FR',
+                //TODO : add country and state to the form
             ],
         ]);
 
         $user->setSessionId($newCustomer->id);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Your email address has been verified.');
+        $this->addFlash('success', $this->translator->trans('verified_email', domain: 'security'));
 
         return $this->redirectToRoute('login');
     }

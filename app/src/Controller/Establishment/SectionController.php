@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\UX\Turbo\TurboBundle;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -21,6 +22,11 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 #[Route('/establishment/card/{card}/section')]
 class SectionController extends AbstractController
 {
+    public function __construct(
+        private TranslatorInterface $translator,
+    )
+    {}
+
     #[Route('/create', name: 'app_section_create', methods: ['GET', 'POST'])]
     public function new(Request $request, SectionRepository $sectionRepository, Card $card): Response
     {
@@ -28,7 +34,7 @@ class SectionController extends AbstractController
         $card->addSection($section);
         $form = $this->createForm(SectionType::class, $section, [
             'action' => $this->generateUrl('app_section_create', ['card' => $card->getId()]),
-            'save-label' => 'Ajouter',
+            'save-label' => $this->translator->trans('add'),
         ]);
         $form->handleRequest($request);
 
@@ -63,7 +69,7 @@ class SectionController extends AbstractController
     {
         $form = $this->createForm(SectionType::class, $section, [
             'action' => $this->generateUrl('app_section_edit', ['card' => $card->getId(), 'id' => $section->getId()]),
-            'save-label' => 'Enregistrer',
+            'save-label' => $this->translator->trans('save'),
         ]);
         $form->handleRequest($request);
 
@@ -107,7 +113,7 @@ class SectionController extends AbstractController
         $section->addProduct($product);
         $form = $this->createForm(ProductType::class, $product, [
             'action' => $this->generateUrl('app_section_product_create', ['card' => $card->getId(), 'id' => $section->getId()]),
-            'save-label' => 'Ajouter',
+            'save-label' => $this->translator->trans('add')
         ]);
         $form->handleRequest($request);
 

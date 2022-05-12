@@ -1,0 +1,7 @@
+confirm_address : "Confirm your email address"
+
+subject :
+  received_payment : "Received your payment"
+  paid_invoice : "Your invoice"
+  failed_payment : "Your payment has failed"
+  subscription_updated : "Your subscription has been updated"
