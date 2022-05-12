@@ -52,6 +52,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $session_id;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $subscriptionActive;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -181,6 +186,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSessionId(string $session_id): self
     {
         $this->session_id = $session_id;
+
+        return $this;
+    }
+
+    public function isSubscriptionActive(): ?bool
+    {
+        return $this->subscriptionActive;
+    }
+
+    public function setSubscriptionActive(?bool $subscriptionActive): self
+    {
+        $this->subscriptionActive = $subscriptionActive;
 
         return $this;
     }

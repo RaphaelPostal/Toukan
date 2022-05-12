@@ -2,11 +2,15 @@
 
 namespace App\Controller\Subscription;
 
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Stripe\Checkout\Session;
 use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Price;
+use Stripe\Product;
+use Stripe\Subscription;
 use Stripe\Webhook;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +29,8 @@ class CheckoutSubscriptionController extends AbstractController
 
     public function __construct(
         private TranslatorInterface $translator,
+        private UserRepository $userRepository,
+        private EntityManagerInterface $entityManager,
         )
     {}
 
@@ -156,10 +162,10 @@ class CheckoutSubscriptionController extends AbstractController
                 $mail_subject = $this->translator->trans('subject.received_payment', domain: 'mail');
                 $mail_template = 'mail_template/subscription/welcome.html.twig';
                 break;
-            case 'invoice.created':
-                $mail_subject = null;
-                $mail_template = null;
-                break;
+//            case 'invoice.created':
+//                $mail_subject = null;
+//                $mail_template = null;
+//                break;
             case 'invoice.paid':
                 $mail_subject = $this->translator->trans('subject.paid_invoice', domain: 'mail');
                 $mail_template = 'invoice/subscription_checkout_success.html.twig';
@@ -168,15 +174,17 @@ class CheckoutSubscriptionController extends AbstractController
                 $mail_subject = $this->translator->trans('subject.failed_payment', domain: 'mail');
                 $mail_template = 'invoice/subscription_checkout_failed.html.twig';
                 break;
-            case 'invoice.payment_action_required':
-                $mail_subject = null;
-                $mail_template = null;
-                break;
+//            case 'invoice.payment_action_required':
+//                $mail_subject = null;
+//                $mail_template = null;
+//                break;
             case 'customer.subscription.updated':
+                $this->setUserSubscription($customer);
                 $mail_subject = $this->translator->trans('subject.subscription_updated', domain: 'mail');
                 $mail_template = $object['cancel_at_period_end'] ? 'mail_template/subscription/cancelled.html.twig' : 'mail_template/subscription/updated.html.twig';
                 break;
             case 'customer.subscription.deleted':
+                $this->setUserSubscription($customer);
                 $mail_template = null;
                 $mail_subject = null;
                 break;
@@ -200,5 +208,32 @@ class CheckoutSubscriptionController extends AbstractController
         }
 
         return $this->json([ 'status' => 'success' ]);
+    }
+
+    private function setUserSubscription(Customer $customer)
+    {
+        Stripe::setApiKey($this->getParameter('stripe_api_key'));
+
+        $customer = Customer::retrieve($customer->id);
+
+        $subscription = Subscription::all(['customer' => $customer->id, 'status' => 'active']);
+        $toukanProducts = Product::all([ 'active' => true]);
+
+        $subscriptionsProduct = array_map(function ($subscription) {
+            return $subscription->plan->product;
+        }, $subscription->data);
+
+        $allowedToukanProducts = array_filter($toukanProducts->data, function ($product){
+            return $product->metadata->allow_app_usage;
+        });
+
+        $allowedToukanProductsId = array_map(function ($product){
+            return $product->id;
+        }, $allowedToukanProducts);
+
+        $isUserAllowedToUseToukan = array_intersect(array_values($allowedToukanProductsId), array_values($subscriptionsProduct));
+
+        $this->userRepository->findOneBy(['session_id' => $customer->id])->setSubscriptionActive((bool)$isUserAllowedToUseToukan);
+        $this->entityManager->flush();
     }
 }

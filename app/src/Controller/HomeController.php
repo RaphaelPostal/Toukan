@@ -2,6 +2,11 @@
 
 namespace App\Controller;
 
+use Stripe\Customer;
+use Stripe\Product;
+use Stripe\Stripe;
+use Stripe\Subscription;
+use Stripe\SubscriptionItem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,6 +38,7 @@ class HomeController extends AbstractController
      */
     public function dashboard(): Response
     {
+        dd($this->getUser()->isSubscriptionActive());
         return $this->render('establishment/dashboard/index.html.twig', [
             'controller_name' => 'HomeController',
         ]);
