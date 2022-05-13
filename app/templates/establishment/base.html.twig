@@ -17,7 +17,17 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body class="{{ app.request.attributes.get('_route') == 'home' ? 'bg-salmon' }}">
-        {% block body %}{% endblock %}
+    <body class="{{ app.request.attributes.get('_route') == 'home' ? 'bg-salmon' }} flex flex-row min-h-screen h-full relative w-full">
+        {% include 'establishment/header.html.twig' %}
+        <div class="block w-full">
+            {% if subscriptionActive is defined %}
+                {% if not subscriptionActive %}
+                    {{ include('establishment/partials/no_subscription_alert.html.twig') }}
+                {% endif %}
+            {% endif %}
+            <div class="p-2">
+                {% block body %}{% endblock %}
+            </div>
+        </div>
     </body>
 </html>

@@ -1,0 +1,27 @@
+{% trans_default_domain 'navbar' %}
+<aside class="block w-max bg-toukan h-screen sticky top-0 p-4 text-xl">
+    <nav class="flex flex-col justify-between h-full">
+        <ul>
+            <li class="py-2">
+                <a class="whitespace-nowrap" href="{{ path('establishment_dashboard') }}">
+                    <i class="fa-solid fa-chart-line fa-fw pr-1"></i>
+                    {{ 'dashboard'|trans }}
+                </a>
+            </li>
+            <li class="py-2">
+                <a href="{{ path('establishment_profile') }}">
+                    <i class="fa-solid fa-user fa-fw pr-1"></i>
+                    {{ 'profile'|trans }}
+                </a>
+            </li>
+        </ul>
+        <ul>
+            <li class="py-2">
+                <a class="text-red-500" href="{{ path('app_logout') }}">
+                    <i class="fa-solid fa-power-off fa-fw pr-1"></i>
+                    {{ 'logout'|trans }}
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>

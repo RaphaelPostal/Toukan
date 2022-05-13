@@ -3,7 +3,7 @@
 {% block title %}Connexion - Toukan{% endblock %}
 
 {% block body %}
-<form method="post" class="flex justify-center align-center w-full h-full text-center">
+<form data-turbo="false" method="post" class="flex justify-center align-center w-full h-full text-center">
     <a href="{{ path('home') }}" class="btn btn-lg btn-primary">
         Retour
     </a>
@@ -41,7 +41,7 @@
         </div>
         #}
 
-        <button class="bg-toukan text-white rounded-3xl px-16 py-2 mb-2" type="submit">
+        <button data-turbo="false" class="bg-toukan text-white rounded-3xl px-16 py-2 mb-2" type="submit">
             Se connecter
         </button>
 
