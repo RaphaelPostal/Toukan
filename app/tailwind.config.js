@@ -1,37 +1,29 @@
-const colors = require('tailwindcss/colors')
-
 module.exports = {
-    purge: [],
-    darkMode: false, // or 'media' or 'class'
-    theme: {
-        colors: {
-            black: colors.black,
-            white: colors.white,
-            gray: colors.trueGray,
-            indigo: colors.indigo,
-            yellow: colors.amber,
-            'toukan' : '#F49B22',
-            'toukan-dark' : '#D68402',
-            'toukan-white' : '#FFEDD0',
-            'red' : '#F70303',
-            'light-blue' : '#1488F3',
-            'blue' : '#575A89',
-            'green' : '#04D733',
-            'dark-gray' : '#2E2E2E',
-            'light-gray' : '#EDEDED',
-            'salmon' : '#FFDED0'
-        },
-        extend: {},
-        fontFamily: {
-            base: ['Karla', 'sans-serif'],
-        },
-        plugins: [
-            require('@tailwindcss/forms'),
-        ],
+  purge: [],
+  darkMode: false, // or 'media' or 'class'
+  theme: {
+    extend: {
+      colors:{
+        'toukan' : '#F49B22',
+        'toukan-dark' : '#D68402',
+        'toukan-white' : '#FFEDD0',
+        'toukan-red' : '#F70303',
+        'toukan-light-blue' : '#1488F3',
+        'toukan-blue' : '#575A89',
+        'toukan-green' : '#04D733',
+        'toukan-dark-gray' : '#2E2E2E',
+        'toukan-light-gray' : '#EDEDED',
+        'toukan-salmon' : '#FFDED0'
+      }
     },
-    variants: {
-        extend: {},
+    fontFamily: {
+      base: ['Karla', 'sans-serif'],
     },
-    plugins: [
-    ],
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 }

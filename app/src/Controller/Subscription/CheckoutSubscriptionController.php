@@ -62,14 +62,15 @@ class CheckoutSubscriptionController extends AbstractController
     {
         Stripe::setApiKey($this->getParameter('stripe_api_key'));
 
-        $prices = Price::all([
-            'active' => true,
-            ]);
-        dd($prices);
+        $products = Product::all(['active' => true, 'expand' => ['data.default_price']]);
+
+        return $this->render('establishment/pricing/index.html.twig', [
+            'products' => $products,
+        ]);
     }
 
-    #[Route('/checkout', name: 'app_subscription_checkout')]
-    public function index(): Response
+    #[Route('/checkout/{priceId}', name: 'app_subscription_checkout')]
+    public function index($priceId): Response
     {
         Stripe::setApiKey($this->getParameter('stripe_api_key'));
 
@@ -80,8 +81,7 @@ class CheckoutSubscriptionController extends AbstractController
             'mode'=>'subscription',
             'line_items' => [
                 [
-                    'price' => 'price_1KxpEDDUppKYGFFMGRO49zAm',
-//                    'price' => 'price_1KyCGSDUppKYGFFMxk6L02z0',
+                    'price' => $priceId,
                     'quantity' => 1,
                 ],
             ],
