@@ -52,3 +52,11 @@
         </template>
     </turbo-stream>
 {% endif %}
+
+{% if 'app_sauce' in app.request.get('_route') %}
+    <turbo-stream action="update" target="establishment-sauces">
+        <template>
+            {% include 'establishment/partials/sauces.html.twig' with {'card' : card} %}
+        </template>
+    </turbo-stream>
+{% endif %}

@@ -1,5 +1,5 @@
 <turbo-frame id="establishment-card">
-        {% for section in card.sections|filter(s => s.title != "Sauces") %}
+        {% for section in card.sections %}
             <table class="mt-5">
                 <thead>
                     <th>
@@ -46,37 +46,4 @@
             </table>
 
         {% endfor %}
-
-    {% for section in card.sections|filter(s => s.title == "Sauces") %}
-        <table class="mt-5">
-            <thead>
-            <th>
-                {{ section.title }}
-            </th>
-            </thead>
-
-            <tbody>
-            {% for sauce in section.sauces %}
-                <tr>
-                    <td>
-                        {{ sauce.title }}
-                    </td>
-                    <td>
-                        <button type="button" onclick="set_frame_src({{ sauce.id }}, 'section_sauce_edit')" class="transition duration-150 ease-in-out admin-button-edit" data-bs-toggle="modal" data-bs-target="#modal-form-edit-sauce">
-                            Modifier
-                        </button>
-                    </td>
-                    <td>
-                        <form method="post" action="{{ path('app_sauce_delete', {'card' : card.id, 'id': sauce.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sauce.id) }}">
-                            <button class="btn admin-button-delete">Supprimer</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% endfor %}
-
-
 </turbo-frame>

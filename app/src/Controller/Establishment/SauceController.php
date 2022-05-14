@@ -31,19 +31,7 @@ class SauceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //if a section named "sauce" exists, we add the sauce to it
-            $section_sauce = $sectionRepository->findOneBy(['title' => 'Sauces']);
-            if($section_sauce){
-                $section_sauce->addSauce($sauce);
-            } else {
-                //else, we create a new section named "sauce" and add the sauce to it
-                $section_sauce = new Section();
-                $section_sauce->setTitle('Sauces');
-                $section_sauce->addSauce($sauce);
-                $section_sauce->setCard($card);
-                $entityManager->persist($section_sauce);
 
-            };
             $card->addSauce($sauce);
             $sauceRepository->add($sauce);
             if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {

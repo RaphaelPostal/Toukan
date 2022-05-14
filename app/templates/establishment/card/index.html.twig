@@ -16,6 +16,10 @@
         Ajouter une sauce <img class="custom-icon" src="{{ asset('assets/img/icons/icon_sauce.svg') }}" alt="">
     </button>
 
+    <div id="establishment-sauces">
+        {% include 'establishment/partials/sauces.html.twig' %}
+    </div>
+
     <!-- Modals -->
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-create-section', 'modal_title' : 'Section', 'context' : 'section-create'} %}
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-section', 'modal_title' : 'Section', 'context' : 'section-edit'} %}
