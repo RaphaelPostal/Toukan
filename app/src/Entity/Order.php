@@ -13,6 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Order
 {
+    CONST STATUS_ORDERING = 'ordering'; // commande non validée par le client
+    CONST STATUS_IN_PROGRESS = 'in_progress'; // commande validée par le client, en attente de livraison
+    CONST STATUS_DELIVERED = 'delivered'; // commande servie
+    CONST STATUS_CANCELED = 'canceled';
+    CONST STATUS_PAYED = 'payed';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
