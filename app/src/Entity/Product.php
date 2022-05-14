@@ -76,6 +76,11 @@ class Product
      */
     private $available;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $sauce_choosable;
+
     public function __construct()
     {
         $this->productOrders = new ArrayCollection();
@@ -220,6 +225,18 @@ class Product
     public function setAvailable(?bool $available): self
     {
         $this->available = $available;
+
+        return $this;
+    }
+
+    public function getSauceChoosable(): ?bool
+    {
+        return $this->sauce_choosable;
+    }
+
+    public function setSauceChoosable(?bool $sauce_choosable): self
+    {
+        $this->sauce_choosable = $sauce_choosable;
 
         return $this;
     }

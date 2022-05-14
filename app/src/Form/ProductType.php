@@ -31,6 +31,10 @@ class ProductType extends AbstractType
                 'label' => 'Allergènes',
                 'required' => false,
             ])
+            ->add('sauce_choosable', CheckboxType::class, [
+                'label' => 'Sauce aux choix',
+                'required' => false,
+            ])
             ->add('available', CheckboxType::class, [
                 'label' => 'Disponible',
                 'required' => false,
