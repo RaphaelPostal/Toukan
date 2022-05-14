@@ -35,6 +35,11 @@ class Sauce
      */
     private $title;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $available;
+
     public function __construct()
     {
         $this->ProductOrder = new ArrayCollection();
@@ -95,6 +100,18 @@ class Sauce
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getAvailable(): ?bool
+    {
+        return $this->available;
+    }
+
+    public function setAvailable(?bool $available): self
+    {
+        $this->available = $available;
 
         return $this;
     }
