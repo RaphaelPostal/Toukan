@@ -74,7 +74,7 @@ class Product
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $available;
+    private $available = true;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)

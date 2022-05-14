@@ -38,7 +38,7 @@ class Sauce
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $available;
+    private $available = true;
 
     public function __construct()
     {
