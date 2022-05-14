@@ -14,7 +14,7 @@
 
                 {% if context == 'section-create' %}
                     <div id="form-create-section">
-                        {{ render(controller('App\\Controller\\Establishment\\SectionController::new', {card:card.id})) }}
+                        {{ render(controller('App\\Controller\\Establishment\\SectionController::new')) }}
                     </div>
                 {% elseif context == 'section-edit' %}
                     <div id="form-edit-section">
@@ -33,7 +33,7 @@
                     </div>
                 {% elseif context == 'sauce-create' %}
                     <div id="form-create-sauce">
-                        {{ render(controller('App\\Controller\\Establishment\\SauceController::new', {card:card.id})) }}
+                        {{ render(controller('App\\Controller\\Establishment\\SauceController::new')) }}
                     </div>
                 {% elseif context == 'sauce-edit' %}
                     <div id="form-edit-sauce">

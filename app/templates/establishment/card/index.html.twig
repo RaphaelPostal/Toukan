@@ -33,23 +33,23 @@
             let path = ''
             switch(context) {
                 case 'section_edit':
-                    path = '{{ path('app_section_edit', {'card' : card.id, 'id' : 'id'}) }}'
+                    path = '{{ path('app_section_edit', {'id' : 'id'}) }}'
                     path = path.replace('id', entity_id)
                     document.getElementById('frame-edit-section').src = path;
                     break;
                 case 'section_product_create' :
-                    path = '{{ path('app_section_product_create', {'card' : card.id, 'id' : 'id'}) }}'
+                    path = '{{ path('app_section_product_create', {'id' : 'id'}) }}'
                     path = path.replace('id', entity_id)
                     document.getElementById('frame-section-create-product').src = path;
                     break;
                 case 'section_product_edit' :
-                    path = '{{ path('app_section_product_edit', {'card' : card.id, 'product' : 'id'}) }}'
+                    path = '{{ path('app_section_product_edit', {'product' : 'id'}) }}'
                     path = path.replace('id', entity_id)
                     document.getElementById('frame-section-edit-product').src = path;
                     break;
 
                 case 'section_sauce_edit':
-                    path = '{{ path('app_sauce_edit', {'card' : card.id, 'id' : 'sauce_id'}) }}'
+                    path = '{{ path('app_sauce_edit', {'id' : 'sauce_id'}) }}'
                     path = path.replace('sauce_id', entity_id)
                     document.getElementById('frame-edit-sauce').src = path;
                     break;

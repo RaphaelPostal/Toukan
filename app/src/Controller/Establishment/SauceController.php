@@ -15,14 +15,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\UX\Turbo\TurboBundle;
 
-#[Route('establishment/card/{card}/sauce')]
+#[Route('establishment/card/sauce')]
 class SauceController extends AbstractController
 {
 
 
     #[Route('/create', name: 'app_sauce_create', methods: ['GET', 'POST'])]
-    public function new(Request $request, Card $card, SauceRepository $sauceRepository, SectionRepository $sectionRepository, EntityManagerInterface$entityManager): Response
+    public function new(Request $request, SauceRepository $sauceRepository, SectionRepository $sectionRepository, EntityManagerInterface$entityManager): Response
     {
+        //        $card = $this->getUser()->getEstablishment()->getCard();
+        //get the first card in the database
+        $card = $this->get('doctrine')->getRepository(Card::class)->find(1);
+
         $sauce = new Sauce();
         $form = $this->createForm(SauceType::class, $sauce, [
             'action' => $this->generateUrl('app_sauce_create', ['card' => $card->getId()]),
@@ -51,8 +55,12 @@ class SauceController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_sauce_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Card $card, Sauce $sauce, SauceRepository $sauceRepository): Response
+    public function edit(Request $request, Sauce $sauce, SauceRepository $sauceRepository): Response
     {
+        //        $card = $this->getUser()->getEstablishment()->getCard();
+        //get the first card in the database
+        $card = $this->get('doctrine')->getRepository(Card::class)->find(1);
+
         $form = $this->createForm(SauceType::class, $sauce, [
             'action' => $this->generateUrl('app_sauce_edit', ['card' => $card->getId(), 'id' => $sauce->getId()]),
             'save-label' => 'Enregistrer',
@@ -78,8 +86,12 @@ class SauceController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_sauce_delete', methods: ['POST'])]
-    public function delete(Request $request, Card $card, Sauce $sauce, SauceRepository $sauceRepository): Response
+    public function delete(Request $request, Sauce $sauce, SauceRepository $sauceRepository): Response
     {
+        //        $card = $this->getUser()->getEstablishment()->getCard();
+        //get the first card in the database
+        $card = $this->get('doctrine')->getRepository(Card::class)->find(1);
+
         if ($this->isCsrfTokenValid('delete'.$sauce->getId(), $request->request->get('_token'))) {
             $sauceRepository->remove($sauce);
 
