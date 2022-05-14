@@ -71,6 +71,16 @@ class Product
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $available = true;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $sauce_choosable;
+
     public function __construct()
     {
         $this->productOrders = new ArrayCollection();
@@ -203,6 +213,30 @@ class Product
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getAvailable(): ?bool
+    {
+        return $this->available;
+    }
+
+    public function setAvailable(?bool $available): self
+    {
+        $this->available = $available;
+
+        return $this;
+    }
+
+    public function getSauceChoosable(): ?bool
+    {
+        return $this->sauce_choosable;
+    }
+
+    public function setSauceChoosable(?bool $sauce_choosable): self
+    {
+        $this->sauce_choosable = $sauce_choosable;
 
         return $this;
     }
