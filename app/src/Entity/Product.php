@@ -13,10 +13,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Product
 {
-
+    CONST TYPE_PLAT = 'Plat';
     CONST TYPE_BOISSON = 'Boisson';
-    CONST TYPE_PLAT = 'Boisson';
-    CONST TYPE_MENU = 'Boisson';
+    CONST TYPE_MENU = 'Menu';
 
     /**
      * @ORM\Id
@@ -85,19 +84,14 @@ class Product
     private $sauce_choosable;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $is_menu;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $drink_choosable;
-
-    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $menu_information;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $drink_choosable;
 
     public function __construct()
     {
@@ -270,14 +264,14 @@ class Product
         return $this;
     }
 
-    public function getIsMenu(): ?bool
+    public function getMenuInformation(): ?string
     {
-        return $this->is_menu;
+        return $this->menu_information;
     }
 
-    public function setIsMenu(?bool $is_menu): self
+    public function setMenuInformation(?string $menu_information): self
     {
-        $this->is_menu = $is_menu;
+        $this->menu_information = $menu_information;
 
         return $this;
     }
@@ -287,21 +281,9 @@ class Product
         return $this->drink_choosable;
     }
 
-    public function setDrinkChoosable(bool $drink_choosable): self
+    public function setDrinkChoosable(?bool $drink_choosable): self
     {
         $this->drink_choosable = $drink_choosable;
-
-        return $this;
-    }
-
-    public function getMenuInformation(): ?string
-    {
-        return $this->menu_information;
-    }
-
-    public function setMenuInformation(?string $menu_information): self
-    {
-        $this->menu_information = $menu_information;
 
         return $this;
     }
