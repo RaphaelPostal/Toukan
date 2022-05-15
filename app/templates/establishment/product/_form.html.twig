@@ -1,48 +1,42 @@
-{% set menu = 'false' %}
-{% if product.id is null %}
-    {% set menu = 'false' %}
-{% else %}
-    {% if product.isMenu == true %}
-            {% set menu = 'true' %}
-        {% elseif product.isMenu == false or product.isMenu is null %}
-            {% set menu = 'false' %}
-    {% endif %}
-{% endif %}
 
-<div x-data="{menu: {{ menu }} }">
     {{ form_start(form) }}
     {{ form_label(form.title) }}
     {{ form_widget(form.title) }}
 
-    {{ form_label(form.price) }}
-    {{ form_errors(form.price) }}
-    {{ form_widget(form.price) }}
-
-    <div id="product{{ product.id is not null ? '_'~product.id}}">
-        {{ form_label(form.isMenu) }}
-        {{ form_widget(form.isMenu) }}
+    <div id="product_type{{ product.id is not null ? '_'~product.id }}">
+        {{ form_label(form.type) }}
+        {{ form_widget(form.type) }}
     </div>
 
-
-    <div x-show="menu">
-        {{ form_label(form.menuInformation) }}
-        {{ form_widget(form.menuInformation) }}
-    </div>
-
-    <div x-show="!menu">
+    <div id="product_ingredients{{ product.id is not null ? '_'~product.id }}" style="display: {{ product.type == constant('App\\Entity\\Product::TYPE_MENU') ? 'none' : 'block' }}">
         {{ form_label(form.ingredients) }}
         {{ form_widget(form.ingredients) }}
     </div>
 
+    <div id="product_menu_infos{{ product.id is not null ? '_'~product.id }}" style="display: {{ product.type == constant('App\\Entity\\Product::TYPE_MENU') ? 'block' : 'none' }}">
+        {{ form_label(form.menuInformation) }}
+        {{ form_widget(form.menuInformation) }}
+    </div>
 
     {{ form_label(form.allergens) }}
     {{ form_widget(form.allergens) }}
 
-    {{ form_label(form.sauce_choosable) }}
-    {{ form_widget(form.sauce_choosable) }}
+    <div id="product_sauce{{ product.id is not null ? '_'~product.id }}" style="display: {{ product.type == constant('App\\Entity\\Product::TYPE_BOISSON') ? 'none' : 'block' }}">
+        {{ form_label(form.sauce_choosable) }}
+        {{ form_widget(form.sauce_choosable) }}
+    </div>
+
+    <div id="product_drink{{ product.id is not null ? '_'~product.id }}" style="display: {{ product.type == constant('App\\Entity\\Product::TYPE_MENU') ? 'block' : 'none' }}">
+        {{ form_label(form.drink_choosable) }}
+        {{ form_widget(form.drink_choosable) }}
+    </div>
 
     {{ form_label(form.available) }}
     {{ form_widget(form.available) }}
+
+    {{ form_label(form.price) }}
+    {{ form_errors(form.price) }}
+    {{ form_widget(form.price) }}
 
     {{ form_label(form.image) }}
     {{ form_widget(form.image) }}
@@ -50,9 +44,24 @@
     {{ form_label(form.save) }}
     {{ form_widget(form.save) }}
     {{ form_end(form) }}
-</div>
 
 <script>
-    document.querySelector('#product{{ product.id is not null ? '_'~product.id}} input').setAttribute('x-on:click', 'menu = !menu');
+    document.querySelector('#product_type{{ product.id is not null ? '_'~product.id}} select').addEventListener('change', function(e) {
+        if (e.target.value === 'Menu') {
+            document.querySelector('#product_menu_infos{{ product.id is not null ? '_'~product.id}}').style.display = 'block';
+            document.querySelector('#product_drink{{ product.id is not null ? '_'~product.id}}').style.display = 'block';
+            document.querySelector('#product_ingredients{{ product.id is not null ? '_'~product.id}}').style.display = 'none';
+        } else {
+            document.querySelector('#product_menu_infos{{ product.id is not null ? '_'~product.id}}').style.display = 'none';
+            document.querySelector('#product_drink{{ product.id is not null ? '_'~product.id}}').style.display = 'none';
+            document.querySelector('#product_ingredients{{ product.id is not null ? '_'~product.id}}').style.display = 'block';
+        }
+
+        if (e.target.value === 'Boisson') {
+            document.querySelector('#product_sauce{{ product.id is not null ? '_'~product.id}}').style.display = 'none';
+        } else {
+            document.querySelector('#product_sauce{{ product.id is not null ? '_'~product.id}}').style.display = 'block';
+        }
+    });
 </script>
 

@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Product;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -24,21 +25,26 @@ class ProductType extends AbstractType
                     'placeholder' => 'ex: Cheeseburger'
                 ]
             ])
+            ->add('type', ChoiceType::class, [
+                'label' => 'Type',
+                'choices' => [
+                    'Plat' => Product::TYPE_PLAT,
+                    'Boisson' => Product::TYPE_BOISSON,
+                    'Menu' => Product::TYPE_MENU,
+                ]
+            ])
             ->add('price', TextType::class, [
                 'label' => 'Prix',
                 'attr' => [
                     'placeholder' => 'ex: 4.50'
                 ]
             ])
-            ->add('isMenu', CheckboxType::class, [
-                'label' => 'Menu ?',
-                'required' => false
-            ])
+
             ->add('menuInformation', TextareaType::class, [
                 'label' => 'Informations sur le menu (composition, options, etc ...)',
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'ex: 6 Nuggets, Frite (grande ou petite), boisson au choix'
+                    'placeholder' => 'ex: 6 Nuggets, Frite (grande ou petite), dessert au choix'
                 ]
             ])
             ->add('ingredients', TextareaType::class, [
@@ -56,6 +62,10 @@ class ProductType extends AbstractType
             ])
             ->add('sauce_choosable', CheckboxType::class, [
                 'label' => 'Sauce aux choix',
+                'required' => false,
+            ])
+            ->add('drink_choosable', CheckboxType::class, [
+                'label' => 'Boisson aux choix',
                 'required' => false,
             ])
             ->add('available', CheckboxType::class, [
