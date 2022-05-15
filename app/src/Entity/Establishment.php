@@ -59,6 +59,11 @@ class Establishment
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $custom_color;
+
     public function __construct()
     {
         $this->cards = new ArrayCollection();
@@ -179,6 +184,18 @@ class Establishment
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getCustomColor(): ?string
+    {
+        return $this->custom_color;
+    }
+
+    public function setCustomColor(?string $custom_color): self
+    {
+        $this->custom_color = $custom_color;
 
         return $this;
     }

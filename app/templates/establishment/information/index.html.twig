@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes informations{% endblock %}
+
+{% block body %}
+    <h2 class="text-2xl font-bold">Compte</h2>
+    <p>{{ user.email }} <i class="fas fa-pen"></i></p>
+    <p>Modifier mon mot de passe <i class="fas fa-pen"></i></p>
+    <p>{{ establishment.name }} <i class="fas fa-pen"></i></p>
+    <p>{{ establishment.address }} <i class="fas fa-pen"></i></p>
+    <p>{{ establishment.phone }} <i class="fas fa-pen"></i></p>
+    <p>Mon illustration <i class="fas fa-pen"></i></p>
+    <p>Ma couleur <i class="fas fa-pen"></i></p>
+{% endblock %}

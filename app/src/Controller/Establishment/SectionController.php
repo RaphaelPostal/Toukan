@@ -55,14 +55,6 @@ class SectionController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_section_show', methods: ['GET'])]
-    public function show(Section $section): Response
-    {
-        return $this->render('section/show.html.twig', [
-            'section' => $section,
-        ]);
-    }
-
     #[Route('/{id}/edit', name: 'app_section_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Section $section, SectionRepository $sectionRepository): Response
     {
@@ -166,7 +158,7 @@ class SectionController extends AbstractController
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('product/new.html.twig', [
+        return $this->renderForm('establishment/product/new.html.twig', [
             'product' => $product,
             'form' => $form,
         ]);

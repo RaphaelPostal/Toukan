@@ -48,7 +48,7 @@ class SauceController extends AbstractController
             return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('sauce/new.html.twig', [
+        return $this->renderForm('establishment/sauce/new.html.twig', [
             'sauce' => $sauce,
             'form' => $form,
         ]);
@@ -79,7 +79,7 @@ class SauceController extends AbstractController
             return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('sauce/edit.html.twig', [
+        return $this->renderForm('establishment/sauce/edit.html.twig', [
             'sauce' => $sauce,
             'form' => $form,
         ]);
