@@ -7,8 +7,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Checkout\Session;
 use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
+use Stripe\Price;
 use Stripe\Product;
 use Stripe\Stripe;
+use Stripe\Subscription;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,6 +52,30 @@ class CheckoutSubscriptionController extends AbstractController
         return $this->render('subscription/test.html.twig');
     }
 
+    #[Route('/upgrade/{priceId}', name: 'app_subscription_upgrade')]
+    public function upgradeSubscription($priceId){
+        if (!$this->getUser()->isSubscriptionActive()) {
+//            return $this->redirectToRoute('establishment_dashboard');
+        }
+        //Upgrade user's subscription on stripe
+        Stripe::setApiKey($this->getParameter('stripe_api_key'));
+
+        $subscription = Subscription::retrieve($this->getUser()->getSubscriptionId());
+
+        Subscription::update($subscription->id, [
+            'cancel_at_period_end' => false,
+            'proration_behavior' => 'create_prorations',
+            'items' => [
+                [
+                    'id' => $subscription->items->data[0]->id,
+                    'price' => $priceId,
+                ],
+            ],
+        ]);
+
+        return $this->redirectToRoute('establishment_dashboard');
+    }
+
     #[Route('/pricing', name: 'app_subscription_pricing')]
     public function getPricing()
     {
@@ -60,14 +86,14 @@ class CheckoutSubscriptionController extends AbstractController
 
         Stripe::setApiKey($this->getParameter('stripe_api_key'));
 
-        $products = Product::all(['active' => true, 'expand' => ['data.default_price']]);
+        $prices = Price::all(['active' => true, 'expand' => ['data.product']]);
 
-        $products = array_filter($products->data, function($product) {
-            return  $product->metadata->allow_app_usage;
-        });
+        $prices = array_values(array_filter($prices->data, function($price) {
+            return  $price->product->metadata->allow_app_usage;
+        }));
 
         return $this->render('establishment/pricing/index.html.twig', [
-            'products' => $products,
+            'prices' => $prices,
         ]);
     }
 

@@ -2,21 +2,21 @@
 {% block body %}
     <h1 class="text-3xl text-center py-4">Abonnements</h1>
     <div class="products-container flex flex-row">
-    {% for product in products %}
+    {% for price in prices %}
         <div class="shadow-lg rounded-2xl w-64 bg-white dark:bg-gray-800 p-4 m-auto">
             <p class="text-gray-800 dark:text-gray-50 text-xl font-medium mb-4">
-                {{ product.name }}
+                {{ price.product.name }}
             </p>
             <p class="text-gray-900 dark:text-white text-3xl font-bold">
-                {{ product.default_price.unit_amount/100 }}€
+                {{ price.unit_amount/100 }}€
             </p>
-            {% if product.default_price.type is same as('recurring') %}
+            {% if price.type is same as('recurring') %}
                 <span class="text-gray-300 text-sm">
                 / mois
                 </span>
             {% endif %}
             <p class="text-gray-600 dark:text-gray-100  text-xs mt-4">
-                {{ product.description }}
+                {{ price.product.description }}
             </p>
             <ul class="text-sm text-gray-600 dark:text-gray-100 w-full mt-6 mb-6">
                 <li class="mb-3 flex items-center ">
@@ -69,9 +69,15 @@
                     My wife
                 </li>
             </ul>
-            <a data-turbo="false" href="{{ path('app_subscription_checkout', {'priceId':product.default_price.id}) }}" class="py-2 px-4  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
-                Choose plan
-            </a>
+            {% if app.user.isSubscriptionActive() %}
+                <a data-turbo="false" href="{{ path('app_subscription_upgrade', {'priceId':price.id}) }}" class="py-2 px-4  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                    Upgrade plan
+                </a>
+            {% else %}
+                <a data-turbo="false" href="{{ path('app_subscription_checkout', {'priceId':price.id}) }}" class="py-2 px-4  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                    Choose plan
+                </a>
+            {% endif %}
         </div>
     {% endfor %}
     </div>

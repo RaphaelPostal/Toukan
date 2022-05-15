@@ -57,6 +57,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $subscriptionActive;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $subscription_id;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -198,6 +203,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSubscriptionActive(?bool $subscriptionActive): self
     {
         $this->subscriptionActive = $subscriptionActive;
+
+        return $this;
+    }
+
+    public function getSubscriptionId(): ?string
+    {
+        return $this->subscription_id;
+    }
+
+    public function setSubscriptionId(?string $subscription_id): self
+    {
+        $this->subscription_id = $subscription_id;
 
         return $this;
     }

@@ -76,6 +76,7 @@ class StripeWebhookController extends AbstractController
 //                $mail_template = null;
 //                break;
             case 'invoice.payment_succeeded':
+                $this->setUserSubscription($customer);
                 $mail_subject = $this->translator->trans('subject.paid_invoice', domain: 'mail');
                 $mail_template = 'invoice/subscription_checkout_success.html.twig';
                 break;
@@ -182,7 +183,11 @@ class StripeWebhookController extends AbstractController
 
         $isUserAllowedToUseToukan = array_intersect(array_values($allowedToukanProductsId), array_values($subscriptionsProduct));
 
-        $this->userRepository->findOneBy(['session_id' => $customer->id])->setSubscriptionActive((bool)$isUserAllowedToUseToukan);
+        $user = $this->userRepository->findOneBy(['session_id' => $customer->id]);
+
+        $user->setSubscriptionId($isUserAllowedToUseToukan?$subscription->data[0]->id:null);
+        $user->setSubscriptionActive((bool)$isUserAllowedToUseToukan);
+
         $this->entityManager->flush();
     }
 }
