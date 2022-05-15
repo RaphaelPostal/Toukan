@@ -30,6 +30,17 @@ class ProductType extends AbstractType
                     'placeholder' => 'ex: 4.50'
                 ]
             ])
+            ->add('isMenu', CheckboxType::class, [
+                'label' => 'Menu ?',
+                'required' => false
+            ])
+            ->add('menuInformation', TextareaType::class, [
+                'label' => 'Informations sur le menu (composition, options, etc ...)',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'ex: 6 Nuggets, Frite (grande ou petite), Boisson au choix'
+                ]
+            ])
             ->add('ingredients', TextareaType::class, [
                 'label' => 'Ingrédients',
                 'attr' => [

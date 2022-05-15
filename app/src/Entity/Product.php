@@ -84,6 +84,21 @@ class Product
      */
     private $sauce_choosable;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $is_menu;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $drink_choosable;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $menu_information;
+
     public function __construct()
     {
         $this->productOrders = new ArrayCollection();
@@ -251,6 +266,42 @@ class Product
     public function setSauceChoosable(?bool $sauce_choosable): self
     {
         $this->sauce_choosable = $sauce_choosable;
+
+        return $this;
+    }
+
+    public function getIsMenu(): ?bool
+    {
+        return $this->is_menu;
+    }
+
+    public function setIsMenu(?bool $is_menu): self
+    {
+        $this->is_menu = $is_menu;
+
+        return $this;
+    }
+
+    public function getDrinkChoosable(): ?bool
+    {
+        return $this->drink_choosable;
+    }
+
+    public function setDrinkChoosable(bool $drink_choosable): self
+    {
+        $this->drink_choosable = $drink_choosable;
+
+        return $this;
+    }
+
+    public function getMenuInformation(): ?string
+    {
+        return $this->menu_information;
+    }
+
+    public function setMenuInformation(?string $menu_information): self
+    {
+        $this->menu_information = $menu_information;
 
         return $this;
     }
