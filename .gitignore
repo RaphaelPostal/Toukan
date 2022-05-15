@@ -1,2 +1,3 @@
 .idea/
 /app/migrations/
+./docker/stripe/stripe_cli.env

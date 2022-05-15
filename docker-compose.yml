@@ -4,6 +4,7 @@ services:
     db:
         image: mysql
         container_name: db_docker_toukan
+        platform: linux/amd64
         volumes:
             - toukan-db-data:/var/lib/mysql
         environment:
@@ -17,6 +18,7 @@ services:
     phpmyadmin:
         image: phpmyadmin
         container_name: phpmyadmin_docker_toukan
+        platform: linux/amd64
         depends_on:
             - db
         ports:
@@ -28,6 +30,7 @@ services:
 
     maildev:
         image: maildev/maildev
+        platform: linux/amd64
         container_name: maildev_docker_toukan
         command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
         ports:
@@ -46,6 +49,15 @@ services:
         networks:
             - dev
 
+    stripe-cli:
+        image: stripe/stripe-cli
+        platform: linux/amd64
+        container_name: stripe-cli
+        command: "listen --api-key ${STRIPE_API_KEY} --device-name ${STRIPE_DEVICE_NAME} --forward-to http://www_docker_toukan/establishment/subscription/webhook"
+        env_file:
+            - ./docker/stripe/stripe_cli.env
+        networks:
+            - dev
 
 networks:
     dev:

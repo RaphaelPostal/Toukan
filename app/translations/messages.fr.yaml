@@ -1,2 +1,5 @@
 add : 'Ajouter'
 save : 'Enregistrer'
+back : 'Retour'
+no_active_subscription : "Vous n'avez pas activé votre abonnement Toukan, vos fonctionnalités sont restreintes."
+go_to_subscriptions : "Voir les abonnements"

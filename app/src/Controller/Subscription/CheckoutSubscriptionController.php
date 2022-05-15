@@ -4,22 +4,15 @@ namespace App\Controller\Subscription;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Stripe\Checkout\Session;
 use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
-use Stripe\Price;
 use Stripe\Product;
-use Stripe\Subscription;
-use Stripe\Webhook;
+use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
-use Stripe\Stripe;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -60,9 +53,18 @@ class CheckoutSubscriptionController extends AbstractController
     #[Route('/pricing', name: 'app_subscription_pricing')]
     public function getPricing()
     {
+        if ($this->getUser()->isSubscriptionActive()) {
+            $this->addFlash('warning', $this->translator->trans('subscription.already_subscribed', domain: 'alert'));
+//            return $this->redirectToRoute('establishment_dashboard');
+        }
+
         Stripe::setApiKey($this->getParameter('stripe_api_key'));
 
         $products = Product::all(['active' => true, 'expand' => ['data.default_price']]);
+
+        $products = array_filter($products->data, function($product) {
+            return  $product->metadata->allow_app_usage;
+        });
 
         return $this->render('establishment/pricing/index.html.twig', [
             'products' => $products,

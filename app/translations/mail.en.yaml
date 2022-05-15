@@ -5,3 +5,6 @@ subject :
   paid_invoice : "Your invoice"
   failed_payment : "Your payment has failed"
   subscription_updated : "Your subscription has been updated"
+  subscription_cancelled : "Cancellation of your subscription"
+  charge_refunded : "Refund of your payment"
+  duplicate_subscription : "Detection of a duplicate subscription"

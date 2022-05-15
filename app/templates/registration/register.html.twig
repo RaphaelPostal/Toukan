@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Inscription - Toukan{% endblock %}
+{% trans_default_domain 'form' %}
+{% block title %}Inscription{% endblock %}
 
 {% block body %}
     {% for flashError in app.flashes('verify_email_error') %}
@@ -8,35 +8,42 @@
     {% endfor %}
 
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
+        {{ form_row(registrationForm.email, {
+            label: 'email'|trans
+        }) }}
         {{ form_row(registrationForm.name, {
-            label: 'Nom de l\'établissement'
+            label: 'establishment_name'|trans
         }) }}
         {{ form_row(registrationForm.type, {
-            label: 'Type de l\'établissement'
+            label: 'establishment_type'|trans
         }) }}
         {{ form_row(registrationForm.street, {
-            label: 'Adresse postale'
+            label: 'establishment_address'|trans
         }) }}
         {{ form_row(registrationForm.city, {
-            label: 'Ville'
+            label: 'establishment_city'|trans
         }) }}
         {{ form_row(registrationForm.zipcode, {
-            label: 'Code postal'
+            label: 'establishment_zip_code'|trans
         }) }}
         {{ form_row(registrationForm.phone, {
-            label: 'Téléphone'
+            label: 'establishment_phone'|trans
         }) }}
-        {{ form_row(registrationForm.password) }}
+        {{ form_row(registrationForm.password.first, {
+            label: 'password'|trans
+        }) }}
+    {{ form_row(registrationForm.password.second, {
+        label: 'password_confirmation'|trans
+    }) }}
 
         {{ form_row(registrationForm.agreeTerms,{
-            label: 'Accepter les conditions d\'utilisation : '
+            label: 'accept_terms'|trans
         }) }}
 
-        <button type="submit" class="btn">S'inscrire</button>
+        <button type="submit" class="btn">{{ 'sign_up'|trans }}</button>
 
         <a href="{{ path('login') }}" class="btn btn-lg btn-primary">
-            Se connecter
+            {{ 'log_in'|trans }}
         </a>
     {{ form_end(registrationForm) }}
 {% endblock %}

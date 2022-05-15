@@ -6,7 +6,10 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Stripe\Customer;
+use Stripe\Invoice;
+use Stripe\PaymentIntent;
 use Stripe\Product;
+use Stripe\Refund;
 use Stripe\Stripe;
 use Stripe\Subscription;
 use Stripe\Webhook;
@@ -19,7 +22,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/subscription')]
+#[Route('/establishment/subscription')]
 class StripeWebhookController extends AbstractController
 {
 
@@ -27,11 +30,12 @@ class StripeWebhookController extends AbstractController
         private TranslatorInterface $translator,
         private UserRepository $userRepository,
         private EntityManagerInterface $entityManager,
+        private MailerInterface $mailer,
         )
     {}
 
     #[Route('/webhook', name: 'app_subscription_webhook')]
-    public function handleWebhook(Request $request, LoggerInterface $logger, MailerInterface $mailer): Response
+    public function handleWebhook(Request $request): Response
     {
         Stripe::setApiKey($this->getParameter('stripe_api_key'));
 
@@ -71,7 +75,7 @@ class StripeWebhookController extends AbstractController
 //                $mail_subject = null;
 //                $mail_template = null;
 //                break;
-            case 'invoice.paid':
+            case 'invoice.payment_succeeded':
                 $mail_subject = $this->translator->trans('subject.paid_invoice', domain: 'mail');
                 $mail_template = 'invoice/subscription_checkout_success.html.twig';
                 break;
@@ -83,6 +87,11 @@ class StripeWebhookController extends AbstractController
 //                $mail_subject = null;
 //                $mail_template = null;
 //                break;
+            case 'customer.subscription.created':
+                $this->removeDuplicateSubscription($customer, $object['id']);
+                $mail_template = null;
+                $mail_subject = null;
+                break;
             case 'customer.subscription.updated':
                 $this->setUserSubscription($customer);
                 $mail_subject = $this->translator->trans('subject.subscription_updated', domain: 'mail');
@@ -90,8 +99,12 @@ class StripeWebhookController extends AbstractController
                 break;
             case 'customer.subscription.deleted':
                 $this->setUserSubscription($customer);
-                $mail_template = null;
-                $mail_subject = null;
+                $mail_subject = $this->translator->trans('subject.subscription_cancelled', domain: 'mail');
+                $mail_template = 'mail_template/subscription/cancelled.html.twig';
+                break;
+            case 'charge.refunded':
+                $mail_subject = $this->translator->trans('subject.charge_refunded', domain: 'mail');
+                $mail_template = 'mail_template/subscription/cancelled.html.twig';
                 break;
             default:
                 $mail_template = null;
@@ -109,10 +122,41 @@ class StripeWebhookController extends AbstractController
                     'user' => $customer,
                 ]));
 
-            $mailer->send($email);
+            $this->mailer->send($email);
         }
 
         return $this->json([ 'status' => 'success' ]);
+    }
+
+    private function removeDuplicateSubscription(Customer $customer, $subscriptionId)
+    {
+        $subscriptions = Subscription::all(['customer' => $customer->id, 'status' => 'active']);
+        $newSubscription = Subscription::retrieve($subscriptionId);
+
+        $sameSubscription = [];
+        foreach ($subscriptions as $subscription) {
+            if ($subscription->items->data[0]->price->id === $newSubscription->items->data[0]->price->id) {
+                $sameSubscription[] = $subscription->id;
+            }
+        }
+
+        $invoice = Invoice::retrieve($newSubscription->latest_invoice);
+
+        if (count($sameSubscription) > 1) {
+            Refund::create([
+                'payment_intent' => $invoice->payment_intent,
+            ]);
+            $newSubscription->cancel();
+
+            $email = (new Email())
+                // email address as a simple string
+                ->from(new Address('contact@toukan-app.fr', 'Toukan App'))
+                ->to($customer->email)
+                ->subject($this->translator->trans('subject.duplicate_subscription', domain: 'mail'))
+                ->text("Nous avons détecté un abonnement en double, suppression et remboursement en cours...");
+
+            $this->mailer->send($email);
+        }
     }
 
     private function setUserSubscription(Customer $customer)

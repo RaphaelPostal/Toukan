@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-Cancelled bro !
-</body>
-</html>
+{% extends 'base.html.twig' %}
+{% block title %}Souscription échouée{% endblock %}
+{% block body %}
+<div class="flex flex-col items-center justify-center h-screen">
+    <div class="w-full max-w-md">
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <img src="{{ asset('assets/img/cancelled_checkout.png') }}" alt="image illustrant une erreur lors de la souscription" class="w-full">
+            </div>
+            <div class="mb-4">
+                <h1 class="text-center text-2xl font-bold w-full">Souscription échouée</h1>
+                <p class="text-center text-gray-700 text-base my-4">Votre souscription n'a pas pu être enregistrée</p>
+                <p class="text-center text-gray-700 text-base my-4">Veuillez réessayer ultérieurement.</p>
+            </div>
+            <div class="flex items-center justify-between">
+                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 text-center w-full" href="{{ path('establishment_dashboard') }}">
+                    <i class="fas fa-arrow-left"></i> Retour au tableau de bord
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
