@@ -29,6 +29,7 @@ class SectionController extends AbstractController
 //        $card = $this->getUser()->getEstablishment()->getCard();
         //get the first card in the database
         $card = $this->get('doctrine')->getRepository(Card::class)->find(1);
+
         $section = new Section();
         $card->addSection($section);
         $form = $this->createForm(SectionType::class, $section, [
@@ -166,7 +167,7 @@ class SectionController extends AbstractController
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('product/new.html.twig', [
+        return $this->renderForm('establishment/product/new.html.twig', [
             'product' => $product,
             'form' => $form,
         ]);

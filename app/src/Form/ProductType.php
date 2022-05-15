@@ -19,16 +19,28 @@ class ProductType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label' => 'Nom'
+                'label' => 'Nom',
+                'attr' => [
+                    'placeholder' => 'ex: Cheeseburger'
+                ]
             ])
             ->add('price', TextType::class, [
-                'label' => 'Prix'
+                'label' => 'Prix',
+                'attr' => [
+                    'placeholder' => 'ex: 4.50'
+                ]
             ])
             ->add('ingredients', TextareaType::class, [
-                'label' => 'Ingrédients'
+                'label' => 'Ingrédients',
+                'attr' => [
+                    'placeholder' => 'ex: Boeuf, oignons, ...'
+                ]
             ])
             ->add('allergens', TextareaType::class, [
                 'label' => 'Allergènes',
+                'attr' => [
+                    'placeholder' => 'ex: Gluten, lait, ...'
+                ],
                 'required' => false,
             ])
             ->add('sauce_choosable', CheckboxType::class, [
