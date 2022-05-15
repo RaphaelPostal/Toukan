@@ -34,7 +34,7 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('product/new.html.twig', [
+        return $this->renderForm('establishment/product/new.html.twig', [
             'product' => $product,
             'form' => $form,
         ]);
@@ -59,7 +59,7 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('product/edit.html.twig', [
+        return $this->renderForm('establishment/product/edit.html.twig', [
             'product' => $product,
             'form' => $form,
         ]);

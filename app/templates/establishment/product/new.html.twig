@@ -1,6 +1,7 @@
-<turbo-frame id="frame-edit-sauce">
+<turbo-frame id="frame-section-create-product">
     {% for message in app.flashes('success') %}
         <p class="text-green">{{ message }}</p>
     {% endfor %}
-    {{ include('sauce/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('establishment/product/_form.html.twig') }}
 </turbo-frame>
+
