@@ -4,11 +4,13 @@
 
 {% block body %}
     <h2 class="text-2xl font-bold">Compte</h2>
-    <p>{{ user.email }} <i class="fas fa-pen"></i></p>
+    <div id="establishment-information">
+        {% include 'establishment/partials/_information.html.twig' with {'establishment' : establishment} %}
+    </div>
+
+    {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-establishment', 'modal_title' : 'Vos informations', 'context' : 'establishment-edit'} %}
+
     <p>Modifier mon mot de passe <i class="fas fa-pen"></i></p>
-    <p>{{ establishment.name }} <i class="fas fa-pen"></i></p>
-    <p>{{ establishment.address }} <i class="fas fa-pen"></i></p>
-    <p>{{ establishment.phone }} <i class="fas fa-pen"></i></p>
     <p>Mon illustration <i class="fas fa-pen"></i></p>
     <p>Ma couleur customisée <i class="fas fa-pen"></i></p>
 {% endblock %}

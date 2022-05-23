@@ -37,10 +37,13 @@
                     </div>
                 {% elseif context == 'sauce-edit' %}
                     <div id="form-edit-sauce">
-                        <!--En utilisant un turbo frame pour l'edition, on peut utiliser la même modal pour toutes les sections-->
                         <turbo-frame id="frame-edit-sauce">
 
                         </turbo-frame>
+                    </div>
+                {% elseif context == 'establishment-edit' %}
+                    <div id="form-edit-establishment">
+                       {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editInformation', {establishment: establishment.id})) }}
                     </div>
                 {% endif %}
             </div>
