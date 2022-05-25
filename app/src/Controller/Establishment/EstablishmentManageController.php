@@ -77,9 +77,9 @@ class EstablishmentManageController extends AbstractController
 
         $user = $this->getDoctrine()->getRepository(User::class)->find(1);
         $establishment = $establishmentRepository->find(1);
-        $form = $this->createForm(EstablishmentPasswordType::class, $establishment, [
-            'action' => $this->generateUrl('app_establishment_information_edit'),
-            'email' => $user->getEmail(),
+
+        $form = $this->createForm(EstablishmentPasswordType::class, null, [
+            'action' => $this->generateUrl('app_establishment_password_edit'),
         ]);
 
         $form->handleRequest($request);

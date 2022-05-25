@@ -8,7 +8,11 @@
         {% include 'establishment/partials/_information.html.twig' with {'establishment' : establishment} %}
     </div>
 
-    <p>Modifier mon mot de passe <i class="fas fa-pen"></i></p>
+    <p>Modifier mon mot de passe
+        <button id="button-edit-password" type="button" class="transition duration-150 ease-in-out mt-3" data-bs-toggle="modal" data-bs-target="#modal-form-edit-password">
+            <i class="fas fa-pen"></i>
+        </button>
+    </p>
     <p>Mon illustration <i class="fas fa-pen"></i></p>
     <p>Ma couleur customisée <i class="fas fa-pen"></i></p>
 

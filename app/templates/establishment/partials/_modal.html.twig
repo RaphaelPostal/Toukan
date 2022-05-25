@@ -46,7 +46,9 @@
                        {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editInformation', {establishment: establishment.id})) }}
                     </div>
                 {% elseif context == 'establishment-password-edit' %}
-
+                    <div id="form-edit-establishment-password">
+                        {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editPassword', {user: user.id})) }}
+                    </div>
                 {% endif %}
             </div>
         </div>

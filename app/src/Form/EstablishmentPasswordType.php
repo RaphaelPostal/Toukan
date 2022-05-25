@@ -17,6 +17,10 @@ class EstablishmentPasswordType extends AbstractType
     {
         $builder
             ->add('password', PasswordType::class, [
+                'label' => 'Mot de passe actuel',
+                'mapped' => false,
+            ])
+            ->add('newPassword', PasswordType::class, [
                 'label' => 'Nouveau mot de passe',
                 'mapped' => false,
             ])
