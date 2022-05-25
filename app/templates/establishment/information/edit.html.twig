@@ -1,5 +1,8 @@
 {% for message in app.flashes('success') %}
     <p class="text-green">{{ message }}</p>
 {% endfor %}
+{% for message in app.flashes('error') %}
+    <p class="text-red">{{ message }}</p>
+{% endfor %}
 {{ include('establishment/information/_form.html.twig') }}
 

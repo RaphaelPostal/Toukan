@@ -11,3 +11,11 @@
         </template>
     </turbo-stream>
 {% endif %}
+
+{% if app.request.get('_route') == 'app_establishment_password_edit'%}
+    <turbo-stream action="update" target="form-edit-establishment-password">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editPassword', {user: user.id})) }}
+        </template>
+    </turbo-stream>
+{% endif %}

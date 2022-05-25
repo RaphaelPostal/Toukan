@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\UX\Turbo\TurboBundle;
 
@@ -70,7 +71,12 @@ class EstablishmentManageController extends AbstractController
     }
 
     #[Route('/establishment/password-edit', name: 'app_establishment_password_edit', methods: ['GET', 'POST'])]
-    public function editPassword(Request $request, EstablishmentRepository $establishmentRepository, EntityManagerInterface $entityManager): Response
+    public function editPassword(
+        Request $request,
+        EstablishmentRepository $establishmentRepository,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher
+    ): Response
     {
 //        $establishment = $this->getUser()->getEstablishment();
 //        $user = $this->getUser();
@@ -84,17 +90,28 @@ class EstablishmentManageController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $password = $form->get('password')->getData();
 
-            $entityManager->flush($user);
+                if (!$passwordHasher->isPasswordValid($user, $password)) {
+                    $this->addFlash('error', "Le mot de passe actuel n'est pas correct. Si vous ne vous en souvenez plus, vous pouvez toujours le réinitialiser.");
+                    $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                    return $this->render('establishment/stream/information.stream.html.twig', ['establishment' => $establishment, 'user' => $user]);
+                }
 
-            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
-                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $newPassword = $form->get('newPassword')->getData();
+                $user->setPassword($passwordHasher->hashPassword($user, $newPassword));
+
+                $entityManager->flush($user);
+
                 $this->addFlash('success', 'Mot de passe sauvegardé !');
-                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
-                return $this->render('establishment/stream/information.stream.html.twig', ['establishment' => $establishment, 'user' => $user]);
+            } else {
+                $this->addFlash('error', "Les mots de passes ne correspondent pas.");
             }
-            return $this->redirectToRoute('app_establishment_manage', [], Response::HTTP_SEE_OTHER);
+
+            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+            return $this->render('establishment/stream/information.stream.html.twig', ['establishment' => $establishment, 'user' => $user]);
         }
 
         return $this->renderForm('establishment/information/edit.html.twig', [
