@@ -8,6 +8,7 @@ use App\Entity\Product;
 use App\Entity\ProductOrder;
 use App\Entity\Table;
 use App\Form\OrderCommentsType;
+use App\Repository\EstablishmentRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductOrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,7 +23,9 @@ use Symfony\UX\Turbo\TurboBundle;
 class OrderController extends AbstractController
 {
     #[Route('/', name: 'client_order_basket')]
-    public function showBasket(EntityManagerInterface $entityManager,
+    public function showBasket(OrderRepository $orderRepository,
+                               EntityManagerInterface $entityManager,
+                               EstablishmentRepository $establishmentRepository,
                                Request $request,
                                Establishment $establishment,
                                Table $table,
@@ -42,13 +45,15 @@ class OrderController extends AbstractController
                 'order' => $order
             ]);
         }
+        $establishment = $establishmentRepository->find($establishmentId);
 
         return $this->render('client/order/show_basket.html.twig', [
             'establishment' => $establishment,
             'table' => $table,
             'order' => $order,
             'total' => 0,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'establishment' => $establishment
         ]);
     }
 

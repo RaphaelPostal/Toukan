@@ -17,14 +17,14 @@ class OrderCommentsType extends AbstractType
         $builder
             ->add('custom_infos', TextType::class, [
                 'required' => false,
-                'label' => 'Commentaires',
+                'label' => 'Ajouter un commantaire',
                 'attr' => [
-                    'placeholder' => 'Ex: Pas de fromage svp',
+                    'placeholder' => 'Ex: Pas de fromage dans mon sky svp',
                 ],
             ])
 
             ->add('save', SubmitType::class, [
-                'label' => 'Valider',
+                'label' => 'Valider ma commande',
                 'attr' => [
                     'id' => 'btn-section-save',
                     'class' => 'btn btn-primary btn-section-save',
