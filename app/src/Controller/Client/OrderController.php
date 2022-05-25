@@ -68,7 +68,6 @@ class OrderController extends AbstractController
             $productOrder->setOrderEntity($order);
             $productOrder->setProduct($product);
             $productOrder->setQuantity(1);
-            dump($productOrder);
         }
         $entityManager->persist($productOrder);
         $entityManager->flush();

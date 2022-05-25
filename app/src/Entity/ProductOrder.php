@@ -39,6 +39,16 @@ class ProductOrder
      */
     private $sauce;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Product::class)
+     */
+    private $drink_id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Product::class)
+     */
+    private $dessert_id;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,6 +98,30 @@ class ProductOrder
     public function setSauce(?Sauce $sauce): self
     {
         $this->sauce = $sauce;
+
+        return $this;
+    }
+
+    public function getDrinkId(): ?Product
+    {
+        return $this->drink_id;
+    }
+
+    public function setDrinkId(?Product $drink_id): self
+    {
+        $this->drink_id = $drink_id;
+
+        return $this;
+    }
+
+    public function getDessertId(): ?Product
+    {
+        return $this->dessert_id;
+    }
+
+    public function setDessertId(?Product $dessert_id): self
+    {
+        $this->dessert_id = $dessert_id;
 
         return $this;
     }
