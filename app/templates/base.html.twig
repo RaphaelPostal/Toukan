@@ -16,8 +16,17 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
     </head>
     <body class="{{ app.request.attributes.get('_route') == 'home' ? 'bg-salmon' }}">
-        {% block body %}{% endblock %}
+    
+    {% include 'home/navbar.html.twig' %}
+
+        <main class="md:px-20 px-4">
+            {% block body %}{% endblock %}
+        </main>
+    {% include 'home/footer.html.twig' %}
+    
+    <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
     </body>
 </html>

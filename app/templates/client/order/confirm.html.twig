@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ma commande{% endblock %}
+
+{% block body %}
+
+    <div id="waiting-pos">
+
+    </div>
+
+    <script>
+        setInterval(function() {
+            let page = `{{ path('client_order_confirm_update', {'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}`
+
+            fetch(page).then(function (response) {
+                return response.text()
+            }).then(function (data) {
+                document.getElementById('waiting-pos').innerHTML = data
+            })
+        }, 5000)
+    </script>
+{% endblock %}
+

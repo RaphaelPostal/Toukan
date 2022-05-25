@@ -45,6 +45,18 @@ class OrderRepository extends ServiceEntityRepository
         }
     }
 
+    public function getPreviousOrders($order)
+    {
+        return $this->createQueryBuilder('o')
+            ->select('o')
+            ->where('o.status = :status')
+            ->setParameter('status', Order::STATUS_IN_PROGRESS)
+            ->andWhere('o.createdAt < :order')
+            ->setParameter('order', $order->getCreatedAt())
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Order[] Returns an array of Order objects
     //  */

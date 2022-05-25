@@ -13,6 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Order
 {
+    CONST STATUS_ORDERING = 'ordering'; // commande non validée par le client
+    CONST STATUS_IN_PROGRESS = 'in_progress'; // commande validée par le client, en attente de livraison
+    CONST STATUS_DELIVERED = 'delivered'; // commande servie
+    CONST STATUS_CANCELED = 'canceled';
+    CONST STATUS_PAYED = 'payed';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -40,6 +46,11 @@ class Order
      * @ORM\OneToMany(targetEntity=ProductOrder::class, mappedBy="orderEntity", orphanRemoval=true)
      */
     private $productOrders;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $status;
 
     public function __construct()
     {
@@ -113,6 +124,18 @@ class Order
                 $productOrder->setOrderEntity(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

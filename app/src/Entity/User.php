@@ -139,9 +139,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Establishment>
+     * @return Establishment|null
      */
-    public function getEstablishment(): Collection
+    public function getEstablishment(): ?Establishment
     {
         return $this->establishment;
     }

@@ -45,14 +45,19 @@ class Establishment
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=Card::class, mappedBy="establishment", orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity=Card::class, mappedBy="establishment", fetch="EAGER")
      */
-    private $cards;
+    private $card;
 
     /**
      * @ORM\OneToMany(targetEntity=Table::class, mappedBy="establishment", orphanRemoval=true)
      */
     private $tables;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
 
     public function __construct()
     {
@@ -114,9 +119,9 @@ class Establishment
     }
 
     /**
-     * @return Collection<int, User>
+     * @return User|null
      */
-    public function getUser(): Collection
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -129,33 +134,11 @@ class Establishment
     }
 
     /**
-     * @return Collection<int, Card>
+     * @return Card|null
      */
-    public function getCards(): Collection
+    public function getCard(): ?Card
     {
-        return $this->cards;
-    }
-
-    public function addCard(Card $card): self
-    {
-        if (!$this->cards->contains($card)) {
-            $this->cards[] = $card;
-            $card->setEstablishment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCard(Card $card): self
-    {
-        if ($this->cards->removeElement($card)) {
-            // set the owning side to null (unless already changed)
-            if ($card->getEstablishment() === $this) {
-                $card->setEstablishment(null);
-            }
-        }
-
-        return $this;
+        return $this->card;
     }
 
     /**
@@ -184,6 +167,18 @@ class Establishment
                 $table->setEstablishment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

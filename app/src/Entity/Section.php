@@ -25,7 +25,7 @@ class Section
     private $title;
 
     /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="section")
+     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="section", fetch="EAGER")
      */
     private $products;
 
@@ -34,6 +34,7 @@ class Section
      * @ORM\JoinColumn(nullable=false)
      */
     private $card;
+
 
     public function __construct()
     {

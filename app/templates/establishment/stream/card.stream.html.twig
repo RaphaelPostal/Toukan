@@ -1,0 +1,62 @@
+<turbo-stream action="update" target="establishment-card">
+    <template>
+        {% include 'establishment/partials/card.html.twig' with {'card' : card} %}
+    </template>
+</turbo-stream>
+
+{% if app.request.get('_route') == 'app_section_create' %}
+    <turbo-stream action="update" target="form-create-section">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\SectionController::new', {card:card.id})) }}
+        </template>
+    </turbo-stream>
+{% endif %}
+
+{% if app.request.get('_route') == 'app_section_edit' %}
+    <turbo-stream action="update" target="form-edit-section">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\SectionController::edit', {card:card.id, id: section.id})) }}
+        </template>
+    </turbo-stream>
+{% endif %}
+
+{% if app.request.get('_route') == 'app_section_product_create' %}
+    <turbo-stream action="update" target="form-section-create-product">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\SectionController::newProductInSection', {card:card.id, id: section.id})) }}
+        </template>
+    </turbo-stream>
+{% endif %}
+
+
+{% if app.request.get('_route') == 'app_section_product_edit' %}
+    <turbo-stream action="update" target="form-section-edit-product">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\SectionController::editProduct', {card:card.id, product: product.id})) }}
+        </template>
+    </turbo-stream>
+{% endif %}
+
+{% if app.request.get('_route') == 'app_sauce_create' %}
+    <turbo-stream action="update" target="form-create-sauce">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\SauceController::new', {card:card.id})) }}
+        </template>
+    </turbo-stream>
+{% endif %}
+
+{% if app.request.get('_route') == 'app_sauce_edit' %}
+    <turbo-stream action="update" target="form-edit-sauce">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\SauceController::edit', {card:card.id, sauce: sauce.id})) }}
+        </template>
+    </turbo-stream>
+{% endif %}
+
+{% if 'app_sauce' in app.request.get('_route') %}
+    <turbo-stream action="update" target="establishment-sauces">
+        <template>
+            {% include 'establishment/partials/sauces.html.twig' with {'card' : card} %}
+        </template>
+    </turbo-stream>
+{% endif %}

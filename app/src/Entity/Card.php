@@ -25,7 +25,7 @@ class Card
     private $products;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Establishment::class, inversedBy="cards")
+     * @ORM\OneToOne(targetEntity=Establishment::class, inversedBy="card", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $establishment;
@@ -35,10 +35,16 @@ class Card
      */
     private $sections;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Sauce::class, mappedBy="Card")
+     */
+    private $sauces;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
         $this->sections = new ArrayCollection();
+        $this->sauces = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,6 +118,36 @@ class Card
             // set the owning side to null (unless already changed)
             if ($section->getCard() === $this) {
                 $section->setCard(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sauce>
+     */
+    public function getSauces(): Collection
+    {
+        return $this->sauces;
+    }
+
+    public function addSauce(Sauce $sauce): self
+    {
+        if (!$this->sauces->contains($sauce)) {
+            $this->sauces[] = $sauce;
+            $sauce->setCard($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSauce(Sauce $sauce): self
+    {
+        if ($this->sauces->removeElement($sauce)) {
+            // set the owning side to null (unless already changed)
+            if ($sauce->getCard() === $this) {
+                $sauce->setCard(null);
             }
         }
 
