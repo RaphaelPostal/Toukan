@@ -9,6 +9,7 @@ module.exports = {
             white: colors.white,
             gray: colors.trueGray,
             indigo: colors.indigo,
+            red: colors.red,
             yellow: colors.amber,
             'toukan' : '#F49B22',
             'toukan-dark' : '#D68402',
