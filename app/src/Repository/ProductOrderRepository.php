@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Order;
+use App\Entity\Product;
 use App\Entity\ProductOrder;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -43,6 +45,15 @@ class ProductOrderRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    public function isProductAlreadyInBasket(Order $order, Product $product): bool
+    {
+        $productOrder = $this->findOneBy(['orderEntity' => $order, 'product' => $product]);
+        if ($productOrder) {
+            return true;
+        }
+        return false;
     }
 
     // /**

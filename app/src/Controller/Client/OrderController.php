@@ -60,7 +60,7 @@ class OrderController extends AbstractController
                                 Order $order,
                                 Product $product): Response
     {
-        if($productOrderRepository->findOneBy(['orderEntity' => $order, 'product' => $product])){
+        if($productOrderRepository->isProductAlreadyInBasket($order, $product)) {
             $productOrder = $productOrderRepository->findOneBy(['orderEntity' => $order, 'product' => $product]);
             $productOrder->setQuantity($productOrder->getQuantity() + 1);
         } else {
@@ -68,6 +68,7 @@ class OrderController extends AbstractController
             $productOrder->setOrderEntity($order);
             $productOrder->setProduct($product);
             $productOrder->setQuantity(1);
+            dump($productOrder);
         }
         $entityManager->persist($productOrder);
         $entityManager->flush();
