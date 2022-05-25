@@ -4,6 +4,7 @@ namespace App\Controller\Client;
 
 use App\Entity\Order;
 use App\Form\OrderCommentsType;
+use App\Repository\EstablishmentRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductOrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,6 +21,7 @@ class OrderController extends AbstractController
     #[Route('/', name: 'client_order_basket')]
     public function showBasket(OrderRepository $orderRepository,
                                EntityManagerInterface $entityManager,
+                               EstablishmentRepository $establishmentRepository,
                                Request $request,
                                $establishmentId,
                                $tableId,
@@ -40,6 +42,7 @@ class OrderController extends AbstractController
                 'orderId' => $orderId
             ]);
         }
+        $establishment = $establishmentRepository->find($establishmentId);
 
         return $this->render('client/order/show_basket.html.twig', [
             'establishmentId' => $establishmentId,
@@ -47,7 +50,8 @@ class OrderController extends AbstractController
             'order' => $order,
             'orderId' => $orderId,
             'total' => 0,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'establishment' => $establishment
         ]);
     }
 
