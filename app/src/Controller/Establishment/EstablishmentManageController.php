@@ -15,9 +15,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\UX\Turbo\TurboBundle;
 
+#[Route('/establishment')]
 class EstablishmentManageController extends AbstractController
 {
-    #[Route('/establishment/manage', name: 'app_establishment_manage')]
+    #[Route('/manage', name: 'app_establishment_manage')]
     public function index(): Response
     {
         //$establishment = $this->getUser()->getEstablishment();
@@ -31,7 +32,7 @@ class EstablishmentManageController extends AbstractController
         ]);
     }
 
-    #[Route('/establishment/information-edit', name: 'app_establishment_information_edit', methods: ['GET', 'POST'])]
+    #[Route('/information-edit', name: 'app_establishment_information_edit', methods: ['GET', 'POST'])]
     public function editInformation(Request $request, EstablishmentRepository $establishmentRepository, EntityManagerInterface $entityManager): Response
     {
 //        $establishment = $this->getUser()->getEstablishment();
@@ -70,7 +71,7 @@ class EstablishmentManageController extends AbstractController
 
     }
 
-    #[Route('/establishment/password-edit', name: 'app_establishment_password_edit', methods: ['GET', 'POST'])]
+    #[Route('/password-edit', name: 'app_establishment_password_edit', methods: ['GET', 'POST'])]
     public function editPassword(
         Request $request,
         EstablishmentRepository $establishmentRepository,
