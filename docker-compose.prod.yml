@@ -3,6 +3,7 @@ services:
     db:
         image: mysql
         container_name: db_docker_toukan
+        platform: linux/amd64
         restart: always
         volumes:
             - toukan-db-data:/var/lib/mysql
@@ -17,6 +18,7 @@ services:
     phpmyadmin:
         image: phpmyadmin
         container_name: phpmyadmin_docker_toukan
+        platform: linux/amd64
         depends_on:
             - db
         ports:
@@ -29,6 +31,7 @@ services:
     www:
         build: docker/php
         container_name: www_docker_toukan
+        platform: linux/amd64
         restart: always
         ports:
             - "8080:80"
