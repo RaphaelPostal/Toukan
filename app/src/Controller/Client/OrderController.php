@@ -112,14 +112,12 @@ class OrderController extends AbstractController
                                   Establishment $establishment): Response
     {
         $productOrderRepository->remove($productOrder);
-
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
         return $this->render('client/order/stream/product.stream.html.twig', [
             'productOrder' => $productOrder,
             'order' => $order,
             'table' => $table,
             'establishment' => $establishment]);
-
     }
 
     #[Route('/product/{productOrder}/minus', name: 'client_order_basket_product_minus')]
@@ -139,7 +137,7 @@ class OrderController extends AbstractController
             'productOrder' => $productOrder,
             'order' => $order,
             'table' => $table,
-            'establishment' => $establishment
+            'establishment' => $establishment,
         ]);
     }
 
