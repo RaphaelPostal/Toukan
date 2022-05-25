@@ -1,0 +1,10 @@
+{% extends 'establishment/base.html.twig' %}
+{% block body %}
+    <h1>Bienvenue sur votre profil FDP</h1>
+    <p>Vous pouvez modifier vos informations personnelles ici</p>
+    {% if app.user.subscriptionActive %}
+    <a class="underline" href="{{ path('app_establishment_portal') }}">Gérer mon abonnement</a>
+    {% else %}
+    <a class="underline" href="{{ path('app_subscription_pricing') }}">Voir les abonnements</a>
+    {% endif %}
+{%endblock%}

@@ -1,4 +1,5 @@
 version: "3.8"
+#To run stripe cli in docker : docker run --rm -it stripe/stripe-cli:latest
 services:
     db:
         image: mysql
@@ -29,6 +30,7 @@ services:
 
     maildev:
         image: maildev/maildev
+        platform: linux/amd64
         container_name: maildev_docker_toukan
         platform: linux/amd64
         command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
@@ -48,6 +50,15 @@ services:
         networks:
             - dev
 
+    stripe-cli:
+        image: stripe/stripe-cli
+        platform: linux/amd64
+        container_name: stripe-cli
+        command: "listen --api-key ${STRIPE_API_KEY} --device-name ${STRIPE_DEVICE_NAME} --forward-to http://www_docker_toukan/establishment/subscription/webhook"
+        env_file:
+            - ./docker/stripe/stripe_cli.env
+        networks:
+            - dev
 
 networks:
     dev:

@@ -1,59 +1,53 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Connexion - Toukan{% endblock %}
+{% trans_default_domain 'form' %}
+{% block title %}Connexion{% endblock %}
 
 {% block body %}
-<div>
-    <a href="{{ path('home') }}" class="btn absolute top-0 left-0 p-8">
-        <i class="fa-solid fa-arrow-left pr-2"></i>Retour
+<form data-turbo="false" method="post" class="flex justify-center align-center w-full h-full text-center">
+    <a href="{{ path('home') }}" class="btn btn-lg btn-primary">
+        {{ 'back'|trans({}, 'messages') }}
     </a>
-    <form method="post" class="flex justify-center items-center w-full h-full text-center px-2 py-8">
-        <div class="w-full sm:w-1/2 md:w-1/3 flex flex-col justify-center items-center">
-            <div class="w-full flex justify-center items-center mb-4">
-                <img class="w-1/4" src="{{asset('assets/img/toukan_orange_text.png')}}">
+    <div class="w-full sm:w-1/2 md:w-1/3 flex flex-col justify-center align-center mt-10">
+        {% for message in app.flashes('error') %}
+            <div class="flash-notice">
+                {{ message }}
             </div>
-            <h1 class="h3 font-weight-normal mb-10">Connectez-vous pour accéder à votre espace établissement</h1>
-
-            {% for message in app.flashes('error') %}
-                <div class="flash-notice py-2 text-red-600 font-bold">
-                    {{ message }}
-                </div>
-            {% endfor %}
-            {% for message in app.flashes('success') %}
-                <div class="flash-notice py-2 text-red-600 font-bold">
-                    {{ message }}
-                </div>
-            {% endfor %}
-            {% if error %}
-                <div class="alert alert-danger py-2 text-red-600 font-bold">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
-
-            <label for="inputEmail">Email</label>
-            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control text-center border-b-2 border-toukan mb-10 p-2 w-full" autocomplete="email" required autofocus>
-            <label for="inputPassword">Mot de passe</label>
-            <input type="password" name="password" id="inputPassword" class="form-control text-center border-b-2 border-toukan mb-10 p-2 w-full" autocomplete="current-password" required>
-
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-            {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" name="_remember_me"> Remember me
-                </label>
+        {% endfor %}
+        {% for message in app.flashes('success') %}
+            <div class="flash-notice">
+                {{ message }}
             </div>
-            #}
+        {% endfor %}
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
 
-            <button class="bg-toukan text-white rounded-3xl px-16 py-2 mb-2" type="submit">
-                Se connecter
-            </button>
+        <h1 class="h3 mb-3 font-weight-normal mb-10">{{ 'log_in_message'|trans }}</h1>
+        <label for="inputEmail">{{ 'email'|trans }}</label>
+        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control border-b-2 border-toukan mb-10" autocomplete="email" required autofocus>
+        <label for="inputPassword">{{ 'password'|trans }}</label>
+        <input type="password" name="password" id="inputPassword" class="form-control border-b-2 border-toukan mb-10" autocomplete="current-password" required>
 
-            <a href="{{ path('creation-establishment') }}" class="btn underline">
-                S'inscrire
-            </a>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        {#
+        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+        See https://symfony.com/doc/current/security/remember_me.html
+
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" name="_remember_me"> Remember me
+            </label>
         </div>
-    </form>
-</div>
+        #}
+
+        <button data-turbo="false" class="bg-toukan text-white rounded-3xl px-16 py-2 mb-2" type="submit">
+            {{ 'log_in'|trans }}
+        </button>
+
+        <a href="{{ path('register') }}" class="underline">
+            {{ 'sign_up'|trans }}
+        </a>
+    </div>
+</form>
 {% endblock %}

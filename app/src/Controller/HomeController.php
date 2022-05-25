@@ -18,24 +18,32 @@ class HomeController extends AbstractController
         ]);
     }
 
-    //create route to register user in database
-
     /**
-     * @Route("/register", name="register")
+     * @Route("/establishment/profile", name="establishment_profile")
      */
-    public function register(): Response
+    public function profile(): Response
     {
-        return $this->render('home/register.html.twig', [
-            'controller_name' => 'HomeController',
+        return $this->render('establishment/profile/index.html.twig', [
+            'subscriptionActive'=>$this->getUser()->isSubscriptionActive(),
         ]);
     }
 
     /**
-     * @Route("/profile", name="profile")
+     * @Route("/establishment/dashboard", name="establishment_dashboard")
      */
-    public function profile(): Response
+    public function dashboard(): Response
     {
-        return $this->render('home/profile.html.twig', [
+        return $this->render('establishment/dashboard/index.html.twig', [
+            'subscriptionActive'=>$this->getUser()->isSubscriptionActive(),
+        ]);
+    }
+
+    /**
+     * @Route("/contact", name="contact")
+     */
+    public function contact(): Response
+    {
+        return $this->render('home/contact.html.twig', [
             'controller_name' => 'HomeController',
         ]);
     }

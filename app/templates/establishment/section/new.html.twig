@@ -1,0 +1,4 @@
+    {% for message in app.flashes('success') %}
+        <p class="text-green">{{ message }}</p>
+    {% endfor %}
+    {{ include('establishment/section/_form.html.twig') }}

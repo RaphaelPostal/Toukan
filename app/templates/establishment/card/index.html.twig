@@ -1,12 +1,40 @@
-{% extends 'base.html.twig' %}
+{% extends 'establishment/base.html.twig' %}
 
 {% block title %}Ma carte{% endblock %}
 
 {% block body %}
-    <h1>Ma carte</h1>
-    <table>
-        <tr>
-            <td></td>
-        </tr>
-    </table>
+    <h1 class="border-2 border-gray-300">Ma carte</h1>
+    <div id="establishment-card">
+        {% include 'establishment/partials/card.html.twig' %}
+    </div>
+
+    <!-- Button trigger modal -->
+    <button id="button-add-section" type="button" class="transition duration-150 ease-in-out admin-button-add" data-bs-toggle="modal" data-bs-target="#modal-form-create-section">
+        Ajouter une section
+    </button>
+    <!-- Modals -->
+    {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-create-section', 'modal_title' : 'Section', 'context' : 'section-create'} %}
+    {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-section', 'modal_title' : 'Section', 'context' : 'section-edit'} %}
+    {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-section-create-product', 'modal_title' : 'Produit', 'context' : 'product-create'} %}
+
+    <script>
+        function set_frame_src(section_id, context){
+            let path = ''
+            console.log(section_id, context)
+            switch(context) {
+                case 'section_edit':
+                    path = '{{ path('app_section_edit', {'card' : card.id, 'id' : 'id'}) }}'
+                    path = path.replace('id', section_id)
+                    document.getElementById('frame-edit-section').src = path;
+                    break;
+                case 'section_product_create' :
+                    path = '{{ path('app_section_product_create', {'card' : card.id, 'id' : 'id'}) }}'
+                    path = path.replace('id', section_id)
+                    document.getElementById('frame-section-create-product').src = path;
+                    break;
+            }
+        }
+    </script>
+
 {% endblock %}
+

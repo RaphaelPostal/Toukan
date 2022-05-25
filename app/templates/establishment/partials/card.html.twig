@@ -1,0 +1,44 @@
+<turbo-frame id="establishment-card">
+        {% for section in card.sections %}
+            <table>
+                <thead>
+                    <th>
+                        {{ section.title }}
+                    </th>
+                    <th>
+                        <button type="button" onclick="set_frame_src({{ section.id }}, 'section_product_create')" class="transition duration-150 ease-in-out admin-button-add" data-bs-toggle="modal" data-bs-target="#modal-form-section-create-product">
+                            Ajouter un produit
+                        </button>
+                    </th>
+                    <th>
+                        <button type="button" onclick="set_frame_src({{ section.id }}, 'section_edit')" class="transition duration-150 ease-in-out admin-button-edit" data-bs-toggle="modal" data-bs-target="#modal-form-edit-section">
+                            Modifier
+                        </button>
+                    </th>
+                    <th>
+                        <form method="post" action="{{ path('app_section_delete', {'card' : card.id, 'id': section.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ section.id) }}">
+                            <button class="btn admin-button-delete">Supprimer</button>
+                        </form>
+                    </th>
+                </thead>
+
+                <tbody>
+                {% for product in section.products %}
+                    <tr>
+                        <td>
+                            {{ product.title }}
+                        </td>
+                        <td>
+                            Modifier
+                        </td>
+                        <td>
+                            Supprimer
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        {% endfor %}
+</turbo-frame>

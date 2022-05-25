@@ -6,3 +6,9 @@
 
 /*Dans ce fichier se trouvent les classes prédéfinies pour chaque type texte*/
 @import "font-class.css";
+
+.turbo-progress-bar {
+    @apply bg-toukan !important;
+}
+
+@import "establishment/index.css";

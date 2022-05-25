@@ -19,13 +19,13 @@ class ProductOrder
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="productOrders")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $product;
 
     /**
      * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="productOrders")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $orderEntity;
 
@@ -33,6 +33,11 @@ class ProductOrder
      * @ORM\Column(type="integer")
      */
     private $quantity;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Sauce::class, inversedBy="ProductOrder")
+     */
+    private $sauce;
 
     public function getId(): ?int
     {
@@ -71,6 +76,18 @@ class ProductOrder
     public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getSauce(): ?Sauce
+    {
+        return $this->sauce;
+    }
+
+    public function setSauce(?Sauce $sauce): self
+    {
+        $this->sauce = $sauce;
 
         return $this;
     }

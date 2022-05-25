@@ -45,6 +45,57 @@ class OrderRepository extends ServiceEntityRepository
         }
     }
 
+    public function getPreviousOrders($order)
+    {
+        return $this->createQueryBuilder('o')
+            ->select('o')
+            ->where('o.status = :status')
+            ->setParameter('status', Order::STATUS_IN_PROGRESS)
+            ->andWhere('o.createdAt < :order')
+            ->setParameter('order', $order->getCreatedAt())
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function isTableOrdered($table)
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->select('o')
+            ->orWhere('o.status = :ordering')
+            ->setParameter('ordering', Order::STATUS_ORDERING)
+            ->orWhere('o.status = :in_progress')
+            ->setParameter('in_progress', Order::STATUS_IN_PROGRESS)
+            ->orWhere('o.status = :delivered')
+            ->setParameter('delivered', Order::STATUS_DELIVERED)
+            ->andWhere('o.establishmentTable = :table')
+            ->setParameter('table', $table)
+            ->getQuery()
+            ->getResult();
+            if (count($qb) > 0){
+                return true;
+            } else {
+                return false;
+            }
+    }
+
+    public function getLastOrderByTable($table){
+        return $this->createQueryBuilder('o')
+            ->select('o')
+            ->orWhere('o.status = :ordering')
+            ->setParameter('ordering', Order::STATUS_ORDERING)
+            ->orWhere('o.status = :in_progress')
+            ->setParameter('in_progress', Order::STATUS_IN_PROGRESS)
+            ->orWhere('o.status = :delivered')
+            ->setParameter('delivered', Order::STATUS_DELIVERED)
+            ->andWhere('o.establishmentTable = :table')
+            ->setParameter('table', $table)
+            ->orderBy('o.createdAt', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+
     // /**
     //  * @return Order[] Returns an array of Order objects
     //  */

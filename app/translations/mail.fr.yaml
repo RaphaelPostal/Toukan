@@ -1,0 +1,10 @@
+confirm_address : "Confirmez votre adresse email"
+
+subject :
+  received_payment : "Réception de votre paiement"
+  paid_invoice : "Votre facture"
+  failed_payment : "Votre paiement a échoué"
+  subscription_updated : "Votre abonnement a été mis à jour"
+  subscription_cancelled : "Annulation de votre abonnement"
+  charge_refunded : "Remboursement de votre payement"
+  duplicate_subscription : "Détection abonnement en double"
