@@ -6,16 +6,16 @@ use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  */
 class Product
 {
-
+    CONST TYPE_PLAT = 'Plat';
     CONST TYPE_BOISSON = 'Boisson';
-    CONST TYPE_PLAT = 'Boisson';
-    CONST TYPE_MENU = 'Boisson';
+    CONST TYPE_MENU = 'Menu';
 
     /**
      * @ORM\Id
@@ -30,8 +30,10 @@ class Product
     private $title;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=10, scale=2)
+     * @Assert\Regex("/\d+(?:[.,]\d{0,2})?/" , message="Le format du prix n'est pas valide")
      */
+
     private $price;
 
     /**
@@ -71,6 +73,26 @@ class Product
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $available = true;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $sauce_choosable;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $menu_information;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $drink_choosable;
+
     public function __construct()
     {
         $this->productOrders = new ArrayCollection();
@@ -93,13 +115,24 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getPrice()
     {
         return $this->price;
     }
 
-    public function setPrice(float $price): self
+    public function setPrice($price): self
     {
+        $price = str_replace(',', '.', $price);
+        //test if last char of price is €
+        if (str_contains($price, '€')) {
+            //test if first char of price is €
+            if (str_ends_with($price, '€')) {
+                $price = str_replace('€', '', $price);
+            } else {
+                $price = str_replace('€', '.', $price);
+            }
+        }
+
         $this->price = $price;
 
         return $this;
@@ -203,6 +236,54 @@ class Product
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getAvailable(): ?bool
+    {
+        return $this->available;
+    }
+
+    public function setAvailable(?bool $available): self
+    {
+        $this->available = $available;
+
+        return $this;
+    }
+
+    public function getSauceChoosable(): ?bool
+    {
+        return $this->sauce_choosable;
+    }
+
+    public function setSauceChoosable(?bool $sauce_choosable): self
+    {
+        $this->sauce_choosable = $sauce_choosable;
+
+        return $this;
+    }
+
+    public function getMenuInformation(): ?string
+    {
+        return $this->menu_information;
+    }
+
+    public function setMenuInformation(?string $menu_information): self
+    {
+        $this->menu_information = $menu_information;
+
+        return $this;
+    }
+
+    public function getDrinkChoosable(): ?bool
+    {
+        return $this->drink_choosable;
+    }
+
+    public function setDrinkChoosable(?bool $drink_choosable): self
+    {
+        $this->drink_choosable = $drink_choosable;
 
         return $this;
     }
