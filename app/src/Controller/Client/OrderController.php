@@ -2,7 +2,11 @@
 
 namespace App\Controller\Client;
 
+use App\Entity\Establishment;
 use App\Entity\Order;
+use App\Entity\Product;
+use App\Entity\ProductOrder;
+use App\Entity\Table;
 use App\Form\OrderCommentsType;
 use App\Repository\EstablishmentRepository;
 use App\Repository\OrderRepository;
@@ -14,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\UX\Turbo\TurboBundle;
 
-#[Route('/client/establishment/{establishmentId}/table/{tableId}/order/{orderId}')]
+#[Route('/client/establishment/{establishment}/table/{table}/order/{order}')]
 
 class OrderController extends AbstractController
 {
@@ -23,11 +27,10 @@ class OrderController extends AbstractController
                                EntityManagerInterface $entityManager,
                                EstablishmentRepository $establishmentRepository,
                                Request $request,
-                               $establishmentId,
-                               $tableId,
-                               $orderId): Response
+                               Establishment $establishment,
+                               Table $table,
+                               Order $order): Response
     {
-        $order = $orderRepository->findOneById($orderId);
         $form = $this->createForm(OrderCommentsType::class);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
@@ -37,87 +40,134 @@ class OrderController extends AbstractController
             $entityManager->persist($order);
             $entityManager->flush();
             return $this->redirectToRoute('client_order_confirm', [
-                'establishmentId' => $establishmentId,
-                'tableId' => $tableId,
-                'orderId' => $orderId
+                'establishment' => $establishment,
+                'table' => $table,
+                'order' => $order
             ]);
         }
         $establishment = $establishmentRepository->find($establishmentId);
 
         return $this->render('client/order/show_basket.html.twig', [
-            'establishmentId' => $establishmentId,
-            'tableId' => $tableId,
+            'establishment' => $establishment,
+            'table' => $table,
             'order' => $order,
-            'orderId' => $orderId,
             'total' => 0,
             'form' => $form->createView(),
             'establishment' => $establishment
         ]);
     }
 
-    #[Route('/product/{productOrderId}/plus', name: 'client_order_basket_product_plus')]
-    public function addProductQuantity(Request $request,
-                                       ProductOrderRepository $productOrderRepository,
-                                       EntityManagerInterface $entityManager,
-                                       $productOrderId, $orderId, $tableId, $establishmentId): Response
+    #[Route('/product/{product}/add', name: 'client_order_add_product')]
+    public function addProduct(EntityManagerInterface $entityManager,
+                                Establishment $establishment,
+                                ProductOrderRepository $productOrderRepository,
+                                Table $table,
+                                Order $order,
+                                Product $product): Response
     {
-        $productOrder = $productOrderRepository->find($productOrderId);
+        if($productOrderRepository->isProductAlreadyInBasket($order, $product)) {
+            $productOrder = $productOrderRepository->findOneBy(['orderEntity' => $order, 'product' => $product]);
+            $productOrder->setQuantity($productOrder->getQuantity() + 1);
+        } else {
+            $productOrder = new ProductOrder();
+            $productOrder->setOrderEntity($order);
+            $productOrder->setProduct($product);
+            $productOrder->setQuantity(1);
+        }
+        $entityManager->persist($productOrder);
+        $entityManager->flush();
+
+        $nbrProducts = 0;
+        foreach ($order->getProductOrders() as $product) {
+            $nbrProducts += $product->getQuantity();
+        }
+
+        return $this->json([
+            'nbrProducts' => $nbrProducts
+        ]);
+    }
+
+    #[Route('/product/{productOrder}/plus', name: 'client_order_basket_product_plus')]
+    public function addProductQuantity(Request $request,
+                                       EntityManagerInterface $entityManager,
+                                       ProductOrder $productOrder,
+                                       Order $order,
+                                       Table $table,
+                                       Establishment $establishment): Response
+    {
         $productOrder->setQuantity($productOrder->getQuantity() + 1);
         $entityManager->persist($productOrder);
         $entityManager->flush();
 
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
-        return $this->render('client/order/stream/product.stream.html.twig', ['productOrder' => $productOrder, 'orderId' => $orderId, 'order' => $productOrder->getOrderEntity(), 'tableId' => $tableId, 'establishmentId' => $establishmentId]);
-
+        return $this->render('client/order/stream/product.stream.html.twig', [
+            'productOrder' => $productOrder,
+            'order' => $order,
+            'table' => $table,
+            'establishment' => $establishment
+        ]);
     }
 
-    #[Route('/product/{productOrderId}/delete', name: 'client_order_basket_product_delete')]
+    #[Route('/product/{productOrder}/delete', name: 'client_order_basket_product_delete')]
     public function deleteProduct(Request $request,
-                                       ProductOrderRepository $productOrderRepository,
-                                       EntityManagerInterface $entityManager,
-        $productOrderId, $orderId, $tableId, $establishmentId): Response
+                                  ProductOrderRepository $productOrderRepository,
+                                  ProductOrder $productOrder,
+                                  Order $order,
+                                  Table $table,
+                                  Establishment $establishment): Response
     {
-        $productOrder = $productOrderRepository->find($productOrderId);
         $productOrderRepository->remove($productOrder);
 
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
-        return $this->render('client/order/stream/product.stream.html.twig', ['productOrder' => $productOrder, 'orderId' => $orderId, 'order' => $productOrder->getOrderEntity(), 'tableId' => $tableId, 'establishmentId' => $establishmentId]);
+        return $this->render('client/order/stream/product.stream.html.twig', [
+            'productOrder' => $productOrder,
+            'order' => $order,
+            'table' => $table,
+            'establishment' => $establishment]);
 
     }
 
-    #[Route('/product/{productOrderId}/minus', name: 'client_order_basket_product_minus')]
+    #[Route('/product/{productOrder}/minus', name: 'client_order_basket_product_minus')]
     public function removeProductQuantity(Request $request,
-                                          ProductOrderRepository $productOrderRepository,
-                                          EntityManagerInterface $entityManager,
-        $productOrderId, $orderId, $tableId, $establishmentId): Response
+                                       EntityManagerInterface $entityManager,
+                                       ProductOrder $productOrder,
+                                       Order $order,
+                                       Table $table,
+                                       Establishment $establishment): Response
     {
-        $productOrder = $productOrderRepository->find($productOrderId);
         $productOrder->setQuantity($productOrder->getQuantity() - 1);
         $entityManager->persist($productOrder);
         $entityManager->flush();
 
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
-        return $this->render('client/order/stream/product.stream.html.twig', ['productOrder' => $productOrder, 'orderId' => $orderId, 'order' => $productOrder->getOrderEntity(), 'tableId' => $tableId, 'establishmentId' => $establishmentId]);
-
+        return $this->render('client/order/stream/product.stream.html.twig', [
+            'productOrder' => $productOrder,
+            'order' => $order,
+            'table' => $table,
+            'establishment' => $establishment
+        ]);
     }
 
     #[Route('/confirm', name: 'client_order_confirm')]
-    public function confirmOrder($orderId, $tableId, $establishmentId, OrderRepository $orderRepository): Response
+    public function confirmOrder(Order $order,
+                                Table $table,
+                                Establishment $establishment,
+                                OrderRepository $orderRepository): Response
     {
-        $waitingListRank = count($orderRepository->getPreviousOrders($orderRepository->find($orderId))) + 1;
+        $waitingListRank = count($orderRepository->getPreviousOrders($order)) + 1;
         return $this->render('client/order/confirm.html.twig', [
             'waitingListRank' => $waitingListRank,
-            'orderId' => $orderId,
-            'tableId' => $tableId,
-            'establishmentId' => $establishmentId
+            'order' => $order,
+            'table' => $table,
+            'establishment' => $establishment
         ]);
 
     }
 
     #[Route('/confirm/update', name: 'client_order_confirm_update')]
-    public function confirmOrderUpdate($orderId, $tableId, $establishmentId, OrderRepository $orderRepository, Request $request)
+    public function confirmOrderUpdate(Order $order, OrderRepository $orderRepository,)
     {
-        $waitingListRank = count($orderRepository->getPreviousOrders($orderRepository->find($orderId))) + 1;
+        $waitingListRank = count($orderRepository->getPreviousOrders($order)) + 1;
         return $this->render('client/order/waiting-list.html.twig', [
             'waitingListRank' => $waitingListRank,
         ]);

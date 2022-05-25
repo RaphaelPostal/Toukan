@@ -10,7 +10,7 @@
 
     <script>
         setInterval(function() {
-            let page = `{{ path('client_order_confirm_update', {'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}`
+            let page = `{{ path('client_order_confirm_update', {'establishment':establishment.id, 'table':table.id, 'order':order.id}) }}`
 
             fetch(page).then(function (response) {
                 return response.text()

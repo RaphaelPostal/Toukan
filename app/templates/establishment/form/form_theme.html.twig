@@ -42,11 +42,11 @@
                   {%- endblock checkbox_row -%}
 
                   {%- block checkbox_widget -%}
-                  {%- set widget_class = widget_class|default('mr-2 rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-offset-0 focus:ring-green-200 focus:ring-opacity-50') -%}
+                  {%- set widget_class = widget_class|default('rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-offset-0 focus:ring-green-200 focus:ring-opacity-50') -%}
                   {{- parent() -}}
                   {%- endblock -%}
 
                   {%- block checkbox_label -%}
-                  {%- set label_class = label_class|default('block text-gray-800') -%}
+                  {%- set label_class = label_class|default('form-label') -%}
                   {{- block('form_label') -}}
                   {%- endblock -%}

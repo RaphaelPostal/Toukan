@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\UX\Turbo\TurboBundle;
 
 #[Route('/product')]
 class ProductController extends AbstractController
@@ -33,7 +34,7 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('product/new.html.twig', [
+        return $this->renderForm('establishment/product/new.html.twig', [
             'product' => $product,
             'form' => $form,
         ]);
@@ -58,19 +59,24 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('product/edit.html.twig', [
+        return $this->renderForm('establishment/product/edit.html.twig', [
             'product' => $product,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
-    public function delete(Request $request, Product $product, ProductRepository $productRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
-            $productRepository->remove($product);
-        }
-
-        return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
-    }
+//    #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
+//    public function delete(Request $request, Product $product, ProductRepository $productRepository): Response
+//    {
+//        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
+//            $productRepository->remove($product);
+//            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+//                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+//                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+//                return $this->render('establishment/stream/card.stream.html.twig');
+//            }
+//        }
+//
+//        return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
+//    }
 }
