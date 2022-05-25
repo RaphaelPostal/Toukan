@@ -3,11 +3,15 @@
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
-<form data-turbo="false" method="post" class="flex justify-center align-center w-full h-full text-center">
-    <a href="{{ path('home') }}" class="btn btn-lg btn-primary">
+    <a href="{{ path('home') }}" class="btn absolute top-0 left-0 p-8">
+        <i class="fa-solid fa-arrow-left pr-2"></i>
         {{ 'back'|trans({}, 'messages') }}
     </a>
+<form data-turbo="false" method="post" class="flex justify-center items-center w-full h-full text-center px-2 py-8">
     <div class="w-full sm:w-1/2 md:w-1/3 flex flex-col justify-center align-center mt-10">
+        <div class="w-full flex justify-center items-center mb-4">
+            <img class="w-1/4" src="{{asset('assets/img/toukan_orange_text.png')}}">
+        </div>
         {% for message in app.flashes('error') %}
             <div class="flash-notice">
                 {{ message }}
@@ -24,9 +28,9 @@
 
         <h1 class="h3 mb-3 font-weight-normal mb-10">{{ 'log_in_message'|trans }}</h1>
         <label for="inputEmail">{{ 'email'|trans }}</label>
-        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control border-b-2 border-toukan mb-10" autocomplete="email" required autofocus>
+        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control border-b-2 border-t-0 border-r-0 border-l-0 border-toukan mb-10" autocomplete="email" required autofocus>
         <label for="inputPassword">{{ 'password'|trans }}</label>
-        <input type="password" name="password" id="inputPassword" class="form-control border-b-2 border-toukan mb-10" autocomplete="current-password" required>
+        <input type="password" name="password" id="inputPassword" class="form-control border-b-2 border-t-0 border-r-0 border-l-0 border-toukan mb-10" autocomplete="current-password" required>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
@@ -45,7 +49,7 @@
             {{ 'log_in'|trans }}
         </button>
 
-        <a href="{{ path('register') }}" class="underline">
+        <a href="{{ path('register') }}" class="underline pt-2 pb-8">
             {{ 'sign_up'|trans }}
         </a>
     </div>

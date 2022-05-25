@@ -36,7 +36,7 @@ class RegistrationController extends AbstractController
         $this->request = $this->requestStack->getCurrentRequest();
     }
 
-    #[Route('/register', name: 'register')]
+    #[Route('/creation-establishment', name: 'register')]
     public function register(UserPasswordHasherInterface $userPasswordHasherInterface): Response
     {
         $user = new User();

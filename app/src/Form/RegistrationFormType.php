@@ -25,7 +25,7 @@ class RegistrationFormType extends AbstractType
                 'required' => true,
                 'label' => 'Email',
                 'attr' => [
-                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2 w-full',
+                    'class' => 'form-control text-center border-b-2 border-t-0 border-r-0 border-l-0 border-toukan mb-10 p-2 w-full',
                 ],
             ])
             ->add('name', TextType::class, [
@@ -33,7 +33,7 @@ class RegistrationFormType extends AbstractType
                 'required' => true,
                 'label' => 'Nom de l\'établissement',
                 'attr' => [
-                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2 w-full',
+                    'class' => 'form-control text-center border-b-2 border-t-0 border-r-0 border-l-0 border-toukan mb-10 p-2 w-full',
                 ]
             ])
             ->add('type', ChoiceType::class, [
@@ -41,7 +41,7 @@ class RegistrationFormType extends AbstractType
                 'required' => true,
                 'label' => 'Type d\'établissement',
                 'attr' => [
-                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2 pb-2.5 w-full',
+                    'class' => 'form-control text-center border-b-2 border-t-0 border-r-0 border-l-0 border-toukan mb-10 p-2 pb-2.5 w-full',
                 ],
                 'choices' => [
                     'Restaurant' => 'restaurant',
@@ -52,17 +52,25 @@ class RegistrationFormType extends AbstractType
             ->add('street', TextType::class, [
                 'mapped' => false,
                 'required' => true,
+                'label' => 'Rue',
+                'attr' => [
+                    'class' => 'form-control text-center border-b-2 border-t-0 border-r-0 border-l-0 border-toukan mb-10 p-2 pb-2.5 w-full',
+                ],
             ])
             ->add('city', TextType::class, [
                 'mapped' => false,
                 'required' => true,
+                'label' => 'Ville',
+                'attr' => [
+                    'class' => 'form-control text-center border-b-2 border-t-0 border-r-0 border-l-0 border-toukan mb-10 p-2 pb-2.5 w-full',
+                ],
             ])
             ->add('zipcode', TextType::class, [
                 'mapped' => false,
                 'required' => true,
-                'label' => 'Adresse postale',
+                'label' => 'Code postal',
                 'attr' => [
-                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2 w-full',
+                    'class' => 'form-control text-center border-b-2 border-t-0 border-r-0 border-l-0 border-toukan mb-10 p-2 pb-2.5 w-full',
                 ],
             ])
             ->add('phone', TextType::class, [
@@ -78,7 +86,7 @@ class RegistrationFormType extends AbstractType
                 'required' => true,
                 'label' => 'Téléphone',
                 'attr' => [
-                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2 w-full',
+                    'class' => 'form-control text-center border-b-2 border-t-0 border-r-0 border-l-0 border-toukan mb-10 p-2 w-full',
                 ],
             ])
             ->add('password', RepeatedType::class, [
@@ -90,7 +98,7 @@ class RegistrationFormType extends AbstractType
                 'type' => PasswordType::class,
                 'attr' => [
                     'autocomplete' => 'new-password',
-                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2 w-full',
+                    'class' => 'form-control text-center border-b-2 border-t-0 border-r-0 border-l-0 border-toukan mb-10 p-2 w-full',
                 ],
                 'first_options' => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmation du mot de passe'],
@@ -112,7 +120,7 @@ class RegistrationFormType extends AbstractType
                 'required' => true,
                 'label' => 'Accepter les conditions d\'utilisation',
                 'attr' => [
-                    'class' => 'form-control text-center border-b-2 border-toukan mb-10 p-2',
+                    'class' => 'form-control text-center border-2 border-toukan mr-2 p-2',
                 ],
                 'constraints' => [
                     new IsTrue([
