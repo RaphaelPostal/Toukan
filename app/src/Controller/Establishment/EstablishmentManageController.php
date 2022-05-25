@@ -4,6 +4,7 @@ namespace App\Controller\Establishment;
 
 use App\Entity\Establishment;
 use App\Entity\User;
+use App\Form\EstablishmentImageType;
 use App\Form\EstablishmentInfoType;
 use App\Form\EstablishmentPasswordType;
 use App\Repository\EstablishmentRepository;
@@ -120,5 +121,41 @@ class EstablishmentManageController extends AbstractController
             'form' => $form,
         ]);
 
+    }
+
+    #[Route('/password-image', name: 'app_establishment_image_edit', methods: ['GET', 'POST'])]
+    public function editImage(
+        Request $request,
+        EstablishmentRepository $establishmentRepository,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher
+    ): Response
+    {
+        $establishment = $this->getUser()->getEstablishment();
+
+        $form = $this->createForm(EstablishmentImageType::class, null, [
+            'action' => $this->generateUrl('app_establishment_image_edit'),
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/information.stream.html.twig', ['establishment' => $establishment, 'user' => $user]);
+            }
+
+            return $this->renderForm('establishment/information/edit.html.twig', [
+                'establishment' => $establishment,
+                'form' => $form,
+            ]);
+
+        }
+
+        return $this->renderForm('establishment/information/edit.html.twig', [
+            'establishment' => $establishment,
+            'form' => $form,
+        ]);
     }
 }
