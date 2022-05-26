@@ -130,7 +130,6 @@ class SectionController extends AbstractController
                 // this is needed to safely include the file name as part of the URL
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
-                dump($this->getParameter('products_directory'));
 
                 // Move the file to the directory where brochures are stored
                 try {

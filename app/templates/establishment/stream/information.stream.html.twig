@@ -19,3 +19,16 @@
         </template>
     </turbo-stream>
 {% endif %}
+
+{% if app.request.get('_route') == 'app_establishment_image_edit'%}
+    <turbo-stream action="update" target="form-edit-establishment-image">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editImage', {establishment: establishment.id})) }}
+        </template>
+    </turbo-stream>
+    <turbo-stream action="update" target="establishment-image">
+        <template>
+            {% include 'establishment/partials/_image.html.twig' with {'establishment' : establishment} %}
+        </template>
+    </turbo-stream>
+{% endif %}

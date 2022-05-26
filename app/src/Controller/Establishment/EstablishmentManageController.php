@@ -10,10 +10,12 @@ use App\Form\EstablishmentPasswordType;
 use App\Repository\EstablishmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\UX\Turbo\TurboBundle;
 
 #[Route('/establishment')]
@@ -123,16 +125,17 @@ class EstablishmentManageController extends AbstractController
 
     }
 
-    #[Route('/password-image', name: 'app_establishment_image_edit', methods: ['GET', 'POST'])]
+    #[Route('/image-edit', name: 'app_establishment_image_edit', methods: ['GET', 'POST'])]
     public function editImage(
         Request $request,
         EstablishmentRepository $establishmentRepository,
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        SluggerInterface $slugger
     ): Response
     {
         $establishment = $this->getUser()->getEstablishment();
-
+        $user = $this->getUser();
         $form = $this->createForm(EstablishmentImageType::class, null, [
             'action' => $this->generateUrl('app_establishment_image_edit'),
         ]);
@@ -141,9 +144,35 @@ class EstablishmentManageController extends AbstractController
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
+                $imageFile = $form->get('image')->getData();
+
+                if ($imageFile) {
+                    $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    // this is needed to safely include the file name as part of the URL
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+                    // Move the file to the directory where brochures are stored
+                    try {
+                        $imageFile->move(
+                            $this->getParameter('images_directory').'/'.$establishment->getId(),
+                            $newFilename
+                        );
+                    } catch (FileException $e) {
+                        dump('impossible de déplacer le fichier');
+                    }
+
+                    // updates the 'brochureFilename' property to store the PDF file name
+                    // instead of its contents
+                    $establishment->setImage($newFilename);
+                }
+
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Image sauvegardée !');
 
                 $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
-                return $this->render('establishment/stream/information.stream.html.twig', ['establishment' => $establishment, 'user' => $user]);
+                return $this->render('establishment/stream/information.stream.html.twig', ['establishment' => $establishment, 'user' => $user ]);
             }
 
             return $this->renderForm('establishment/information/edit.html.twig', [
