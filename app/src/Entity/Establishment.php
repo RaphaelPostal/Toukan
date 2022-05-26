@@ -62,7 +62,7 @@ class Establishment
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $custom_color;
+    private $custom_color = '#F49B22' ;
 
     public function __construct()
     {
