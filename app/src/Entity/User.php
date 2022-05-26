@@ -40,7 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
-     * @ORM\OneToOne(targetEntity=Establishment::class, mappedBy="user")
+     * @ORM\OneToOne(targetEntity=Establishment::class, mappedBy="user", fetch="EAGER")
      */
     private $establishment;
 

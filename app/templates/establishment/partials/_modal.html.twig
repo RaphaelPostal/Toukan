@@ -37,10 +37,25 @@
                     </div>
                 {% elseif context == 'sauce-edit' %}
                     <div id="form-edit-sauce">
-                        <!--En utilisant un turbo frame pour l'edition, on peut utiliser la même modal pour toutes les sections-->
                         <turbo-frame id="frame-edit-sauce">
 
                         </turbo-frame>
+                    </div>
+                {% elseif context == 'establishment-information-edit' %}
+                    <div id="form-edit-establishment-information">
+                       {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editInformation')) }}
+                    </div>
+                {% elseif context == 'establishment-password-edit' %}
+                    <div id="form-edit-establishment-password">
+                        {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editPassword', {user: user.id})) }}
+                    </div>
+                {% elseif context == 'establishment-image-edit' %}
+                    <div id="form-edit-establishment-image">
+                        {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editImage')) }}
+                    </div>
+                {% elseif context == 'establishment-color-edit'%}
+                    <div id="form-edit-establishment-color">
+                        {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editColor')) }}
                     </div>
                 {% endif %}
             </div>
