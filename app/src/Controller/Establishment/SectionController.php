@@ -25,10 +25,7 @@ class SectionController extends AbstractController
     #[Route('/create', name: 'app_section_create', methods: ['GET', 'POST'])]
     public function new(Request $request, SectionRepository $sectionRepository): Response
     {
-
-//        $card = $this->getUser()->getEstablishment()->getCard();
-        //get the first card in the database
-        $card = $this->get('doctrine')->getRepository(Card::class)->find(1);
+        $card = $this->getUser()->getEstablishment()->getCard();
 
         $section = new Section();
         $card->addSection($section);
@@ -59,9 +56,7 @@ class SectionController extends AbstractController
     #[Route('/{id}/edit', name: 'app_section_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Section $section, SectionRepository $sectionRepository): Response
     {
-        //        $card = $this->getUser()->getEstablishment()->getCard();
-        //get the first card in the database
-        $card = $this->get('doctrine')->getRepository(Card::class)->find(1);
+        $card = $this->getUser()->getEstablishment()->getCard();
 
         $form = $this->createForm(SectionType::class, $section, [
             'action' => $this->generateUrl('app_section_edit', ['id' => $section->getId()]),
@@ -89,9 +84,7 @@ class SectionController extends AbstractController
     #[Route('/{id}', name: 'app_section_delete', methods: ['POST'])]
     public function delete(Request $request, Section $section, SectionRepository $sectionRepository): Response
     {
-        //        $card = $this->getUser()->getEstablishment()->getCard();
-        //get the first card in the database
-        $card = $this->get('doctrine')->getRepository(Card::class)->find(1);
+        $card = $this->getUser()->getEstablishment()->getCard();
 
         if ($this->isCsrfTokenValid('delete'.$section->getId(), $request->request->get('_token'))) {
             $sectionRepository->remove($section);
@@ -109,9 +102,7 @@ class SectionController extends AbstractController
     #[Route('/{id}/product/create', name: 'app_section_product_create', methods: ['GET', 'POST'])]
     public function newProductInSection(Request $request, Section $section, ProductRepository $productRepository, SluggerInterface $slugger): Response
     {
-        //        $card = $this->getUser()->getEstablishment()->getCard();
-        //get the first card in the database
-        $card = $this->get('doctrine')->getRepository(Card::class)->find(1);
+        $card = $this->getUser()->getEstablishment()->getCard();
 
         $product = new Product();
         $section->addProduct($product);
@@ -167,9 +158,7 @@ class SectionController extends AbstractController
     #[Route('/product/{product}/edit', name: 'app_section_product_edit', methods: ['GET', 'POST'])]
     public function editProduct(Request $request, Product $product, ProductRepository $productRepository, SluggerInterface $slugger): Response
     {
-        //        $card = $this->getUser()->getEstablishment()->getCard();
-        //get the first card in the database
-        $card = $this->get('doctrine')->getRepository(Card::class)->find(1);
+        $card = $this->getUser()->getEstablishment()->getCard();
 
         $form = $this->createForm(ProductType::class, $product, [
             'action' => $this->generateUrl('app_section_product_edit', ['product' => $product->getId()]),
@@ -224,9 +213,7 @@ class SectionController extends AbstractController
     #[Route('/product/{id}', name: 'app_product_delete', methods: ['POST'])]
     public function deleteProduct(Request $request, Product $product, ProductRepository $productRepository): Response
     {
-        //        $card = $this->getUser()->getEstablishment()->getCard();
-        //get the first card in the database
-        $card = $this->get('doctrine')->getRepository(Card::class)->find(1);
+        $card = $this->getUser()->getEstablishment()->getCard();
 
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             $productRepository->remove($product);

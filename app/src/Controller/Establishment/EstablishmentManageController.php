@@ -4,6 +4,7 @@ namespace App\Controller\Establishment;
 
 use App\Entity\Establishment;
 use App\Entity\User;
+use App\Form\EstablishmentColorType;
 use App\Form\EstablishmentImageType;
 use App\Form\EstablishmentInfoType;
 use App\Form\EstablishmentPasswordType;
@@ -24,10 +25,8 @@ class EstablishmentManageController extends AbstractController
     #[Route('/manage', name: 'app_establishment_manage')]
     public function index(): Response
     {
-        //$establishment = $this->getUser()->getEstablishment();
-
-        $establishment =$this->getDoctrine()->getRepository(Establishment::class)->find(1);
-        $user = $this->getDoctrine()->getRepository(User::class)->find(1);
+        $user = $this->getUser();
+        $establishment = $user->getEstablishment();
 
         return $this->render('establishment/information/index.html.twig', [
             'user' => $user,
@@ -38,11 +37,10 @@ class EstablishmentManageController extends AbstractController
     #[Route('/information-edit', name: 'app_establishment_information_edit', methods: ['GET', 'POST'])]
     public function editInformation(Request $request, EstablishmentRepository $establishmentRepository, EntityManagerInterface $entityManager): Response
     {
-//        $establishment = $this->getUser()->getEstablishment();
-//        $user = $this->getUser();
 
-        $user = $this->getDoctrine()->getRepository(User::class)->find(1);
-        $establishment = $establishmentRepository->find(1);
+        $user = $this->getUser();
+        $establishment = $user->getEstablishment();
+
         $form = $this->createForm(EstablishmentInfoType::class, $establishment, [
             'action' => $this->generateUrl('app_establishment_information_edit'),
             'email' => $user->getEmail(),
@@ -82,11 +80,8 @@ class EstablishmentManageController extends AbstractController
         UserPasswordHasherInterface $passwordHasher
     ): Response
     {
-//        $establishment = $this->getUser()->getEstablishment();
-//        $user = $this->getUser();
-
-        $user = $this->getDoctrine()->getRepository(User::class)->find(1);
-        $establishment = $establishmentRepository->find(1);
+        $user = $this->getUser();
+        $establishment = $user->getEstablishment();
 
         $form = $this->createForm(EstablishmentPasswordType::class, null, [
             'action' => $this->generateUrl('app_establishment_password_edit'),
@@ -128,14 +123,13 @@ class EstablishmentManageController extends AbstractController
     #[Route('/image-edit', name: 'app_establishment_image_edit', methods: ['GET', 'POST'])]
     public function editImage(
         Request $request,
-        EstablishmentRepository $establishmentRepository,
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher,
         SluggerInterface $slugger
     ): Response
     {
-        $establishment = $this->getUser()->getEstablishment();
         $user = $this->getUser();
+        $establishment = $user->getEstablishment();
+
         $form = $this->createForm(EstablishmentImageType::class, null, [
             'action' => $this->generateUrl('app_establishment_image_edit'),
         ]);
@@ -172,13 +166,42 @@ class EstablishmentManageController extends AbstractController
                 $this->addFlash('success', 'Image sauvegardée !');
 
                 $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
-                return $this->render('establishment/stream/information.stream.html.twig', ['establishment' => $establishment, 'user' => $user ]);
+                return $this->render('establishment/stream/information.stream.html.twig', ['establishment' => $establishment]);
             }
 
-            return $this->renderForm('establishment/information/edit.html.twig', [
-                'establishment' => $establishment,
-                'form' => $form,
-            ]);
+        }
+
+        return $this->renderForm('establishment/information/edit.html.twig', [
+            'establishment' => $establishment,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/color-edit', name: 'app_establishment_color_edit', methods: ['GET', 'POST'])]
+    public function editColor(
+        Request $request,
+        EntityManagerInterface $entityManager,
+    ): Response
+    {
+        $user = $this->getUser();
+        $establishment = $user->getEstablishment();
+
+        $form = $this->createForm(EstablishmentColorType::class, $establishment, [
+            'action' => $this->generateUrl('app_establishment_color_edit'),
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Couleur sauvegardée !');
+
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/information.stream.html.twig', ['establishment' => $establishment]);
+            }
 
         }
 

@@ -53,6 +53,10 @@
                     <div id="form-edit-establishment-image">
                         {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editImage')) }}
                     </div>
+                {% elseif context == 'establishment-color-edit'%}
+                    <div id="form-edit-establishment-color">
+                        {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editColor')) }}
+                    </div>
                 {% endif %}
             </div>
         </div>

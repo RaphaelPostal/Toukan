@@ -1,10 +1,9 @@
-<turbo-stream action="update" target="establishment-information">
-    <template>
-        {% include 'establishment/partials/_information.html.twig' with {'establishment' : establishment, 'user' : user} %}
-    </template>
-</turbo-stream>
-
 {% if app.request.get('_route') == 'app_establishment_information_edit'%}
+    <turbo-stream action="update" target="establishment-information">
+        <template>
+            {% include 'establishment/partials/_information.html.twig' with {'establishment' : establishment, 'user' : user} %}
+        </template>
+    </turbo-stream>
     <turbo-stream action="update" target="form-edit-establishment-information">
         <template>
             {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editInformation', {establishment: establishment.id})) }}
@@ -29,6 +28,19 @@
     <turbo-stream action="update" target="establishment-image">
         <template>
             {% include 'establishment/partials/_image.html.twig' with {'establishment' : establishment} %}
+        </template>
+    </turbo-stream>
+{% endif %}
+
+{% if app.request.get('_route') == 'app_establishment_color_edit' %}
+    <turbo-stream action="update" target="form-edit-establishment-color">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editColor', {establishment: establishment.id})) }}
+        </template>
+    </turbo-stream>
+    <turbo-stream action="update" target="establishment-color">
+        <template>
+            {% include 'establishment/partials/_color.html.twig' with {'establishment' : establishment} %}
         </template>
     </turbo-stream>
 {% endif %}

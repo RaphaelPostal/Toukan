@@ -17,11 +17,15 @@
     <div id="establishment-image">
         {% include 'establishment/partials/_image.html.twig' with {'establishment' : establishment} %}
     </div>
-    <p>Ma couleur customisée <i class="fas fa-pen"></i></p>
+
+    <div id="establishment-color">
+        {% include 'establishment/partials/_color.html.twig' with {'establishment' : establishment} %}
+    </div>
 
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-establishment', 'modal_title' : 'Vos informations', 'context' : 'establishment-information-edit'} %}
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-password', 'modal_title' : 'Modifier votre mot de passe', 'context' : 'establishment-password-edit'} %}
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-image', 'modal_title' : 'Modifier votre image', 'context' : 'establishment-image-edit'} %}
+    {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-color', 'modal_title' : 'Couleur personnalisée', 'context' : 'establishment-color-edit'} %}
 
 
 
