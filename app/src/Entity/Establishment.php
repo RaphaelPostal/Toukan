@@ -45,7 +45,7 @@ class Establishment
     private $user;
 
     /**
-     * @ORM\OneToOne(targetEntity=Card::class, mappedBy="establishment")
+     * @ORM\OneToOne(targetEntity=Card::class, mappedBy="establishment", fetch="EAGER")
      */
     private $card;
 
