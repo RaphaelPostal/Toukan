@@ -30,7 +30,7 @@
 
         <main class="">
             {% if app.request.get('_route') == 'app_client_card' %}
-                <header class="bg-cover h-96 flex justify-center flex-col" style="background-image:url('{{asset('assets/uploads/'~establishment.id~'/'~establishment.image)}}'); box-shadow: inset 0px -127px 131px -25px rgba(0,0,0,0.69);">
+                <header class="bg-cover h-96 mb-20 flex justify-center flex-col" style="background-image:url('{{asset('assets/uploads/'~establishment.id~'/'~establishment.image)}}'); box-shadow: inset 0px -127px 131px -25px rgba(0,0,0,0.69);">
                     <h1 class="text-white ml-3 w-4/6 text-5xl font-bold">{{establishment.name}}</h1>
                     <h2 class="text-white ml-3 w-4/6 text-2xl font-bold">{{establishment.address}}</h2>
                     <div class="bg-light-gray" style="clip-path: ellipse(49% 20% at 50% 80%)"></div>

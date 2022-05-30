@@ -4,6 +4,18 @@
 
 {% block body %}
 
+<style>
+    .custom-shadow { box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.25); }
+    .max-height { height:150px; width:auto;}
+</style>
+
+<ul class="flex m-3 font-bold bg-light-gray">
+    {% for section in card.sections %}
+        <li class="m-1"><a href="#{{section.title}}">{{section.title}}</a></li>
+    {% endfor %}
+    <li class="m-1"><a href="#autres">Autres</a></li>
+</ul>
+
 {% for section in card.sections %}
     <div id="{{section.title}}">
         <h3 class="border-toukan w-min m-3 border-2 text-2xl border-solid rounded-2xl pl-2 pr-2">{{section.title}}</h3>
