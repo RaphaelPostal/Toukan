@@ -41,10 +41,10 @@ class ProductType extends AbstractType
             ])
 
             ->add('menuInformation', TextareaType::class, [
-                'label' => 'Informations sur le menu (composition, options, etc ...)',
+                'label' => 'Informations sur le menu (composition, etc ...)',
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'ex: 6 Nuggets, Frite (grande ou petite), dessert au choix'
+                    'placeholder' => 'ex: 6 Nuggets, Frite (grande ou petite)'
                 ]
             ])
             ->add('ingredients', TextareaType::class, [
