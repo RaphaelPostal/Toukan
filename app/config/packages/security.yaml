@@ -20,6 +20,9 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            remember_me:
+                secret: '%kernel.secret%'
+                always_remember_me: true
             custom_authenticator: App\Security\LoginAuthenticator
             logout:
                 path: app_logout
@@ -35,5 +38,6 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/establishment/subscription/webhook, roles: PUBLIC_ACCESS }
+         - { path: ^/establishment, roles: IS_AUTHENTICATED_REMEMBERED }
         # - { path: ^/profile, roles: ROLE_USER }

@@ -49,7 +49,15 @@ class RegistrationFormType extends AbstractType
                     'Bar/Restaurant' => 'bar-restaurant',
                 ],
             ])
-            ->add('address', TextType::class, [
+            ->add('street', TextType::class, [
+                'mapped' => false,
+                'required' => true,
+            ])
+            ->add('city', TextType::class, [
+                'mapped' => false,
+                'required' => true,
+            ])
+            ->add('zipcode', TextType::class, [
                 'mapped' => false,
                 'required' => true,
                 'label' => 'Adresse postale',

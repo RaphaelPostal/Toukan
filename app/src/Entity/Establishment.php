@@ -30,7 +30,7 @@ class Establishment
     private $type;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="array", length=255, nullable=true)
      */
     private $address;
 
@@ -58,6 +58,11 @@ class Establishment
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $image;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $custom_color = '#F49B22' ;
 
     public function __construct()
     {
@@ -94,12 +99,12 @@ class Establishment
         return $this;
     }
 
-    public function getAddress(): ?string
+    public function getAddress(): ?array
     {
         return $this->address;
     }
 
-    public function setAddress(?string $address): self
+    public function setAddress(?array $address): self
     {
         $this->address = $address;
 
@@ -142,9 +147,9 @@ class Establishment
     }
 
     /**
-     * @return Collection<int, Table>
+     * @return ArrayCollection
      */
-    public function getTables(): Collection
+    public function getTables(): ArrayCollection
     {
         return $this->tables;
     }
@@ -179,6 +184,18 @@ class Establishment
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getCustomColor(): ?string
+    {
+        return $this->custom_color;
+    }
+
+    public function setCustomColor(?string $custom_color): self
+    {
+        $this->custom_color = $custom_color;
 
         return $this;
     }

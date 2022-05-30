@@ -1,0 +1,60 @@
+{% extends 'base_printing.html.twig' %}
+
+{% block title %}QR Code printing page{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <link rel="stylesheet" href="{{ asset("build/qr-code-printing.css") }}">
+{% endblock %}
+
+{% block body %}
+    <div id="qr-code-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded',()=> {
+            fetch('{{ path("api_qr_code", {establishmentId: establishmentId}) }}')
+                .then(response => response.json())
+                .then(data => {
+                    let establishmentId = data.establishmentId;
+                    let establishmentImg = data.establishmentImg;
+                    let establishmentColor = data.establishmentColor;
+                    let qrCodeOptions = data.qrCodeOptions;
+                    let tables = data.tables;
+
+                    tables.forEach(tableId => {
+                        const qrCode = new QRCodeStyling({
+                            width: 500,
+                            height: 500,
+                            type: "canvas",
+                            data: `https://toukan.fr/restaurant/${establishmentId}/table/${tableId}`,
+                            image: establishmentImg,
+                            qrOptions: {
+                                errorCorrectionLevel: "H"
+                            },
+                            dotsOptions: {
+                                color: establishmentColor,
+                                type: qrCodeOptions.dotsOption
+                            },
+                            cornersSquareOptions: {
+                                type: qrCodeOptions.cornerSquareOption,
+                                color: establishmentColor
+                            },
+                            cornersDotOptions: {
+                                type: qrCodeOptions.cornerDotsOption,
+                                color: establishmentColor
+                            },
+                            backgroundOptions: {
+                                color: "white",
+                            },
+                            imageOptions: {
+                                crossOrigin: "anonymous",
+                                margin: 0,
+                                imageSize: 0.5,
+                            }
+                        })
+                        qrCode.append(document.getElementById('qr-code-container'))
+                    });
+                })
+        })
+    </script>
+{% endblock %}

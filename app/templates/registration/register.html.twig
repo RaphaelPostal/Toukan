@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Inscription - Toukan{% endblock %}
+{% trans_default_domain 'form' %}
+{% block title %}Inscription{% endblock %}
 
 {% block body %}
 <div>
@@ -23,53 +23,46 @@
                 {{form_label(registrationForm.email)}}
                 {{form_widget(registrationForm.email)}}
             </div>
-
-            <div class="w-full flex justify-center">
-                <div class="px-2 w-1/2">
-                    {{form_label(registrationForm.name)}}
-                    {{form_widget(registrationForm.name)}}
-                </div>
-                <div class="px-2 w-1/2">
-                    {{form_label(registrationForm.type)}}
-                    {{form_widget(registrationForm.type)}}
-                </div>
-            </div>
-
-            <div class="w-full flex justify-center">
-                <div class="px-2 w-1/2">
-                    {{form_label(registrationForm.address)}}
-                    {{form_widget(registrationForm.address)}}
-                </div>
-                <div class="px-2 w-1/2">
-                    {{form_label(registrationForm.phone)}}
-                    {{form_widget(registrationForm.phone)}}
-                </div>
-            </div>
-
-            <div class="w-full flex justify-center">
-                <div class="px-2 w-1/2">
-                    {{form_label(registrationForm.password.first)}}
-                    {{form_widget(registrationForm.password.first, {'attr':{'class':'form-control text-center border-b-2 border-toukan mb-10 p-2 w-full'}})}}
-                </div>
-                <div class="px-2 w-1/2">
-                    {{form_label(registrationForm.password.second)}}
-                    {{form_widget(registrationForm.password.second, {'attr':{'class':'form-control text-center border-b-2 border-toukan mb-10 p-2 w-full'}})}}
-                </div>
-            </div>
-
-            <div class="w-full">
-                {{form_widget(registrationForm.agreeTerms)}}
-                {{form_label(registrationForm.agreeTerms)}}
-            </div>
-
-            <button class="bg-toukan text-white rounded-3xl px-16 py-2 mb-2" type="submit">
-                S'inscrire
-            </button>
-
-            <a href="{{ path('login') }}" class="btn underline">
-                Se connecter
-            </a>
         </div>
+
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.email, {
+            label: 'email'|trans
+        }) }}
+        {{ form_row(registrationForm.name, {
+            label: 'establishment_name'|trans
+        }) }}
+        {{ form_row(registrationForm.type, {
+            label: 'establishment_type'|trans
+        }) }}
+        {{ form_row(registrationForm.street, {
+            label: 'establishment_address'|trans
+        }) }}
+        {{ form_row(registrationForm.city, {
+            label: 'establishment_city'|trans
+        }) }}
+        {{ form_row(registrationForm.zipcode, {
+            label: 'establishment_zip_code'|trans
+        }) }}
+        {{ form_row(registrationForm.phone, {
+            label: 'establishment_phone'|trans
+        }) }}
+        {{ form_row(registrationForm.password.first, {
+            label: 'password'|trans
+        }) }}
+    {{ form_row(registrationForm.password.second, {
+        label: 'password_confirmation'|trans
+    }) }}
+
+        {{ form_row(registrationForm.agreeTerms,{
+            label: 'accept_terms'|trans
+        }) }}
+
+        <button type="submit" class="btn">{{ 'sign_up'|trans }}</button>
+
+        <a href="{{ path('login') }}" class="btn btn-lg btn-primary">
+            {{ 'log_in'|trans }}
+        </a>
     {{ form_end(registrationForm) }}
 </div>
 {% endblock %}

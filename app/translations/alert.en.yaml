@@ -1,0 +1,4 @@
+subscription:
+  no_active_subscription : 'You have not activated your Toukan subscription, your features are restricted.'
+  go_to_subscriptions : 'See subscriptions'
+  already_subscribed : 'You are already subscribed to Toukan.'

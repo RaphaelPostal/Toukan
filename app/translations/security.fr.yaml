@@ -1,0 +1,5 @@
+verified_email: "Votre adresse email a bien été vérifiée."
+already_verified_email: "Votre adresse email a déjà été vérifiée."
+user_not_found: "Utilisateur introuvable."
+invalid_verification_link: "Lien de vérification invalide."
+invalid_credentials: "Identifiants invalides."

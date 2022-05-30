@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -40,7 +38,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
-     * @ORM\OneToOne(targetEntity=Establishment::class, mappedBy="user")
+     * @ORM\OneToOne(targetEntity=Establishment::class, mappedBy="user", fetch="EAGER")
      */
     private $establishment;
 
@@ -48,6 +46,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="boolean")
      */
     private $isVerified = false;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $session_id;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $subscriptionActive;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $subscription_id;
 
     public function getId(): ?int
     {
@@ -139,9 +152,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Establishment|null
+     * @return Establishment
      */
-    public function getEstablishment(): ?Establishment
+    public function getEstablishment(): Establishment
     {
         return $this->establishment;
     }
@@ -166,6 +179,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getSessionId(): ?string
+    {
+        return $this->session_id;
+    }
+
+    public function setSessionId(string $session_id): self
+    {
+        $this->session_id = $session_id;
+
+        return $this;
+    }
+
+    public function isSubscriptionActive(): ?bool
+    {
+        return $this->subscriptionActive;
+    }
+
+    public function setSubscriptionActive(?bool $subscriptionActive): self
+    {
+        $this->subscriptionActive = $subscriptionActive;
+
+        return $this;
+    }
+
+    public function getSubscriptionId(): ?string
+    {
+        return $this->subscription_id;
+    }
+
+    public function setSubscriptionId(?string $subscription_id): self
+    {
+        $this->subscription_id = $subscription_id;
 
         return $this;
     }

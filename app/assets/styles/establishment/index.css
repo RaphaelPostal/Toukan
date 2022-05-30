@@ -8,7 +8,7 @@
     }
 
     .admin-button-add {
-        @apply bg-green !important;
+        @apply bg-toukan-green !important;
     }
 
     #section div, #section label {
@@ -16,11 +16,11 @@
     }
 
     .admin-button-edit {
-        @apply bg-light-blue !important;
+        @apply bg-toukan-light-blue !important;
     }
 
     .admin-button-delete {
-        @apply bg-red !important;
+        @apply bg-toukan-red !important;
     }
 
     .custom-icon{
