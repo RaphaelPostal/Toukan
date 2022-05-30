@@ -1,5 +1,7 @@
 log_in: "Log in"
 sign_up: "Sign up"
+sign_up_label: "Don't have Toukan account ? Sign up"
+forgotten_password: "Forgotten password ?"
 email: "Email"
 password: "Password"
 password_confirmation: "Password confirmation"
