@@ -106,7 +106,7 @@ class RegistrationController extends AbstractController
         }
 
         if ($user->isVerified()) {
-            $this->addFlash('error', $this->translator->trans('already_verified_mail', domain: 'security'));
+            $this->addFlash('error', $this->translator->trans('already_verified_email', domain: 'security'));
             return $this->redirectToRoute('login');
         }
         // validate email confirmation link, sets User::isVerified=true and persists
