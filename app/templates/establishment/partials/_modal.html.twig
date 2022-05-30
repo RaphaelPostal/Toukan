@@ -14,7 +14,7 @@
 
                 {% if context == 'section-create' %}
                     <div id="form-create-section">
-                        {{ render(controller('App\\Controller\\Establishment\\SectionController::new', {card:card.id})) }}
+                        {{ render(controller('App\\Controller\\Establishment\\SectionController::new')) }}
                     </div>
                 {% elseif context == 'section-edit' %}
                     <div id="form-edit-section">
@@ -23,10 +23,39 @@
 
                         </turbo-frame>
                     </div>
-                {% elseif context == 'product-create' %}
+                {% elseif context == 'section-product-create' %}
                     <div id="form-section-create-product">
                         <turbo-frame id="frame-section-create-product"></turbo-frame>
-{#                        {{ render(controller('App\\Controller\\Establishment\\SectionController::newProduct', {card:card.id, section})) }}#}
+                    </div>
+                {% elseif context == 'section-product-edit' %}
+                    <div id="form-section-edit-product">
+                        <turbo-frame id="frame-section-edit-product"></turbo-frame>
+                    </div>
+                {% elseif context == 'sauce-create' %}
+                    <div id="form-create-sauce">
+                        {{ render(controller('App\\Controller\\Establishment\\SauceController::new')) }}
+                    </div>
+                {% elseif context == 'sauce-edit' %}
+                    <div id="form-edit-sauce">
+                        <turbo-frame id="frame-edit-sauce">
+
+                        </turbo-frame>
+                    </div>
+                {% elseif context == 'establishment-information-edit' %}
+                    <div id="form-edit-establishment-information">
+                       {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editInformation')) }}
+                    </div>
+                {% elseif context == 'establishment-password-edit' %}
+                    <div id="form-edit-establishment-password">
+                        {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editPassword', {user: user.id})) }}
+                    </div>
+                {% elseif context == 'establishment-image-edit' %}
+                    <div id="form-edit-establishment-image">
+                        {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editImage')) }}
+                    </div>
+                {% elseif context == 'establishment-color-edit'%}
+                    <div id="form-edit-establishment-color">
+                        {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editColor')) }}
                     </div>
                 {% endif %}
             </div>

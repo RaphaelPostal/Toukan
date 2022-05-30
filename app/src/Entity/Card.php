@@ -25,7 +25,7 @@ class Card
     private $products;
 
     /**
-     * @ORM\OneToOne(targetEntity=Establishment::class, inversedBy="card")
+     * @ORM\OneToOne(targetEntity=Establishment::class, inversedBy="card", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $establishment;

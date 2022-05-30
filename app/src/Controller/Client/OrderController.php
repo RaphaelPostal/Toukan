@@ -8,6 +8,7 @@ use App\Entity\Product;
 use App\Entity\ProductOrder;
 use App\Entity\Table;
 use App\Form\OrderCommentsType;
+use App\Repository\EstablishmentRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductOrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,7 +23,9 @@ use Symfony\UX\Turbo\TurboBundle;
 class OrderController extends AbstractController
 {
     #[Route('/', name: 'client_order_basket')]
-    public function showBasket(EntityManagerInterface $entityManager,
+    public function showBasket(OrderRepository $orderRepository,
+                               EntityManagerInterface $entityManager,
+                               EstablishmentRepository $establishmentRepository,
                                Request $request,
                                Establishment $establishment,
                                Table $table,
@@ -42,13 +45,15 @@ class OrderController extends AbstractController
                 'order' => $order
             ]);
         }
+        $establishment = $establishmentRepository->find($establishmentId);
 
         return $this->render('client/order/show_basket.html.twig', [
             'establishment' => $establishment,
             'table' => $table,
             'order' => $order,
             'total' => 0,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'establishment' => $establishment
         ]);
     }
 
@@ -60,7 +65,7 @@ class OrderController extends AbstractController
                                 Order $order,
                                 Product $product): Response
     {
-        if($productOrderRepository->findOneBy(['orderEntity' => $order, 'product' => $product])){
+        if($productOrderRepository->isProductAlreadyInBasket($order, $product)) {
             $productOrder = $productOrderRepository->findOneBy(['orderEntity' => $order, 'product' => $product]);
             $productOrder->setQuantity($productOrder->getQuantity() + 1);
         } else {
@@ -112,14 +117,12 @@ class OrderController extends AbstractController
                                   Establishment $establishment): Response
     {
         $productOrderRepository->remove($productOrder);
-
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
         return $this->render('client/order/stream/product.stream.html.twig', [
             'productOrder' => $productOrder,
             'order' => $order,
             'table' => $table,
             'establishment' => $establishment]);
-
     }
 
     #[Route('/product/{productOrder}/minus', name: 'client_order_basket_product_minus')]
@@ -139,7 +142,7 @@ class OrderController extends AbstractController
             'productOrder' => $productOrder,
             'order' => $order,
             'table' => $table,
-            'establishment' => $establishment
+            'establishment' => $establishment,
         ]);
     }
 
