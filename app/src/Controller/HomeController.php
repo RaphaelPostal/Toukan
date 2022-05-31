@@ -9,8 +9,9 @@ use Symfony\Component\Mercure\Update;
 
 class HomeController extends AbstractController
 {
+
     /**
-     * @Route("/test", name="testtest")
+     * @Route("/", name="home")
      */
     public function test(HubInterface $hub): Response
     {
