@@ -18,7 +18,7 @@
 
 
     {% for section in card.sections %}
-        <div id="{{section.title}}">
+        <div id="{{section.title}}" class="mb-20">
             <h3 class="border-toukan w-min m-3 border-2 text-2xl border-solid rounded-2xl pl-2 pr-2">{{section.title}}</h3>
             <div class="flex justify-around flex-wrap">
                 {% for product in section.products %}
@@ -37,7 +37,13 @@
         <div>
     {% endfor %}
     
-    <div id="client-basket" class="text-3xl">{{ nbrProducts }}</div>
+    <a href="" class="bg-cover w-full bottom-0 fixed flex justify-center flex-col">
+        <i class="text-center z-10 text-white text-3xl fa-solid fa-cart-shopping"></i>
+        <div id="client-basket" class="text-center text-2xl z-10 text-white">Panier ({{ nbrProducts }})</div>
+        <svg class="absolute" viewBox="0 0 375 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M191 1.0407C91.8 0.240703 22.3333 11.3742 0 22.0408V128.041H375V22.0408C355 12.0408 290.2 1.8407 191 1.0407Z" fill="#2E2E2E" stroke="black"/>
+        </svg>
+    </a>
 
     <script>
         document.querySelectorAll('#add-product').forEach(function(e) {
