@@ -123,11 +123,7 @@ class Product
         //test if last char of price is €
         if (str_contains((string)$price, '€')) {
             //test if first char of price is €
-            if (str_ends_with($price, '€')) {
-                $price = str_replace('€', '', $price);
-            } else {
-                $price = str_replace('€', '.', $price);
-            }
+            $price = str_ends_with($price, '€') ? str_replace('€', '', $price) : str_replace('€', '.', $price);
         }
 
         $this->price = $price;
@@ -179,11 +175,9 @@ class Product
 
     public function removeProductOrder(ProductOrder $productOrder): self
     {
-        if ($this->productOrders->removeElement($productOrder)) {
-            // set the owning side to null (unless already changed)
-            if ($productOrder->getProduct() === $this) {
-                $productOrder->setProduct(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->productOrders->removeElement($productOrder) && $productOrder->getProduct() === $this) {
+            $productOrder->setProduct(null);
         }
 
         return $this;

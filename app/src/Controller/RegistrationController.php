@@ -100,7 +100,7 @@ class RegistrationController extends AbstractController
         }
 
         $user = $repository->find($id);
-        if (!$user) {
+        if (!$user instanceof \App\Entity\User) {
             $this->addFlash('error', $this->translator->trans('user_not_find', domain: 'security'));
 
             return $this->redirectToRoute('login');

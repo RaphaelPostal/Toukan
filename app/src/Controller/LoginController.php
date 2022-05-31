@@ -12,7 +12,7 @@ class LoginController extends AbstractController
     #[Route(path: '/login', name: 'login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        if ($this->getUser()) {
+        if ($this->getUser() !== null) {
             return $this->redirectToRoute('establishment_dashboard');
         }
         // get the login error if there is one

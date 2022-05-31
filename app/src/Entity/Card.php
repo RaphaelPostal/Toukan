@@ -2,10 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\CardRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CardRepository::class)
@@ -72,11 +70,9 @@ class Card
 
     public function removeProduct(Product $product): self
     {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getCard() === $this) {
-                $product->setCard(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->products->removeElement($product) && $product->getCard() === $this) {
+            $product->setCard(null);
         }
 
         return $this;
@@ -114,11 +110,9 @@ class Card
 
     public function removeSection(Section $section): self
     {
-        if ($this->sections->removeElement($section)) {
-            // set the owning side to null (unless already changed)
-            if ($section->getCard() === $this) {
-                $section->setCard(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->sections->removeElement($section) && $section->getCard() === $this) {
+            $section->setCard(null);
         }
 
         return $this;
@@ -144,11 +138,9 @@ class Card
 
     public function removeSauce(Sauce $sauce): self
     {
-        if ($this->sauces->removeElement($sauce)) {
-            // set the owning side to null (unless already changed)
-            if ($sauce->getCard() === $this) {
-                $sauce->setCard(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->sauces->removeElement($sauce) && $sauce->getCard() === $this) {
+            $sauce->setCard(null);
         }
 
         return $this;

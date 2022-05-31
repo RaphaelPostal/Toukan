@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Establishment
 {
+    public \Doctrine\Common\Collections\ArrayCollection $cards;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -154,11 +155,9 @@ class Establishment
 
     public function removeTable(Table $table): self
     {
-        if ($this->tables->removeElement($table)) {
-            // set the owning side to null (unless already changed)
-            if ($table->getEstablishment() === $this) {
-                $table->setEstablishment(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->tables->removeElement($table) && $table->getEstablishment() === $this) {
+            $table->setEstablishment(null);
         }
 
         return $this;

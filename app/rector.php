@@ -9,12 +9,17 @@ use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Set\ValueObject\LevelSetList;
+use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector;
 use Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
         __DIR__ . '/src'
+    ]);
+
+    $rectorConfig->sets([
+        SetList::CODE_QUALITY,
     ]);
 
     // Define what rule sets will be applied

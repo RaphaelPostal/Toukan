@@ -116,11 +116,9 @@ class Order
 
     public function removeProductOrder(ProductOrder $productOrder): self
     {
-        if ($this->productOrders->removeElement($productOrder)) {
-            // set the owning side to null (unless already changed)
-            if ($productOrder->getOrderEntity() === $this) {
-                $productOrder->setOrderEntity(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->productOrders->removeElement($productOrder) && $productOrder->getOrderEntity() === $this) {
+            $productOrder->setOrderEntity(null);
         }
 
         return $this;

@@ -41,7 +41,7 @@ class StripeWebhookController extends AbstractController
         $event = $request->getContent();
         // Parse the message body and check the signature
         $webhookSecret = "";
-        if ($webhookSecret) {
+        if ($webhookSecret !== '') {
             try {
                 $event = Webhook::constructEvent(
                     $event,
@@ -49,7 +49,7 @@ class StripeWebhookController extends AbstractController
                     $webhookSecret
                 );
             } catch (\Exception $e) {
-                return $this->json([ 'error' => $e->getMessage() ])->setStatusCode(403);
+                return $this->json(['error' => $e->getMessage()])->setStatusCode(403);
             }
         } else {
             $event = $request->toArray();
@@ -178,7 +178,7 @@ class StripeWebhookController extends AbstractController
 
         $user = $this->userRepository->findOneBy(['session_id' => $customer->id]);
 
-        $user->setSubscriptionId($isUserAllowedToUseToukan?$subscription->data[0]->id:null);
+        $user->setSubscriptionId($isUserAllowedToUseToukan !== [] ? $subscription->data[0]->id : null);
         $user->setSubscriptionActive((bool)$isUserAllowedToUseToukan);
 
         $this->entityManager->flush();

@@ -2,10 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\TableRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=TableRepository::class)
@@ -90,11 +88,9 @@ class Table
 
     public function removeOrder(Order $order): self
     {
-        if ($this->orders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getEstablishmentTable() === $this) {
-                $order->setEstablishmentTable(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->orders->removeElement($order) && $order->getEstablishmentTable() === $this) {
+            $order->setEstablishmentTable(null);
         }
 
         return $this;

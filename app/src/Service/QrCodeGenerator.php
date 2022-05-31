@@ -8,24 +8,27 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class QrCodeGenerator extends AbstractController
 {
-//    private $GOTENBERG_URL;
+    public $GOTENBERG_URL;
+    public $signPdf;
+    //    private $GOTENBERG_URL;
 
     private array $path = [];
 
-    public function __construct(ParameterBagInterface $parameterBag){
+    public function __construct(ParameterBagInterface $parameterBag)
+    {
 //        $this->GOTENBERG_URL = $parameterBag->get('app.gotenberg.url');
     }
 
     private function generatePdf($templatePath, $parameters): string
     {
-        do{
+        do {
             $directoryPath = "../var/cache/".uniqid();
         }while(file_exists($directoryPath));
 
         mkdir($directoryPath, 0777, true);
 
-        $file = fopen($directoryPath.'/index.html', "w+");
-        fputs($file, $this->renderView($templatePath, $parameters));
+        $file = fopen($directoryPath . '/index.html', "w+");
+        fwrite($file, $this->renderView($templatePath, $parameters));
         fclose($file);
 
         $curl = curl_init();
@@ -54,8 +57,8 @@ class QrCodeGenerator extends AbstractController
 
         curl_close($curl);
 
-        $file = fopen($directoryPath.'/non-signed-contract.pdf', "w+");
-        fputs($file, $response);
+        $file = fopen($directoryPath . '/non-signed-contract.pdf', "w+");
+        fwrite($file, $response);
         fclose($file);
 
         while(!file_exists($directoryPath.'/non-signed-contract.pdf')){

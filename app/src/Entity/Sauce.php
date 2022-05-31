@@ -80,11 +80,9 @@ class Sauce
 
     public function removeProductOrder(ProductOrder $productOrder): self
     {
-        if ($this->ProductOrder->removeElement($productOrder)) {
-            // set the owning side to null (unless already changed)
-            if ($productOrder->getSauce() === $this) {
-                $productOrder->setSauce(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->ProductOrder->removeElement($productOrder) && $productOrder->getSauce() === $this) {
+            $productOrder->setSauce(null);
         }
 
         return $this;

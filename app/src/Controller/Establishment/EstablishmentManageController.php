@@ -134,39 +134,32 @@ class EstablishmentManageController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                $imageFile = $form->get('image')->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
 
-                if ($imageFile) {
-                    $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    // this is needed to safely include the file name as part of the URL
-                    $safeFilename = $slugger->slug($originalFilename);
-                    $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
-
-                    // Move the file to the directory where brochures are stored
-                    try {
-                        $imageFile->move(
-                            $this->getParameter('images_directory') . '/' . $establishment->getId(),
-                            $newFilename
-                        );
-                    } catch (FileException) {
-                        dump('impossible de déplacer le fichier');
-                    }
-
-                    // updates the 'brochureFilename' property to store the PDF file name
-                    // instead of its contents
-                    $establishment->setImage($newFilename);
+                // Move the file to the directory where brochures are stored
+                try {
+                    $imageFile->move(
+                        $this->getParameter('images_directory') . '/' . $establishment->getId(),
+                        $newFilename
+                    );
+                } catch (FileException) {
+                    dump('impossible de déplacer le fichier');
                 }
 
-                $entityManager->flush();
-
-                $this->addFlash('success', 'Image sauvegardée !');
-
-                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
-                return $this->render('establishment/stream/information.stream.html.twig', ['establishment' => $establishment]);
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $establishment->setImage($newFilename);
             }
-
+            $entityManager->flush();
+            $this->addFlash('success', 'Image sauvegardée !');
+            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+            return $this->render('establishment/stream/information.stream.html.twig', ['establishment' => $establishment]);
         }
 
         return $this->renderForm('establishment/information/edit.html.twig', [
@@ -190,17 +183,11 @@ class EstablishmentManageController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-
-                $entityManager->flush();
-
-                $this->addFlash('success', 'Couleur sauvegardée !');
-
-                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
-                return $this->render('establishment/stream/information.stream.html.twig', ['establishment' => $establishment]);
-            }
-
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            $this->addFlash('success', 'Couleur sauvegardée !');
+            $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+            return $this->render('establishment/stream/information.stream.html.twig', ['establishment' => $establishment]);
         }
 
         return $this->renderForm('establishment/information/edit.html.twig', [
