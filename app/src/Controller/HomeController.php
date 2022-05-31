@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
 
-    #[Route(path: '/', name: 'home')]
+    #[Route(path: '/test', name: 'testtest')]
     public function test(HubInterface $hub): Response
     {
         $update = new Update(
