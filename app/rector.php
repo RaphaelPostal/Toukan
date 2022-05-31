@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
+use Rector\DependencyInjection\Rector\Class_\ActionInjectionToConstructorInjectionRector;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
@@ -18,15 +19,15 @@ return static function (RectorConfig $rectorConfig): void {
 
     // Define what rule sets will be applied
     $rectorConfig->import(LevelSetList::UP_TO_PHP_81);
-
     // get services (needed for register a single rule)
-    $services = $rectorConfig->services();
-
     // register a single rule
-    $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
-    $services->set(ContainerGetToConstructorInjectionRector::class);
-    $services->set(ReplaceSensioRouteAnnotationWithSymfonyRector::class);
-    $services->set(RemoveUnusedPrivateMethodParameterRector::class);
-    $services->set(AnnotationToAttributeRector::class)
-        ->configure([new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route')]);
+    $rectorConfig->rule(ClassPropertyAssignToConstructorPromotionRector::class);
+    $rectorConfig->rule(ContainerGetToConstructorInjectionRector::class);
+    $rectorConfig->rule(ReplaceSensioRouteAnnotationWithSymfonyRector::class);
+    $rectorConfig->rule(RemoveUnusedPrivateMethodParameterRector::class);
+    $rectorConfig->rule(ActionInjectionToConstructorInjectionRector::class);
+    $rectorConfig->ruleWithConfiguration(
+        AnnotationToAttributeRector::class,
+        [new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route')]
+    );
 };
