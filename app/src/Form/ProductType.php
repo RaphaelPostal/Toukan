@@ -30,6 +30,7 @@ class ProductType extends AbstractType
                 'choices' => [
                     'Plat' => Product::TYPE_PLAT,
                     'Boisson' => Product::TYPE_BOISSON,
+                    'Dessert' => Product::TYPE_DESSERT,
                     'Menu' => Product::TYPE_MENU,
                 ]
             ])
