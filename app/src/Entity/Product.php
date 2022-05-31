@@ -15,6 +15,7 @@ class Product
 {
     CONST TYPE_PLAT = 'Plat';
     CONST TYPE_BOISSON = 'Boisson';
+    CONST TYPE_DESSERT = 'Dessert';
     CONST TYPE_MENU = 'Menu';
 
     /**

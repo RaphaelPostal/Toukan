@@ -68,6 +68,10 @@ class ProductType extends AbstractType
                 'label' => 'Boisson aux choix',
                 'required' => false,
             ])
+            ->add('dessert_choosable', CheckboxType::class, [
+                'label' => 'Dessert aux choix',
+                'required' => false,
+            ])
             ->add('available', CheckboxType::class, [
                 'label' => 'Disponible',
                 'required' => false,

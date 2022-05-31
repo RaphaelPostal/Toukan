@@ -31,6 +31,11 @@
         {{ form_widget(form.drink_choosable) }}
     </div>
 
+    <div id="product_dessert{{ product.id is not null ? '_'~product.id }}" style="display: {{ product.type == constant('App\\Entity\\Product::TYPE_MENU') ? 'block' : 'none' }}">
+        {{ form_label(form.dessert_choosable) }}
+        {{ form_widget(form.dessert_choosable) }}
+    </div>
+
     {{ form_label(form.available) }}
     {{ form_widget(form.available) }}
 
@@ -50,10 +55,12 @@
         if (e.target.value === 'Menu') {
             document.querySelector('#product_menu_infos{{ product.id is not null ? '_'~product.id}}').style.display = 'block';
             document.querySelector('#product_drink{{ product.id is not null ? '_'~product.id}}').style.display = 'block';
+            document.querySelector('#product_dessert{{ product.id is not null ? '_'~product.id}}').style.display = 'block';
             document.querySelector('#product_ingredients{{ product.id is not null ? '_'~product.id}}').style.display = 'none';
         } else {
             document.querySelector('#product_menu_infos{{ product.id is not null ? '_'~product.id}}').style.display = 'none';
             document.querySelector('#product_drink{{ product.id is not null ? '_'~product.id}}').style.display = 'none';
+            document.querySelector('#product_dessert{{ product.id is not null ? '_'~product.id}}').style.display = 'none';
             document.querySelector('#product_ingredients{{ product.id is not null ? '_'~product.id}}').style.display = 'block';
         }
 
