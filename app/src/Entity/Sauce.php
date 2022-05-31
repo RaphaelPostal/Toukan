@@ -2,10 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\SauceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=SauceRepository::class)
@@ -38,7 +36,7 @@ class Sauce
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $available = true;
+    private ?bool $available = true;
 
     public function __construct()
     {

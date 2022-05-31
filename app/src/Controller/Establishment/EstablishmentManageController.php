@@ -2,8 +2,6 @@
 
 namespace App\Controller\Establishment;
 
-use App\Entity\Establishment;
-use App\Entity\User;
 use App\Form\EstablishmentColorType;
 use App\Form\EstablishmentImageType;
 use App\Form\EstablishmentInfoType;
@@ -149,10 +147,10 @@ class EstablishmentManageController extends AbstractController
                     // Move the file to the directory where brochures are stored
                     try {
                         $imageFile->move(
-                            $this->getParameter('images_directory').'/'.$establishment->getId(),
+                            $this->getParameter('images_directory') . '/' . $establishment->getId(),
                             $newFilename
                         );
-                    } catch (FileException $e) {
+                    } catch (FileException) {
                         dump('impossible de déplacer le fichier');
                     }
 

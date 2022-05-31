@@ -71,7 +71,7 @@ class OrderRepository extends ServiceEntityRepository
             ->setParameter('table', $table)
             ->getQuery()
             ->getResult();
-            if (count($qb) > 0){
+            if ((is_countable($qb) ? count($qb) : 0) > 0) {
                 return true;
             } else {
                 return false;

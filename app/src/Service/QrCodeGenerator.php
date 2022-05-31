@@ -10,7 +10,7 @@ class QrCodeGenerator extends AbstractController
 {
 //    private $GOTENBERG_URL;
 
-    private $path = [];
+    private array $path = [];
 
     public function __construct(ParameterBagInterface $parameterBag){
 //        $this->GOTENBERG_URL = $parameterBag->get('app.gotenberg.url');
@@ -96,8 +96,9 @@ class QrCodeGenerator extends AbstractController
             foreach ($this->path as $path){
                 try {
                     $this->delete_files($path);
+                } catch (\ErrorException) {
+                    return false;
                 }
-                catch (\ErrorException $e){return false;}
             }
         }
         return true;

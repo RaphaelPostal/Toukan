@@ -2,10 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\EstablishmentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=EstablishmentRepository::class)
@@ -62,7 +59,7 @@ class Establishment
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $custom_color = '#F49B22' ;
+    private ?string $custom_color = '#F49B22';
 
     public function __construct()
     {
@@ -123,9 +120,6 @@ class Establishment
         return $this;
     }
 
-    /**
-     * @return User|null
-     */
     public function getUser(): ?User
     {
         return $this->user;
@@ -138,17 +132,11 @@ class Establishment
         return $this;
     }
 
-    /**
-     * @return Card|null
-     */
     public function getCard(): ?Card
     {
         return $this->card;
     }
 
-    /**
-     * @return ArrayCollection
-     */
     public function getTables(): ArrayCollection
     {
         return $this->tables;

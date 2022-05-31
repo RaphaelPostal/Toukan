@@ -2,20 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  */
 class Product
 {
-    CONST TYPE_PLAT = 'Plat';
-    CONST TYPE_BOISSON = 'Boisson';
-    CONST TYPE_MENU = 'Menu';
+    final const TYPE_PLAT = 'Plat';
+    final const TYPE_BOISSON = 'Boisson';
+    final const TYPE_MENU = 'Menu';
 
     /**
      * @ORM\Id
@@ -76,7 +73,7 @@ class Product
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $available = true;
+    private ?bool $available = true;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -122,9 +119,9 @@ class Product
 
     public function setPrice($price): self
     {
-        $price = str_replace(',', '.', $price);
+        $price = str_replace(',', '.', (string)$price);
         //test if last char of price is €
-        if (str_contains($price, '€')) {
+        if (str_contains((string)$price, '€')) {
             //test if first char of price is €
             if (str_ends_with($price, '€')) {
                 $price = str_replace('€', '', $price);

@@ -4,10 +4,8 @@ namespace App\Controller\Subscription;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Stripe\Customer;
 use Stripe\Invoice;
-use Stripe\PaymentIntent;
 use Stripe\Product;
 use Stripe\Refund;
 use Stripe\Stripe;
@@ -27,12 +25,13 @@ class StripeWebhookController extends AbstractController
 {
 
     public function __construct(
-        private TranslatorInterface $translator,
-        private UserRepository $userRepository,
-        private EntityManagerInterface $entityManager,
-        private MailerInterface $mailer,
-        )
-    {}
+        private readonly TranslatorInterface    $translator,
+        private readonly UserRepository         $userRepository,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly MailerInterface        $mailer,
+    )
+    {
+    }
 
     #[Route('/webhook', name: 'app_subscription_webhook')]
     public function handleWebhook(Request $request): Response
@@ -169,17 +168,11 @@ class StripeWebhookController extends AbstractController
         $subscription = Subscription::all(['customer' => $customer->id, 'status' => 'active']);
         $toukanProducts = Product::all([ 'active' => true]);
 
-        $subscriptionsProduct = array_map(function ($subscription) {
-            return $subscription->plan->product;
-        }, $subscription->data);
+        $subscriptionsProduct = array_map(fn($subscription) => $subscription->plan->product, $subscription->data);
 
-        $allowedToukanProducts = array_filter($toukanProducts->data, function ($product){
-            return $product->metadata->allow_app_usage;
-        });
+        $allowedToukanProducts = array_filter($toukanProducts->data, fn($product) => $product->metadata->allow_app_usage);
 
-        $allowedToukanProductsId = array_map(function ($product){
-            return $product->id;
-        }, $allowedToukanProducts);
+        $allowedToukanProductsId = array_map(fn($product) => $product->id, $allowedToukanProducts);
 
         $isUserAllowedToUseToukan = array_intersect(array_values($allowedToukanProductsId), array_values($subscriptionsProduct));
 

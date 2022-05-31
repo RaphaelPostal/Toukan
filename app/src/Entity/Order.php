@@ -2,10 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=OrderRepository::class)
@@ -13,11 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Order
 {
-    CONST STATUS_ORDERING = 'ordering'; // commande non validée par le client
-    CONST STATUS_IN_PROGRESS = 'in_progress'; // commande validée par le client, en attente de livraison
-    CONST STATUS_DELIVERED = 'delivered'; // commande servie
-    CONST STATUS_CANCELED = 'canceled';
-    CONST STATUS_PAYED = 'payed';
+    final const STATUS_ORDERING = 'ordering'; // commande non validée par le client
+    final const STATUS_IN_PROGRESS = 'in_progress'; // commande validée par le client, en attente de livraison
+    final const STATUS_DELIVERED = 'delivered'; // commande servie
+    final const STATUS_CANCELED = 'canceled';
+    final const STATUS_PAYED = 'payed';
 
     /**
      * @ORM\Id
