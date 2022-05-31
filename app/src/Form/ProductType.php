@@ -41,10 +41,10 @@ class ProductType extends AbstractType
             ])
 
             ->add('menuInformation', TextareaType::class, [
-                'label' => 'Informations sur le menu (composition, options, etc ...)',
+                'label' => 'Informations sur le menu (composition, etc ...)',
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'ex: 6 Nuggets, Frite (grande ou petite), dessert au choix'
+                    'placeholder' => 'ex: 6 Nuggets, Frite (grande ou petite)'
                 ]
             ])
             ->add('ingredients', TextareaType::class, [
@@ -66,6 +66,10 @@ class ProductType extends AbstractType
             ])
             ->add('drink_choosable', CheckboxType::class, [
                 'label' => 'Boisson aux choix',
+                'required' => false,
+            ])
+            ->add('dessert_choosable', CheckboxType::class, [
+                'label' => 'Dessert aux choix',
                 'required' => false,
             ])
             ->add('available', CheckboxType::class, [
