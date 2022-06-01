@@ -41,6 +41,7 @@ class Establishment
 
     /**
      * @ORM\OneToOne(targetEntity=User::class, inversedBy="establishment")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $user;
 
