@@ -48,8 +48,11 @@
                 {{ 'log_in'|trans }}
             </button>
 
-            <a href="{{ path('register') }}" class="underline pt-2 pb-8">
-                {{ 'sign_up'|trans }}
+            <a href="{{ path('app_forgot_password_request') }}" class="underline py-2 cursor-pointer">
+                {{ 'forgotten_password'|trans }}
+            </a>
+            <a href="{{ path('register') }}" class="underline pt-2 pb-8 cursor-pointer">
+                {{ 'sign_up_label'|trans }}
             </a>
         </div>
     </form>

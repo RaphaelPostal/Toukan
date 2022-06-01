@@ -1,6 +1,5 @@
-confirm_address : "Confirm your email address"
-
 subject :
+  confirm_address : "Confirm your email address"
   received_payment : "Received your payment"
   paid_invoice : "Your invoice"
   failed_payment : "Your payment has failed"
@@ -8,3 +7,4 @@ subject :
   subscription_cancelled : "Cancellation of your subscription"
   charge_refunded : "Refund of your payment"
   duplicate_subscription : "Detection of a duplicate subscription"
+  password_reset_request : "Your password reset request"
