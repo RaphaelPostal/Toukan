@@ -11,7 +11,6 @@ use Stripe\Price;
 use Stripe\Stripe;
 use Stripe\Subscription;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -55,7 +54,7 @@ class CheckoutSubscriptionController extends AbstractController
     #[Route('/upgrade/{priceId}', name: 'app_subscription_upgrade')]
     public function upgradeSubscription($priceId){
         if (!$this->getUser()->isSubscriptionActive()) {
-//            return $this->redirectToRoute('establishment_dashboard');
+            return $this->redirectToRoute('establishment_dashboard');
         }
         //Upgrade user's subscription on stripe
         Stripe::setApiKey($this->getParameter('stripe_api_key'));
@@ -81,7 +80,7 @@ class CheckoutSubscriptionController extends AbstractController
     {
         if ($this->getUser()->isSubscriptionActive()) {
             $this->addFlash('warning', $this->translator->trans('subscription.already_subscribed', domain: 'alert'));
-//            return $this->redirectToRoute('establishment_dashboard');
+            return $this->redirectToRoute('establishment_dashboard');
         }
 
         Stripe::setApiKey($this->getParameter('stripe_api_key'));
@@ -112,14 +111,14 @@ class CheckoutSubscriptionController extends AbstractController
                 ],
             ],
             'success_url' => $this->generateUrl('app_subscription_checkout_success', referenceType: UrlGenerator::ABSOLUTE_URL),
-            'cancel_url' => $this->generateUrl('app_subscription_checkout_cancel', referenceType:  UrlGenerator::ABSOLUTE_URL),
+            'cancel_url' => $this->generateUrl('app_subscription_checkout_cancel', referenceType: UrlGenerator::ABSOLUTE_URL),
         ]);
 
         return $this->redirect($session->url);
     }
 
-    #[Route('/portal', name:'app_establishment_portal')]
-    public function handlePortal(Request $request)
+    #[Route('/portal', name: 'app_establishment_portal')]
+    public function handlePortal()
     {
         Stripe::setApiKey($this->getParameter('stripe_api_key'));
 

@@ -31,6 +31,7 @@ class OrderController extends AbstractController
                                Table $table,
                                Order $order): Response
     {
+        $establishmentId = null;
         $form = $this->createForm(OrderCommentsType::class);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
