@@ -22,8 +22,7 @@ class Table
 
     /**
      * @ORM\ManyToOne(targetEntity=Establishment::class, inversedBy="tables")
-     * @ORM\JoinColumn(nullable=false)
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $establishment;
 
