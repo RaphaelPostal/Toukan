@@ -8,7 +8,6 @@ use Stripe\Checkout\Session;
 use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Price;
-use Stripe\Product;
 use Stripe\Stripe;
 use Stripe\Subscription;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,11 +22,12 @@ class CheckoutSubscriptionController extends AbstractController
 {
 
     public function __construct(
-        private TranslatorInterface $translator,
-        private UserRepository $userRepository,
-        private EntityManagerInterface $entityManager,
-        )
-    {}
+        private readonly TranslatorInterface    $translator,
+        private readonly UserRepository         $userRepository,
+        private readonly EntityManagerInterface $entityManager,
+    )
+    {
+    }
 
     #[Route('/test', name: 'test')]
     public function test()
@@ -88,9 +88,7 @@ class CheckoutSubscriptionController extends AbstractController
 
         $prices = Price::all(['active' => true, 'expand' => ['data.product']]);
 
-        $prices = array_values(array_filter($prices->data, function($price) {
-            return  $price->product->metadata->allow_app_usage;
-        }));
+        $prices = array_values(array_filter($prices->data, fn($price) => $price->product->metadata->allow_app_usage));
 
         return $this->render('establishment/pricing/index.html.twig', [
             'prices' => $prices,

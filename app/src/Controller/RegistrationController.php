@@ -24,13 +24,13 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 class RegistrationController extends AbstractController
 {
 
-    private Request $request;
+    private readonly Request $request;
 
     public function __construct(
-        private EmailVerifier $emailVerifier,
-        private RequestStack $requestStack,
-        private EntityManagerInterface $entityManager,
-        private TranslatorInterface $translator,
+        private readonly EmailVerifier          $emailVerifier,
+        private readonly RequestStack           $requestStack,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly TranslatorInterface    $translator,
     )
     {
         $this->request = $this->requestStack->getCurrentRequest();
@@ -39,6 +39,7 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'register')]
     public function register(UserPasswordHasherInterface $userPasswordHasherInterface): Response
     {
+        $address = [];
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($this->request);
@@ -74,7 +75,7 @@ class RegistrationController extends AbstractController
                 (new TemplatedEmail())
                     ->from(new Address('contact@toukan.fr', 'Toukan'))
                     ->to($user->getEmail())
-                    ->subject($this->translator->trans('confirm_address', domain: 'mail'))
+                    ->subject($this->translator->trans('subject.confirm_address', domain: 'mail'))
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
@@ -99,7 +100,7 @@ class RegistrationController extends AbstractController
         }
 
         $user = $repository->find($id);
-        if (!$user) {
+        if (!$user instanceof \App\Entity\User) {
             $this->addFlash('error', $this->translator->trans('user_not_find', domain: 'security'));
 
             return $this->redirectToRoute('login');

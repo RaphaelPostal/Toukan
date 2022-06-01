@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\EstablishmentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Establishment
 {
+    public \Doctrine\Common\Collections\ArrayCollection $cards;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -62,7 +62,7 @@ class Establishment
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $custom_color = '#F49B22' ;
+    private ?string $custom_color = '#F49B22';
 
     public function __construct()
     {
@@ -123,9 +123,6 @@ class Establishment
         return $this;
     }
 
-    /**
-     * @return User|null
-     */
     public function getUser(): ?User
     {
         return $this->user;
@@ -138,17 +135,11 @@ class Establishment
         return $this;
     }
 
-    /**
-     * @return Card|null
-     */
     public function getCard(): ?Card
     {
         return $this->card;
     }
 
-    /**
-     * @return ArrayCollection
-     */
     public function getTables(): ArrayCollection
     {
         return $this->tables;
@@ -166,11 +157,9 @@ class Establishment
 
     public function removeTable(Table $table): self
     {
-        if ($this->tables->removeElement($table)) {
-            // set the owning side to null (unless already changed)
-            if ($table->getEstablishment() === $this) {
-                $table->setEstablishment(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->tables->removeElement($table) && $table->getEstablishment() === $this) {
+            $table->setEstablishment(null);
         }
 
         return $this;

@@ -13,10 +13,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Product
 {
-    CONST TYPE_PLAT = 'Plat';
-    CONST TYPE_BOISSON = 'Boisson';
-    CONST TYPE_DESSERT = 'Dessert';
-    CONST TYPE_MENU = 'Menu';
+    final const TYPE_PLAT = 'Plat';
+    final const TYPE_BOISSON = 'Boisson';
+    final const TYPE_DESSERT = 'Dessert';
+    final const TYPE_MENU = 'Menu';
 
     /**
      * @ORM\Id
@@ -77,7 +77,7 @@ class Product
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $available = true;
+    private ?bool $available = true;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -128,15 +128,11 @@ class Product
 
     public function setPrice($price): self
     {
-        $price = str_replace(',', '.', $price);
+        $price = str_replace(',', '.', (string)$price);
         //test if last char of price is €
-        if (str_contains($price, '€')) {
+        if (str_contains((string)$price, '€')) {
             //test if first char of price is €
-            if (str_ends_with($price, '€')) {
-                $price = str_replace('€', '', $price);
-            } else {
-                $price = str_replace('€', '.', $price);
-            }
+            $price = str_ends_with($price, '€') ? str_replace('€', '', $price) : str_replace('€', '.', $price);
         }
 
         $this->price = $price;
@@ -188,11 +184,9 @@ class Product
 
     public function removeProductOrder(ProductOrder $productOrder): self
     {
-        if ($this->productOrders->removeElement($productOrder)) {
-            // set the owning side to null (unless already changed)
-            if ($productOrder->getProduct() === $this) {
-                $productOrder->setProduct(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->productOrders->removeElement($productOrder) && $productOrder->getProduct() === $this) {
+            $productOrder->setProduct(null);
         }
 
         return $this;

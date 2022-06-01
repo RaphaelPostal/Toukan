@@ -78,11 +78,9 @@ class Section
 
     public function removeProduct(Product $product): self
     {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getSection() === $this) {
-                $product->setSection(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->products->removeElement($product) && $product->getSection() === $this) {
+            $product->setSection(null);
         }
 
         return $this;

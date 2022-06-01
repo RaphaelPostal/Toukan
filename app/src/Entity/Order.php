@@ -13,11 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Order
 {
-    CONST STATUS_ORDERING = 'ordering'; // commande non validée par le client
-    CONST STATUS_IN_PROGRESS = 'in_progress'; // commande validée par le client, en attente de livraison
-    CONST STATUS_DELIVERED = 'delivered'; // commande servie
-    CONST STATUS_CANCELED = 'canceled';
-    CONST STATUS_PAYED = 'payed';
+    final const STATUS_ORDERING = 'ordering'; // commande non validée par le client
+    final const STATUS_IN_PROGRESS = 'in_progress'; // commande validée par le client, en attente de livraison
+    final const STATUS_DELIVERED = 'delivered'; // commande servie
+    final const STATUS_CANCELED = 'canceled';
+    final const STATUS_PAYED = 'payed';
 
     /**
      * @ORM\Id
@@ -118,11 +118,9 @@ class Order
 
     public function removeProductOrder(ProductOrder $productOrder): self
     {
-        if ($this->productOrders->removeElement($productOrder)) {
-            // set the owning side to null (unless already changed)
-            if ($productOrder->getOrderEntity() === $this) {
-                $productOrder->setOrderEntity(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->productOrders->removeElement($productOrder) && $productOrder->getOrderEntity() === $this) {
+            $productOrder->setOrderEntity(null);
         }
 
         return $this;

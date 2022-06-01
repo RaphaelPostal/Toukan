@@ -2,29 +2,26 @@
 
 namespace App\Controller\Establishment;
 
-use App\Entity\Card;
 use App\Entity\Product;
 use App\Entity\Section;
 use App\Form\ProductType;
 use App\Form\SectionType;
-use App\Repository\CardRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SectionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\UX\Turbo\TurboBundle;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/establishment/card/section')]
 class SectionController extends AbstractController
 {
     public function __construct(
-        private TranslatorInterface $translator,
+        private readonly TranslatorInterface $translator,
     )
     {}
 
@@ -131,10 +128,10 @@ class SectionController extends AbstractController
                 // Move the file to the directory where brochures are stored
                 try {
                     $imageFile->move(
-                        $this->getParameter('products_directory').'/'.$card->getEstablishment()->getId(),
+                        $this->getParameter('products_directory') . '/' . $card->getEstablishment()->getId(),
                         $newFilename
                     );
-                } catch (FileException $e) {
+                } catch (FileException) {
                     dump('impossible de déplacer le fichier');
                 }
 
@@ -186,10 +183,10 @@ class SectionController extends AbstractController
                 // Move the file to the directory where brochures are stored
                 try {
                     $imageFile->move(
-                        $this->getParameter('products_directory').'/'.$card->getEstablishment()->getId(),
+                        $this->getParameter('products_directory') . '/' . $card->getEstablishment()->getId(),
                         $newFilename
                     );
-                } catch (FileException $e) {
+                } catch (FileException) {
                     dump('impossible de déplacer le fichier');
                 }
 

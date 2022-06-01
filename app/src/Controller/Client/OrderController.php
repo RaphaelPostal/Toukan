@@ -45,7 +45,7 @@ class OrderController extends AbstractController
                 'order' => $order
             ]);
         }
-        $establishment = $establishmentRepository->find($establishmentId);
+        $establishment = $establishmentRepository->find($establishment);
 
         return $this->render('client/order/show_basket.html.twig', [
             'establishment' => $establishment,
@@ -152,7 +152,7 @@ class OrderController extends AbstractController
                                 Establishment $establishment,
                                 OrderRepository $orderRepository): Response
     {
-        $waitingListRank = count($orderRepository->getPreviousOrders($order)) + 1;
+        $waitingListRank = (is_countable($orderRepository->getPreviousOrders($order)) ? count($orderRepository->getPreviousOrders($order)) : 0) + 1;
         return $this->render('client/order/confirm.html.twig', [
             'waitingListRank' => $waitingListRank,
             'order' => $order,
@@ -165,7 +165,7 @@ class OrderController extends AbstractController
     #[Route('/confirm/update', name: 'client_order_confirm_update')]
     public function confirmOrderUpdate(Order $order, OrderRepository $orderRepository,)
     {
-        $waitingListRank = count($orderRepository->getPreviousOrders($order)) + 1;
+        $waitingListRank = (is_countable($orderRepository->getPreviousOrders($order)) ? count($orderRepository->getPreviousOrders($order)) : 0) + 1;
         return $this->render('client/order/waiting-list.html.twig', [
             'waitingListRank' => $waitingListRank,
         ]);
