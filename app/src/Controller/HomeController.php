@@ -8,9 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    /**
-     * @Route("/", name="home")
-     */
+    #[Route(path: '/', name: 'home')]
     public function index(): Response
     {
         return $this->render('home/index.html.twig', [
@@ -18,29 +16,23 @@ class HomeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/establishment/profile", name="establishment_profile")
-     */
+    #[Route(path: '/establishment/profile', name: 'establishment_profile')]
     public function profile(): Response
     {
         return $this->render('establishment/profile/index.html.twig', [
-            'subscriptionActive'=>$this->getUser()->isSubscriptionActive(),
+            'subscriptionActive' => $this->getUser()->isSubscriptionActive(),
         ]);
     }
 
-    /**
-     * @Route("/establishment/dashboard", name="establishment_dashboard")
-     */
+    #[Route(path: '/establishment/dashboard', name: 'establishment_dashboard')]
     public function dashboard(): Response
     {
         return $this->render('establishment/dashboard/index.html.twig', [
-            'subscriptionActive'=>$this->getUser()->isSubscriptionActive(),
+            'subscriptionActive' => $this->getUser()->isSubscriptionActive(),
         ]);
     }
 
-    /**
-     * @Route("/contact", name="contact")
-     */
+    #[Route(path: '/contact', name: 'contact')]
     public function contact(): Response
     {
         return $this->render('home/contact.html.twig', [
