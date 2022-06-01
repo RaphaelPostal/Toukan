@@ -91,6 +91,12 @@
     "laminas/laminas-code": {
         "version": "4.4.3"
     },
+    "lcobucci/clock": {
+        "version": "2.2.0"
+    },
+    "lcobucci/jwt": {
+        "version": "4.1.5"
+    },
     "monolog/monolog": {
         "version": "2.3.5"
     },
@@ -117,6 +123,9 @@
     },
     "phpspec/prophecy": {
         "version": "1.14.0"
+    },
+    "phpstan/phpstan": {
+        "version": "1.7.7"
     },
     "phpunit/php-code-coverage": {
         "version": "9.2.8"
@@ -161,6 +170,9 @@
     },
     "psr/log": {
         "version": "1.1.4"
+    },
+    "rector/rector": {
+        "version": "0.13.3"
     },
     "sebastian/cli-parser": {
         "version": "1.0.1"
@@ -221,6 +233,9 @@
         "files": [
             "./config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "stella-maris/clock": {
+        "version": "0.1.4"
     },
     "stripe/stripe-php": {
         "version": "v8.0.0"
@@ -369,6 +384,21 @@
             "version": "1.0",
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
+    },
+    "symfony/mercure": {
+        "version": "v0.6.1"
+    },
+    "symfony/mercure-bundle": {
+        "version": "0.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "0.3",
+            "ref": "e0a854b5439186e04b28fb8887b42c54f24a0d32"
+        },
+        "files": [
+            "config/packages/mercure.yaml"
+        ]
     },
     "symfony/mime": {
         "version": "v5.3.8"

@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client test - Toukan{% endblock %}
+
+{% block body %}
+    <h1>Yoo test</h1>
+    <script>
+        const eventSource = new EventSource("{{ mercure('http://localhost:8084/books/1')|escape('js') }}");
+        eventSource.onmessage = event => {
+            // Will be called every time an update is published by the server
+            console.log(JSON.parse(event.data));
+        }
+    </script>
+{% endblock %}

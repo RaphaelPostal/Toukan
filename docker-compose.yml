@@ -59,8 +59,33 @@ services:
         networks:
             - dev
 
+    caddy:
+        image: dunglas/mercure
+        platform: linux/amd64
+        container_name: mercure_docker_toukan
+        environment:
+            # Uncomment the following line to disable HTTPS
+            SERVER_NAME: ':80'
+            MERCURE_PUBLISHER_JWT_KEY: '!ChangeMe!'
+            MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeMe!'
+            MERCURE_EXTRA_DIRECTIVES: |
+                cors_origins *
+        #                cors_origins http://localhost:8080
+        # Uncomment the following line to enable the development mode
+        command: /usr/bin/caddy run -config /etc/caddy/Caddyfile.dev
+        ports:
+            - "8084:80"
+        #            - "443:443"
+        volumes:
+            - caddy_data:/data
+            - caddy_config:/config
+        networks:
+            - dev
+
 networks:
     dev:
 
 volumes:
     toukan-db-data:
+    caddy_data:
+    caddy_config:
