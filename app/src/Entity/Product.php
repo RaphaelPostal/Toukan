@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -12,6 +14,7 @@ class Product
 {
     final const TYPE_PLAT = 'Plat';
     final const TYPE_BOISSON = 'Boisson';
+    final const TYPE_DESSERT = 'Dessert';
     final const TYPE_MENU = 'Menu';
 
     /**
@@ -89,6 +92,11 @@ class Product
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $drink_choosable;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $dessert_choosable;
 
     public function __construct()
     {
@@ -275,6 +283,18 @@ class Product
     public function setDrinkChoosable(?bool $drink_choosable): self
     {
         $this->drink_choosable = $drink_choosable;
+
+        return $this;
+    }
+
+    public function isDessertChoosable(): ?bool
+    {
+        return $this->dessert_choosable;
+    }
+
+    public function setDessertChoosable(?bool $dessert_choosable): self
+    {
+        $this->dessert_choosable = $dessert_choosable;
 
         return $this;
     }

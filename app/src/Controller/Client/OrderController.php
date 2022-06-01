@@ -46,7 +46,7 @@ class OrderController extends AbstractController
                 'order' => $order
             ]);
         }
-        $establishment = $establishmentRepository->find($establishmentId);
+        $establishment = $establishmentRepository->find($establishment);
 
         return $this->render('client/order/show_basket.html.twig', [
             'establishment' => $establishment,

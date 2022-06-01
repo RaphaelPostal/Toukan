@@ -19,9 +19,12 @@ class CheckoutSubscriptionController extends AbstractController
 {
 
     public function __construct(
-        private readonly TranslatorInterface $translator,
-        )
-    {}
+        private readonly TranslatorInterface    $translator,
+        private readonly UserRepository         $userRepository,
+        private readonly EntityManagerInterface $entityManager,
+    )
+    {
+    }
 
     #[Route('/test', name: 'test')]
     public function test()
