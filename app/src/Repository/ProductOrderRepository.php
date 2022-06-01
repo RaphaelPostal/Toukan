@@ -50,10 +50,7 @@ class ProductOrderRepository extends ServiceEntityRepository
     public function isProductAlreadyInBasket(Order $order, Product $product): bool
     {
         $productOrder = $this->findOneBy(['orderEntity' => $order, 'product' => $product]);
-        if ($productOrder) {
-            return true;
-        }
-        return false;
+        return (bool)$productOrder;
     }
 
     // /**

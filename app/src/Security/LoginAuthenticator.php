@@ -23,16 +23,10 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
-    public const LOGIN_ROUTE = 'login';
+    final public const LOGIN_ROUTE = 'login';
 
-    private UrlGeneratorInterface $urlGenerator;
-
-    public function __construct(
-        UrlGeneratorInterface $urlGenerator,
-        private readonly TranslatorInterface $translator,
-    )
+    public function __construct(private readonly UrlGeneratorInterface $urlGenerator, private readonly TranslatorInterface $translator)
     {
-        $this->urlGenerator = $urlGenerator;
     }
 
     public function authenticate(Request $request): PassportInterface

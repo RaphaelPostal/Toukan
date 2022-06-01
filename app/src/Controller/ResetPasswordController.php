@@ -25,15 +25,8 @@ class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
-    private ResetPasswordHelperInterface $resetPasswordHelper;
-    private EntityManagerInterface $entityManager;
-    private TranslatorInterface $translator;
-
-    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, EntityManagerInterface $entityManager, TranslatorInterface $translator)
+    public function __construct(private readonly ResetPasswordHelperInterface $resetPasswordHelper, private readonly EntityManagerInterface $entityManager, private readonly TranslatorInterface $translator)
     {
-        $this->resetPasswordHelper = $resetPasswordHelper;
-        $this->entityManager = $entityManager;
-        $this->translator = $translator;
     }
 
     /**
@@ -48,8 +41,7 @@ class ResetPasswordController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->processSendingPasswordResetEmail(
                 $form->get('email')->getData(),
-                $mailer,
-                $translator
+                $mailer
             );
         }
 
@@ -134,20 +126,20 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, TranslatorInterface $translator): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
 
         // Do not reveal whether a user account was found or not.
-        if (!$user) {
+        if (!$user instanceof \App\Entity\User) {
             return $this->redirectToRoute('app_check_email');
         }
 
         try {
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
-        } catch (ResetPasswordExceptionInterface $e) {
+        } catch (ResetPasswordExceptionInterface) {
             // If you want to tell the user why a reset email was not sent, uncomment
             // the lines below and change the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.

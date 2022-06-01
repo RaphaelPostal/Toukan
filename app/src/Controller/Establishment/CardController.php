@@ -2,8 +2,6 @@
 
 namespace App\Controller\Establishment;
 
-use App\Entity\Section;
-use App\Form\SectionType;
 use App\Repository\CardRepository;
 use App\Repository\SectionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,11 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/establishment/card')]
 class CardController extends AbstractController
 {
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param CardRepository $cardRepository
-     * @return Response
-     */
     #[Route('', name: 'establishment_card_index')]
     public function index(EntityManagerInterface $entityManager, CardRepository $cardRepository, SectionRepository $sectionRepository, Request $request): Response
     {
