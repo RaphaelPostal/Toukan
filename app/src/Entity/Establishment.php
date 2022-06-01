@@ -50,7 +50,7 @@ class Establishment
     private $card;
 
     /**
-     * @ORM\OneToMany(targetEntity=Table::class, mappedBy="establishment", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Table::class, mappedBy="establishment")
      */
     private $tables;
 
