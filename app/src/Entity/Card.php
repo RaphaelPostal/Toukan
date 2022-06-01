@@ -26,7 +26,7 @@ class Card
 
     /**
      * @ORM\OneToOne(targetEntity=Establishment::class, inversedBy="card", fetch="EAGER")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $establishment;
 
