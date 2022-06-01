@@ -23,11 +23,12 @@ class Table
     /**
      * @ORM\ManyToOne(targetEntity=Establishment::class, inversedBy="tables")
      * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $establishment;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
     private $number;
 
@@ -58,12 +59,12 @@ class Table
         return $this;
     }
 
-    public function getNumber(): ?int
+    public function getNumber(): ?string
     {
         return $this->number;
     }
 
-    public function setNumber(int $number): self
+    public function setNumber(string $number): self
     {
         $this->number = $number;
 

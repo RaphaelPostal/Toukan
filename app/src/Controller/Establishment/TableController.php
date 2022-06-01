@@ -16,12 +16,14 @@ class TableController extends AbstractController
     #[Route('/', name: 'app_table_index', methods: ['GET'])]
     public function index(TableRepository $tableRepository): Response
     {
+
+        $tables = $tableRepository->findBy(['establishment' => $this->getUser()->getEstablishment()]);
         return $this->render('table/index.html.twig', [
-            'tables' => $this->getUser()->getEstablishment()->getTables(),
+            'tables' => $tables,
         ]);
     }
 
-    #[Route('/new', name: 'app_table_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_table_create', methods: ['GET', 'POST'])]
     public function new(Request $request, TableRepository $tableRepository): Response
     {
         $table = new Table();
