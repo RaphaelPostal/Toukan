@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\EstablishmentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
