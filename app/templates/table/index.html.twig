@@ -1,10 +1,16 @@
-{% extends 'base.html.twig' %}
+{% extends 'establishment/base.html.twig' %}
 
 {% block title %}Table index{% endblock %}
 
 {% block body %}
-    <div id="establishment-table">
-        {% include 'establishment/partials/table.html.twig' %}
+    <div id="establishment-tables">
+        {% include 'establishment/partials/tables.html.twig' %}
     </div>
+
+    <button id="button-add-table" type="button" class="transition duration-150 ease-in-out admin-button-add mt-3" data-bs-toggle="modal" data-bs-target="#modal-form-create-table">
+        + Ajouter une table
+    </button>
+
+    {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-create-table', 'modal_title' : 'Table', 'context' : 'table-create'} %}
 
 {% endblock %}
