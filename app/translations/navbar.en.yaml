@@ -1,4 +1,6 @@
 home: 'Home'
+card: 'My card'
 dashboard: 'Dashboard'
+tables: 'My tables'
 logout: 'Logout'
 profile: 'Profile'

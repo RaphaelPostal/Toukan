@@ -3,6 +3,18 @@
     <nav class="flex flex-col justify-between h-full">
         <ul>
             <li class="py-2">
+                <a class="whitespace-nowrap" href="{{ path('establishment_card_index') }}">
+                    <i class="fa-solid fa-clipboard-list fa-fw pr-1"></i>
+                    {{ 'card'|trans({}, 'navbar') }}
+                </a>
+            </li>
+            <li class="py-2">
+                <a class="whitespace-nowrap" href="">
+                    <i class="fa-solid fa-table fa-fw pr-1"></i>
+                    {{ 'tables'|trans({}, 'navbar') }}
+                </a>
+            </li>
+            <li class="py-2">
                 <a class="whitespace-nowrap" href="{{ path('establishment_dashboard') }}">
                     <i class="fa-solid fa-chart-line fa-fw pr-1"></i>
                     {{ 'dashboard'|trans({}, 'navbar') }}
