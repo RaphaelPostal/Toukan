@@ -39,6 +39,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToOne(targetEntity=Establishment::class, mappedBy="user", fetch="EAGER")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $establishment;
 

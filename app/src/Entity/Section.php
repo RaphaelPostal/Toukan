@@ -31,7 +31,7 @@ class Section
 
     /**
      * @ORM\ManyToOne(targetEntity=Card::class, inversedBy="sections")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $card;
 
