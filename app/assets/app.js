@@ -8,12 +8,13 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 import 'alpinejs';
+import 'tw-elements';
 
 import Alpine from 'alpinejs'
+// start the Stimulus application
+import './bootstrap';
 
 window.Alpine = Alpine
 
 Alpine.start()
 
-// start the Stimulus application
-import './bootstrap';

@@ -26,8 +26,9 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "alpinejs": "^3.10.2",
-        "sass": "^1.52.3",
-        "sass-loader": "^12.6.0"
+      "alpinejs": "^3.10.2",
+      "sass": "^1.51.0",
+      "sass-loader": "^12.6.0",
+      "tw-elements": "^1.0.0-alpha12"
     }
 }
