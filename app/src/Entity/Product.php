@@ -99,6 +99,11 @@ class Product
      */
     private $dessert_choosable;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
     public function __construct()
     {
         $this->productOrders = new ArrayCollection();
@@ -296,6 +301,18 @@ class Product
     public function setDessertChoosable(?bool $dessert_choosable): self
     {
         $this->dessert_choosable = $dessert_choosable;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

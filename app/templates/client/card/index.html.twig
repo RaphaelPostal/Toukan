@@ -35,39 +35,62 @@
                         <div id="add-product" class="bg-toukan cursor-pointer flex w-full text-center p-2 rounded-b-2xl text-white justify-center" aria-valuetext="{{ product.id }}">Ajouter au panier</div>
                     </div>
                     <div id="details-{{ product.id }}" class="fixed w-full h-full text-center top-0 z-10 overflow-hidden hidden bg-white p-4">
-                        <div class="inline-flex items-center">
-                            <i onclick="showDetails({{ product.id }})" class="fa-solid fa-2xl fa-arrow-left"></i>
-                            <h2 class="border-solid w-auto text-xl border-toukan rounded-2xl ml-5 pl-2 pr-2 border-2">{{product.title}}</h2>
+                        <div class="flex justify-center items-center h-full w-full">
+                            <div class="h-fit w-fit">
+                                <div class="inline-flex items-center mb-12">
+                                    <i onclick="showDetails({{ product.id }})" class="fa-solid fa-2xl fa-arrow-left"></i>
+                                    <h2 class="border-solid w-auto text-xl border-toukan rounded-2xl ml-5 pl-2 pr-2 border-2">{{product.title}}</h2>
+                                </div>
+                                <img class="text-center w-11/12 m-auto mt-2 max-height" src="{{asset('assets/uploads/'~card.establishment.id~'/'~product.image)}}">
+                                <p class="border-solid bg-white rounded-2xl pl-2 pr-2 border-2 absolute -mt-6 ml-4">{{product.price|number_format(2, '.', ',')}} €</p>
+                                <div class="h-px my-1 w-9/12 bg-black m-auto"></div>
+                                {% if product.description %}
+                                    <p class="text-center w-11/12 m-auto">{{product.description}}</p>
+                                {% endif %}
+                                {% if product.ingredients %}
+                                    <h3 class="ml-4 text-left text-2xl font-bold">
+                                        <i class="fa-solid fa-carrot"></i>
+                                        <span>{{ 'card.ingredients'|trans }}</span>
+                                        <hr class="bg-toukan w-1/2 h-0.5">
+                                    </h3>
+                                    <p class="ml-4 text-left">{{ product.ingredients }}</p>
+                                {% endif %}
+                                {% if product.allergens %}
+                                    <h3 class="ml-4 text-left text-2xl font-bold">
+                                        <i class="fa-solid fa-carrot"></i>
+                                        <span>{{ 'card.allergens'|trans }}</span>
+                                        <hr class="bg-toukan w-1/2 h-0.5">
+                                    </h3>
+                                    <p class="ml-4 text-left">{{ product.allergens }}</p>
+                                {% endif %}
+                                {% if product.sauceChoosable and card.sauces|length>0 %}
+                                    <h3 class="ml-4 text-left text-2xl font-bold mb-2">
+                                        <img class="custom-icon" src="{{ asset('assets/img/icons/icon_sauce.svg') }}" alt="">
+{#                                         TODO change img color#}
+                                        <span>Sauce</span>
+                                        <hr class="bg-toukan w-1/2 h-0.5">
+                                    </h3>
+                                    <div class="flex flex-wrap">
+                                        <select class="ml-4 text-left" name="sauce" id="sauce-selector">
+                                            <option value="0">-- Sauce --</option>
+                                            {% for sauce in card.sauces %}
+                                                <option value="{{ sauce.id }}">{{ sauce.title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                {% endif %}
+                                <div onclick="showDetails({{ product.id }})" id="add-product" class="bg-toukan cursor-pointer flex m-auto mt-12 text-center p-2 rounded-2xl text-white justify-center" aria-valuetext="{{ product.id }}">Ajouter au panier</div>
+                            </div>
                         </div>
-                        <img class="text-center w-11/12 m-auto mt-2 max-height" src="{{asset('assets/uploads/'~card.establishment.id~'/'~product.image)}}">
-                        <p class="border-solid bg-white rounded-2xl pl-2 pr-2 border-2 absolute -mt-6 ml-4">{{product.price|number_format(2, '.', ',')}} €</p>
-                        <div class="h-px my-1 w-9/12 bg-black m-auto"></div>
-{#                        {% if product.description %}#}
-{#                            <p class="text-center w-11/12 m-auto">{{product.description}}</p>#}
-{#                        {% endif %}#}
-                        {% if product.ingredients %}
-                        <h3 class="ml-4 text-left text-2xl font-bold">
-                            <i class="fa-solid fa-carrot"></i>
-                            <span class="underline">{{ 'card.ingredients'|trans }}</span>
-                        </h3>
-                        <p class="ml-4 text-left">{{ product.ingredients }}</p>
-                        {% endif %}
-                        {% if product.allergens %}
-                            <h3 class="ml-4 text-left text-2xl font-bold">
-                                <i class="fa-solid fa-carrot"></i>
-                                <span class="underline">{{ 'card.allergens'|trans }}</span>
-                            </h3>
-                            <p class="ml-4 text-left">{{ product.allergens }}</p>
-                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
-        <div>
+        </div>
     {% endfor %}
     
-    <a href="" class="bg-cover z-20 w-full bottom-0 fixed flex justify-center flex-col">
+    <a href="{{ path('client_order_basket', {'establishment':establishment.id, 'table':table.id, 'order':order.id}) }}" class="bg-cover z-50 w-full bottom-0 fixed flex justify-center flex-col">
         <i class="text-center z-20 text-white text-3xl fa-solid fa-cart-shopping"></i>
-        <div id="client-basket" class="text-center text-2xl z-20 text-white">Panier ({{ nbrProducts }})</div>
+        <div id="client-basket" class="text-center pb-2 text-2xl z-20 text-white">Panier ({{ nbrProducts }})</div>
         <svg class="absolute" viewBox="0 0 375 85" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M191 1.0407C91.8 0.240703 22.3333 11.3742 0 22.0408V128.041H375V22.0408C355 12.0408 290.2 1.8407 191 1.0407Z" fill="#2E2E2E" stroke="black"/>
         </svg>
@@ -75,7 +98,6 @@
 
     <script>
         function showDetails(id) {
-            console.log(id);
             document.getElementById('details-'+id).classList.toggle('hidden');
         }
 
@@ -87,8 +109,10 @@
 
         function makeRequest(e) {
             let product = e.getAttribute("aria-valuetext");
-            let blankUrl = `{{ path('client_order_add_product', {'establishment':establishment.id, 'table':table.id, 'order':order.id, 'product':'productId'}) }}`
-            let url = blankUrl.replace('productId', product);
+            let sauce = document.getElementById('sauce-selector').value;
+            let blankUrl = `{{ path('client_order_add_product', {'establishment':establishment.id, 'table':table.id, 'order':order.id, 'product':'productId', 'sauce':'sauceId'}) }}`
+            let url = blankUrl.replace('productId', product).replace('sauceId', sauce);
+            console.log(url);
 
             fetch(url).then(function (response) {
                 return response.json();
