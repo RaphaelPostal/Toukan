@@ -6,11 +6,13 @@ use App\Entity\Establishment;
 use App\Entity\Order;
 use App\Entity\Product;
 use App\Entity\ProductOrder;
+use App\Entity\Sauce;
 use App\Entity\Table;
 use App\Form\OrderCommentsType;
 use App\Repository\EstablishmentRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductOrderRepository;
+use App\Repository\SauceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,7 +56,6 @@ class OrderController extends AbstractController
             'order' => $order,
             'total' => 0,
             'form' => $form->createView(),
-            'establishment' => $establishment
         ]);
     }
 
@@ -62,18 +63,22 @@ class OrderController extends AbstractController
     public function addProduct(EntityManagerInterface $entityManager,
                                 Establishment $establishment,
                                 ProductOrderRepository $productOrderRepository,
+                                SauceRepository $sauceRepository,
                                 Table $table,
                                 Order $order,
-                                Product $product): Response
+                                Product $product,
+                                Request $request): Response
     {
-        if($productOrderRepository->isProductAlreadyInBasket($order, $product)) {
-            $productOrder = $productOrderRepository->findOneBy(['orderEntity' => $order, 'product' => $product]);
+        $sauce = $sauceRepository->find($request->query->get('sauce'));
+        if($productOrderRepository->isProductAlreadyInBasket($order, $product, $sauce)) {
+            $productOrder = $productOrderRepository->findOneBy(['orderEntity' => $order, 'product' => $product, 'sauce' => $sauce]);
             $productOrder->setQuantity($productOrder->getQuantity() + 1);
         } else {
             $productOrder = new ProductOrder();
             $productOrder->setOrderEntity($order);
             $productOrder->setProduct($product);
             $productOrder->setQuantity(1);
+            $productOrder->setSauce($sauce);
         }
         $entityManager->persist($productOrder);
         $entityManager->flush();
