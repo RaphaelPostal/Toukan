@@ -21,6 +21,7 @@ class Sauce
 
     /**
      * @ORM\ManyToOne(targetEntity=Card::class, inversedBy="sauces")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $Card;
 
