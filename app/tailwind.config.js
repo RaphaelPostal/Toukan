@@ -13,7 +13,7 @@ module.exports = {
         'toukan-green' : '#04D733',
         'toukan-dark-gray' : '#2E2E2E',
         'toukan-light-gray' : '#EDEDED',
-        'toukan-salmon' : '#FFDED0'
+        'toukan-salmon': '#FFDED0'
       }
     },
     fontFamily: {
@@ -23,7 +23,9 @@ module.exports = {
   variants: {
     extend: {},
   },
+  content: ['./src/**/*.{html,js}', './node_modules/tw-elements/dist/js/**/*.js'],
   plugins: [
     require('@tailwindcss/forms'),
+    require('tw-elements/dist/plugin')
   ],
 }
