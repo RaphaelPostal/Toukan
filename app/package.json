@@ -5,9 +5,9 @@
         "@symfony/stimulus-bridge": "^2.0.0",
         "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/Resources/assets",
         "@symfony/webpack-encore": "^1.8.2",
-        "@tailwindcss/forms": "^0.5.1",
+        "@tailwindcss/forms": "^0.5.2",
         "autoprefixer": "^10.4.7",
-        "core-js": "^3.22.5",
+        "core-js": "^3.23.1",
         "glob-all": "^3.3.0",
         "path": "^0.12.7",
         "postcss-loader": "^6.2.1",
@@ -26,9 +26,9 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-      "alpinejs": "^3.10.2",
-      "sass": "^1.51.0",
-      "sass-loader": "^12.6.0",
-      "tw-elements": "^1.0.0-alpha12"
+        "alpinejs": "^3.10.2",
+        "sass": "^1.51.0",
+        "sass-loader": "^12.6.0",
+        "tw-elements": "^1.0.0-alpha12"
     }
 }

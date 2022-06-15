@@ -99,7 +99,6 @@ class SectionController extends AbstractController
         }
 
         return $this->redirectToRoute('establishment_card_index', [], Response::HTTP_SEE_OTHER);
-
     }
 
     #[Route('/{id}/product/create', name: 'app_section_product_create', methods: ['GET', 'POST'])]

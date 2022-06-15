@@ -1,24 +1,42 @@
-<table class="table">
-    <thead>
-    <tr>
-        <th>Number</th>
-        <th>actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for table in tables %}
+    <table class="table">
+        <thead>
         <tr>
-            <td>{{ table.id }}</td>
-            <td>{{ table.number }}</td>
-            <td>
-                <a href="{{ path('app_table_show', {'id': table.id}) }}">show</a>
-                <a href="{{ path('app_table_edit', {'id': table.id}) }}">edit</a>
-            </td>
+            <th>{{ 'table_number'|trans({}, 'table_management') }}</th>
+            <th>{{ 'edit'|trans({}, 'table_management') }}</th>
+            <th>Qr Code</th>
+            <th>{{ 'delete'|trans({}, 'table_management') }}</th>
         </tr>
-    {% else %}
-        <tr>
-            <td colspan="3">no records found</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        {% for table in tables %}
+            <tr>
+                <td>
+                    <input type="checkbox" value="{{ table.id }}" name="qrCodeToPrint[]">
+
+                    {{ table.number }}
+                </td>
+                <td>
+                    <button type="button" onclick="set_frame_src({{ table.id }}, 'table_edit')" class="transition duration-150 ease-in-out admin-button-edit" data-bs-toggle="modal" data-bs-target="#modal-form-edit-table">
+                        <i class="fa-solid fa-pen"></i> {{ 'edit'|trans({}, 'table_management') }}
+                    </button>
+                </td>
+                <td>
+
+                    <a href="https://sucepute.fr" class="btn admin-button-edit"> <i class="fa-solid fa-print"></i>{{ 'print_qrcode'|trans({}, 'table_management') }}</a>
+                </td>
+                <td>
+                    <form method="post" action="{{ path('app_table_delete', {'id': table.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette table ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ table.id) }}">
+                        <button class="btn admin-button-delete"> <i class="fa-solid fa-trash"></i> {{ 'delete'|trans({}, 'table_management') }}</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">{{ 'no_table'|trans({}, 'table_management') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <button class="btn admin-button-edit" type="submit"><i class="fa-solid fa-print"></i> {{ 'print_selection'|trans({}, 'table_management') }}</button>

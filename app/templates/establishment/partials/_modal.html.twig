@@ -57,6 +57,16 @@
                     <div id="form-edit-establishment-color">
                         {{ render(controller('App\\Controller\\Establishment\\EstablishmentManageController::editColor')) }}
                     </div>
+                {% elseif context == 'table-create' %}
+                    <div id="form-create-table">
+                        {{ render(controller('App\\Controller\\Establishment\\TableController::new')) }}
+                    </div>
+                {% elseif context == 'table-edit' %}
+                    <div id="form-edit-table">
+                        <turbo-frame id="frame-edit-table">
+
+                        </turbo-frame>
+                    </div>
                 {% endif %}
             </div>
         </div>

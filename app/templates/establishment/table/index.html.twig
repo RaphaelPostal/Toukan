@@ -1,0 +1,32 @@
+{% extends 'establishment/base.html.twig' %}
+
+{% block title %}Mes tables{% endblock %}
+
+{% block body %}
+    <h1>{{ 'my_tables'|trans({}, 'table_management') }}</h1>
+
+    <button id="button-add-table" type="button" class="transition duration-150 ease-in-out admin-button-add mt-3" data-bs-toggle="modal" data-bs-target="#modal-form-create-table">
+        + {{ 'add_table'|trans({}, 'table_management') }}
+    </button>
+
+    <div id="establishment-tables">
+        {% include 'establishment/partials/tables.html.twig' %}
+    </div>
+
+    {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-create-table', 'modal_title' : 'Table', 'context' : 'table-create'} %}
+    {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-table', 'modal_title' : 'Table', 'context' : 'table-edit'} %}
+
+    <script>
+        function set_frame_src(entity_id, context){
+            let path = ''
+            switch(context) {
+                case 'table_edit':
+                    path = '{{ path('app_table_edit', {'id' : 'id'}) }}'
+                    path = path.replace('id', entity_id)
+                    document.getElementById('frame-edit-table').src = path;
+                    break;
+            }
+        }
+    </script>
+
+{% endblock %}

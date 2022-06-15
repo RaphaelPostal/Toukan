@@ -19,13 +19,10 @@ use Symfony\UX\Turbo\TurboBundle;
 class SauceController extends AbstractController
 {
 
-
     #[Route('/create', name: 'app_sauce_create', methods: ['GET', 'POST'])]
     public function new(Request $request, SauceRepository $sauceRepository, SectionRepository $sectionRepository, EntityManagerInterface$entityManager): Response
     {
-        //        $card = $this->getUser()->getEstablishment()->getCard();
-        //get the first card in the database
-        $card = $this->get('doctrine')->getRepository(Card::class)->find(1);
+       $card = $this->getUser()->getEstablishment()->getCard();
 
         $sauce = new Sauce();
         $form = $this->createForm(SauceType::class, $sauce, [
@@ -57,9 +54,7 @@ class SauceController extends AbstractController
     #[Route('/{id}/edit', name: 'app_sauce_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Sauce $sauce, SauceRepository $sauceRepository): Response
     {
-        //        $card = $this->getUser()->getEstablishment()->getCard();
-        //get the first card in the database
-        $card = $this->get('doctrine')->getRepository(Card::class)->find(1);
+        $card = $this->getUser()->getEstablishment()->getCard();
 
         $form = $this->createForm(SauceType::class, $sauce, [
             'action' => $this->generateUrl('app_sauce_edit', ['card' => $card->getId(), 'id' => $sauce->getId()]),
@@ -88,9 +83,7 @@ class SauceController extends AbstractController
     #[Route('/{id}', name: 'app_sauce_delete', methods: ['POST'])]
     public function delete(Request $request, Sauce $sauce, SauceRepository $sauceRepository): Response
     {
-        //        $card = $this->getUser()->getEstablishment()->getCard();
-        //get the first card in the database
-        $card = $this->get('doctrine')->getRepository(Card::class)->find(1);
+        $card = $this->getUser()->getEstablishment()->getCard();
 
         if ($this->isCsrfTokenValid('delete'.$sauce->getId(), $request->request->get('_token'))) {
             $sauceRepository->remove($sauce);

@@ -41,6 +41,7 @@ class Establishment
 
     /**
      * @ORM\OneToOne(targetEntity=User::class, inversedBy="establishment")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $user;
 
@@ -140,7 +141,7 @@ class Establishment
         return $this->card;
     }
 
-    public function getTables(): ArrayCollection
+    public function getTables()
     {
         return $this->tables;
     }

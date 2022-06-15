@@ -1,0 +1,8 @@
+my_tables: 'Mes tables'
+add_table: 'Ajouter une table'
+table_number : 'Nom/N° Table'
+edit: 'Modifier'
+delete: 'Supprimer'
+print_qrcode: 'Imprimer le QR code'
+print_selection: 'Imprimer la sélection'
+no_table: 'Aucune table'

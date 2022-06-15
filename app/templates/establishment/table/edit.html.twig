@@ -1,0 +1,7 @@
+<turbo-frame id="frame-edit-table">
+    {% for message in app.flashes('success') %}
+        <p class="text-green">{{ message }}</p>
+    {% endfor %}
+    {{ include('establishment/table/_form.html.twig') }}
+</turbo-frame>
+

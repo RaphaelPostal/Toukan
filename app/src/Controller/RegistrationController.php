@@ -52,6 +52,7 @@ class RegistrationController extends AbstractController
             $establishment = new Establishment();
 
             $establishment->setUser($user);
+            $user->setEstablishment($establishment);
 
             $establishment->setName($form->get('name')->getData());
             $establishment->setType($form->get('type')->getData());
