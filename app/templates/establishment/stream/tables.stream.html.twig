@@ -11,3 +11,11 @@
         </template>
     </turbo-stream>
 {% endif %}
+
+{% if app.request.get('_route') == 'app_table_edit' %}
+    <turbo-stream action="update" target="form-edit-table">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\TableController::edit', {'id' : table.id})) }}
+        </template>
+    </turbo-stream>
+{% endif %}

@@ -20,7 +20,7 @@ class TableController extends AbstractController
 
         $tables = $tableRepository->findBy(['establishment' => $this->getUser()->getEstablishment()]);
 
-        return $this->render('table/index.html.twig', [
+        return $this->render('establishment/table/index.html.twig', [
             'tables' => $tables,
         ]);
     }
@@ -29,6 +29,8 @@ class TableController extends AbstractController
     public function new(Request $request, TableRepository $tableRepository): Response
     {
         $establishment = $this->getUser()->getEstablishment();
+        $tables = $establishment->getTables();
+
         $table = new Table();
         $form = $this->createForm(TableType::class, $table, [
             'action' => $this->generateUrl('app_table_create'),
@@ -37,7 +39,6 @@ class TableController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $table->setEstablishment($establishment);
-            $tables = $establishment->getTables();
             $tableRepository->add($table, true);
 
             if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
@@ -50,32 +51,36 @@ class TableController extends AbstractController
             return $this->redirectToRoute('app_table_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('table/new.html.twig', [
+        return $this->renderForm('establishment/table/new.html.twig', [
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_table_show', methods: ['GET'])]
-    public function show(Table $table): Response
-    {
-        return $this->render('table/show.html.twig', [
-            'table' => $table,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_table_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_table_edit')]
     public function edit(Request $request, Table $table, TableRepository $tableRepository): Response
     {
-        $form = $this->createForm(TableType::class, $table);
+        $establishment = $this->getUser()->getEstablishment();
+        $tables = $establishment->getTables();
+
+        $form = $this->createForm(TableType::class, $table, [
+            'action' => $this->generateUrl('app_table_edit', ['id' => $table->getId()]),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $tableRepository->add($table, true);
 
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                $this->addFlash('success', 'Table modifiée !');
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/tables.stream.html.twig', ['tables' => $tables, 'table' => $table]);
+            }
+
             return $this->redirectToRoute('app_table_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('table/edit.html.twig', [
+        return $this->renderForm('establishment/table/edit.html.twig', [
             'table' => $table,
             'form' => $form,
         ]);

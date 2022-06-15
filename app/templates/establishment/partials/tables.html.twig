@@ -12,7 +12,9 @@
         <tr>
             <td>{{ table.number }}</td>
             <td>
-                <a href="{{ path('app_table_edit', {'id': table.id}) }}">edit</a>
+                <button type="button" onclick="set_frame_src({{ table.id }}, 'table_edit')" class="transition duration-150 ease-in-out admin-button-edit" data-bs-toggle="modal" data-bs-target="#modal-form-edit-table">
+                    Modifier
+                </button>
             </td>
             <td>
                 <a href="">Imprimer QrCode</a>
