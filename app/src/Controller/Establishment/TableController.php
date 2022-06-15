@@ -89,8 +89,16 @@ class TableController extends AbstractController
     #[Route('/{id}', name: 'app_table_delete', methods: ['POST'])]
     public function delete(Request $request, Table $table, TableRepository $tableRepository): Response
     {
+        $establishment = $this->getUser()->getEstablishment();
+        $tables = $establishment->getTables();
+
         if ($this->isCsrfTokenValid('delete'.$table->getId(), $request->request->get('_token'))) {
             $tableRepository->remove($table, true);
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/tables.stream.html.twig', ['tables' => $tables, 'table' => $table]);
+            }
         }
 
         return $this->redirectToRoute('app_table_index', [], Response::HTTP_SEE_OTHER);

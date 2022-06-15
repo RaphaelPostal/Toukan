@@ -4,13 +4,14 @@
 
 {% block body %}
     <h1>Mes tables</h1>
-    <div id="establishment-tables">
-        {% include 'establishment/partials/tables.html.twig' %}
-    </div>
 
     <button id="button-add-table" type="button" class="transition duration-150 ease-in-out admin-button-add mt-3" data-bs-toggle="modal" data-bs-target="#modal-form-create-table">
         + Ajouter une table
     </button>
+
+    <div id="establishment-tables">
+        {% include 'establishment/partials/tables.html.twig' %}
+    </div>
 
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-create-table', 'modal_title' : 'Table', 'context' : 'table-create'} %}
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-table', 'modal_title' : 'Table', 'context' : 'table-edit'} %}
