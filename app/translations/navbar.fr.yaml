@@ -1,4 +1,6 @@
 home: 'Accueil'
+card: 'Ma carte'
 dashboard: 'Tableau de bord'
+tables: 'Mes tables'
 logout: 'Déconnexion'
 profile: 'Profil'

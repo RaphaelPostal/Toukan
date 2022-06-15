@@ -31,4 +31,4 @@ composer.lock
 package-lock.json
 /migrations/
 
-public/uploads/
+public/assets/uploads/

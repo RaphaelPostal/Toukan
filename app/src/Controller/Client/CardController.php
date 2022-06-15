@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/customer/establishment')]
+#[Route('/client/establishment')]
 class CardController extends AbstractController
 {
     #[Route('/{establishment}/card/table/{table}', name: 'app_client_card')]
