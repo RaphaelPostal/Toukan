@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Card;
 use App\Entity\Establishment;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
@@ -67,8 +68,12 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $card = new Card();
+            $card->setEstablishment($establishment);
+            
             $this->entityManager->persist($user);
             $this->entityManager->persist($establishment);
+            $this->entityManager->persist($card);
             $this->entityManager->flush();
 
             // generate a signed url and email it to the user
