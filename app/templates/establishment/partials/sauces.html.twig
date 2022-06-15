@@ -1,7 +1,7 @@
     <table class="mt-5">
         <thead>
         <th>
-            Sauces
+            {{ 'sauces'|trans({}, 'card_management') }}
         </th>
         </thead>
 
@@ -22,6 +22,10 @@
                         <button class="btn admin-button-delete">Supprimer</button>
                     </form>
                 </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">{{ 'no_sauce'|trans({}, 'card_management') }}</td>
             </tr>
         {% endfor %}
         </tbody>

@@ -14,7 +14,7 @@ use Symfony\UX\Turbo\TurboBundle;
 #[Route('/establishment/table')]
 class TableController extends AbstractController
 {
-    #[Route('/', name: 'app_table_index')]
+    #[Route('', name: 'app_table_index')]
     public function index(TableRepository $tableRepository): Response
     {
 
@@ -91,7 +91,7 @@ class TableController extends AbstractController
     {
         $establishment = $this->getUser()->getEstablishment();
         $tables = $establishment->getTables();
-
+        dump('suce');
         if ($this->isCsrfTokenValid('delete'.$table->getId(), $request->request->get('_token'))) {
             $tableRepository->remove($table, true);
             if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {

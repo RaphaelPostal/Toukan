@@ -3,22 +3,23 @@
 {% block title %}Ma carte{% endblock %}
 
 {% block body %}
-    <h1 class="border-2 border-gray-300">Ma carte</h1>
+    <h1 class="border-2 border-gray-300">{{ 'my_card'|trans({}, 'card_management') }}</h1>
     <div id="establishment-card">
         {% include 'establishment/partials/card.html.twig' %}
     </div>
 
     <!-- Button trigger modal -->
     <button id="button-add-section" type="button" class="transition duration-150 ease-in-out admin-button-add mt-3" data-bs-toggle="modal" data-bs-target="#modal-form-create-section">
-        Ajouter une section
-    </button>
-    <button id="button-add-sauce" type="button" class="transition duration-150 ease-in-out admin-button-add mt-3 flex" data-bs-toggle="modal" data-bs-target="#modal-form-create-sauce">
-        Ajouter une sauce <img class="custom-icon" src="{{ asset('assets/img/icons/icon_sauce.svg') }}" alt="">
+        {{ 'add_section'|trans({}, 'card_management') }}
     </button>
 
     <div id="establishment-sauces">
         {% include 'establishment/partials/sauces.html.twig' %}
     </div>
+
+    <button id="button-add-sauce" type="button" class="transition duration-150 ease-in-out admin-button-add mt-3 flex" data-bs-toggle="modal" data-bs-target="#modal-form-create-sauce">
+        {{ 'add_sauce'|trans({}, 'card_management') }} <img class="custom-icon" src="{{ asset('assets/img/icons/icon_sauce.svg') }}" alt="">
+    </button>
 
     <!-- Modals -->
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-create-section', 'modal_title' : 'Section', 'context' : 'section-create'} %}

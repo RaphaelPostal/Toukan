@@ -3,10 +3,10 @@
 {% block title %}Mes tables{% endblock %}
 
 {% block body %}
-    <h1>Mes tables</h1>
+    <h1>{{ 'my_tables'|trans({}, 'table_management') }}</h1>
 
     <button id="button-add-table" type="button" class="transition duration-150 ease-in-out admin-button-add mt-3" data-bs-toggle="modal" data-bs-target="#modal-form-create-table">
-        + Ajouter une table
+        + {{ 'add_table'|trans({}, 'table_management') }}
     </button>
 
     <div id="establishment-tables">
