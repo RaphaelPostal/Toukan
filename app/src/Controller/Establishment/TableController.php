@@ -9,15 +9,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\UX\Turbo\TurboBundle;
 
 #[Route('/establishment/table')]
 class TableController extends AbstractController
 {
-    #[Route('/', name: 'app_table_index', methods: ['GET'])]
+    #[Route('/', name: 'app_table_index')]
     public function index(TableRepository $tableRepository): Response
     {
 
         $tables = $tableRepository->findBy(['establishment' => $this->getUser()->getEstablishment()]);
+
         return $this->render('table/index.html.twig', [
             'tables' => $tables,
         ]);
@@ -26,18 +28,29 @@ class TableController extends AbstractController
     #[Route('/create', name: 'app_table_create', methods: ['GET', 'POST'])]
     public function new(Request $request, TableRepository $tableRepository): Response
     {
+        $establishment = $this->getUser()->getEstablishment();
         $table = new Table();
-        $form = $this->createForm(TableType::class, $table);
+        $form = $this->createForm(TableType::class, $table, [
+            'action' => $this->generateUrl('app_table_create'),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $table->setEstablishment($establishment);
+            $tables = $establishment->getTables();
             $tableRepository->add($table, true);
+
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                $this->addFlash('success', 'Table ajoutée !');
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                return $this->render('establishment/stream/tables.stream.html.twig', ['tables' => $tables]);
+            }
 
             return $this->redirectToRoute('app_table_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('table/new.html.twig', [
-            'table' => $table,
             'form' => $form,
         ]);
     }

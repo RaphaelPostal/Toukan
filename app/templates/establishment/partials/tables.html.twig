@@ -1,23 +1,29 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Number</th>
-        <th>actions</th>
+        <th>Nom/N° Table</th>
+        <th>Modifier</th>
+        <th>Qr Code</th>
+        <th>Supprimer</th>
     </tr>
     </thead>
     <tbody>
     {% for table in tables %}
         <tr>
-            <td>{{ table.id }}</td>
             <td>{{ table.number }}</td>
             <td>
-                <a href="{{ path('app_table_show', {'id': table.id}) }}">show</a>
                 <a href="{{ path('app_table_edit', {'id': table.id}) }}">edit</a>
+            </td>
+            <td>
+                <a href="">Imprimer QrCode</a>
+            </td>
+            <td>
+                <a href="{{ path('app_table_delete', {'id' : table.id}) }}"><i class="fa-solid fa-trash fa-fw"></i> Supprimer</a>
             </td>
         </tr>
     {% else %}
         <tr>
-            <td colspan="3">no records found</td>
+            <td colspan="3">Aucune table</td>
         </tr>
     {% endfor %}
     </tbody>

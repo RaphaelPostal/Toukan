@@ -141,7 +141,7 @@ class Establishment
         return $this->card;
     }
 
-    public function getTables(): ArrayCollection
+    public function getTables()
     {
         return $this->tables;
     }

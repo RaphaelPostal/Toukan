@@ -3,3 +3,11 @@
         {% include 'establishment/partials/tables.html.twig' with {'tables' : tables} %}
     </template>
 </turbo-stream>
+
+{% if app.request.get('_route') == 'app_table_create' %}
+    <turbo-stream action="update" target="form-create-table">
+        <template>
+            {{ render(controller('App\\Controller\\Establishment\\TableController::new')) }}
+        </template>
+    </turbo-stream>
+{% endif %}
