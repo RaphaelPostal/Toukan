@@ -32,3 +32,4 @@ package-lock.json
 /migrations/
 
 public/assets/uploads/
+public/uploads/
