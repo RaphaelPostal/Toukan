@@ -4,24 +4,34 @@
 
 {% block javascripts %}
     <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
-    <link rel="stylesheet" href="{{ asset("build/qr-code-printing.css") }}">
+    <link rel="stylesheet" href="{{ asset("build/qr-code-printing.css") }}" media="print">
 {% endblock %}
 
 {% block body %}
     <div id="qr-code-container"></div>
 
     <script>
-        document.addEventListener('DOMContentLoaded',()=> {
-            fetch('{{ path("api_qr_code", {establishmentId: establishmentId}) }}')
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('{{ path("api_qr_code_options") }}')
                 .then(response => response.json())
                 .then(data => {
                     let establishmentId = data.establishmentId;
                     let establishmentImg = data.establishmentImg;
                     let establishmentColor = data.establishmentColor;
                     let qrCodeOptions = data.qrCodeOptions;
-                    let tables = data.tables;
+                    let tables = document.querySelectorAll("input[name='qrCodeToPrint']:checked");
+                    let qrCodeNb = 1;
+                    let pageDiv = document.createElement('div');
+                    pageDiv.classList.add('page');
 
-                    tables.forEach(tableId => {
+                    tables.forEach((tableId) => {
+                        qrCodeNb++;
+                        if (qrCodeNb > 9) {
+                            document.getElementById('qr-code-container').appendChild(pageDiv);
+                            pageDiv = document.createElement('div');
+                            pageDiv.classList.add('page');
+                            qrCodeNb = 1;
+                        }
                         const qrCode = new QRCodeStyling({
                             width: 500,
                             height: 500,
@@ -52,9 +62,19 @@
                                 imageSize: 0.5,
                             }
                         })
-                        qrCode.append(document.getElementById('qr-code-container'))
+                        let p = document.createElement('p')
+                        p.innerHTML = "Table " + tableId;
+                        qrCode.append(pageDiv);
+                        pageDiv.appendChild(p);
                     });
-                })
+                    if (qrCodeNb <= 9) {
+                        document.getElementById('qr-code-container').appendChild(pageDiv);
+                    }
+                    setTimeout(() => {
+                        window.print();
+                        window.close()
+                    }, 500);
+                });
         })
     </script>
 {% endblock %}
