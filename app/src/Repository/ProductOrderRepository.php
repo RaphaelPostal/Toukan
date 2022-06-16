@@ -48,9 +48,9 @@ class ProductOrderRepository extends ServiceEntityRepository
         }
     }
 
-    public function isProductAlreadyInBasket(Order $order, Product $product, $sauce): bool
+    public function isProductAlreadyInBasket(Order $order, Product $product, $sauce, $drink, $dessert): bool
     {
-        $productOrder = $this->findOneBy(['orderEntity' => $order, 'product' => $product, 'sauce' => $sauce]);
+        $productOrder = $this->findOneBy(['orderEntity' => $order, 'product' => $product, 'sauce' => $sauce, 'drink' => $drink, 'dessert' => $dessert]);
         return (bool)$productOrder;
     }
 

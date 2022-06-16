@@ -7,6 +7,12 @@
             {{ product.getProduct().getTitle() }}
             {% if product.sauce %}
                 - sauce {{ product.getSauce().getTitle() }}
+            {% endif %}
+            {% if product.drink %}
+                - {{ product.getDrink().getTitle() }}
+            {% endif %}
+            {% if product.dessert %}
+            - {{ product.getDessert().getTitle() }}
             {% endif %}<br>
             = {{ product.getProduct().getPrice() * product.getQuantity() }}€
             <a href="{{ path('client_order_basket_product_delete', {'productOrder':product.id, 'establishment':establishment.id, 'table':table.id, 'order':order.id}) }}">Supprimer</a>
