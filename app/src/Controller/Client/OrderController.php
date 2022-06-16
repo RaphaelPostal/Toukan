@@ -12,6 +12,7 @@ use App\Form\OrderCommentsType;
 use App\Repository\EstablishmentRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductOrderRepository;
+use App\Repository\ProductRepository;
 use App\Repository\SauceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -59,19 +60,25 @@ class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/product/{product}/add', name: 'client_order_add_product')]
+    #[Route('/product/{product}/add/{sauce}/{drink}/{dessert}', name: 'client_order_add_product')]
     public function addProduct(EntityManagerInterface $entityManager,
                                 Establishment $establishment,
                                 ProductOrderRepository $productOrderRepository,
+                                ProductRepository $productRepository,
                                 SauceRepository $sauceRepository,
                                 Table $table,
                                 Order $order,
                                 Product $product,
+                                $sauce,
+                                $drink,
+                                $dessert,
                                 Request $request): Response
     {
-        $sauce = $sauceRepository->find($request->query->get('sauce'));
-        if($productOrderRepository->isProductAlreadyInBasket($order, $product, $sauce)) {
-            $productOrder = $productOrderRepository->findOneBy(['orderEntity' => $order, 'product' => $product, 'sauce' => $sauce]);
+        $sauce = $sauceRepository->find($sauce);
+        $drink = $productRepository->find($drink);
+        $dessert = $productRepository->find($dessert);
+        if($productOrderRepository->isProductAlreadyInBasket($order, $product, $sauce, $drink, $dessert)) {
+            $productOrder = $productOrderRepository->findOneBy(['orderEntity' => $order, 'product' => $product, 'sauce' => $sauce, 'drink' => $drink, 'dessert' => $dessert]);
             $productOrder->setQuantity($productOrder->getQuantity() + 1);
         } else {
             $productOrder = new ProductOrder();
@@ -79,6 +86,8 @@ class OrderController extends AbstractController
             $productOrder->setProduct($product);
             $productOrder->setQuantity(1);
             $productOrder->setSauce($sauce);
+            $productOrder->setDrink($drink);
+            $productOrder->setDessert($dessert);
         }
         $entityManager->persist($productOrder);
         $entityManager->flush();
