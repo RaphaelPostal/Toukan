@@ -18,7 +18,7 @@ class QrCodeApi extends AbstractController
 
         if (!$qrCodeTemplate) {
             return new JsonResponse(['error' => 'Template QrCode introuvable'], Response::HTTP_NOT_FOUND);
-        } elseif (!$this->getUser()->getEstablishment()->getId() || $this->getUser()->getEstablishment()->getCustomColor()) {
+        } elseif (!$this->getUser()->getEstablishment()->getId() || !$this->getUser()->getEstablishment()->getCustomColor()) {
             return new JsonResponse(['error' => 'Infos établissement manquantes'], Response::HTTP_NOT_FOUND);
         }
 
