@@ -65,6 +65,11 @@ class Establishment
      */
     private ?string $custom_color = '#F49B22';
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $qrCodeTemplate;
+
     public function __construct()
     {
         $this->cards = new ArrayCollection();
@@ -186,6 +191,18 @@ class Establishment
     public function setCustomColor(?string $custom_color): self
     {
         $this->custom_color = $custom_color;
+
+        return $this;
+    }
+
+    public function getQrCodeTemplate(): ?int
+    {
+        return $this->qrCodeTemplate;
+    }
+
+    public function setQrCodeTemplate(int $qrCodeTemplate): self
+    {
+        $this->qrCodeTemplate = $qrCodeTemplate;
 
         return $this;
     }

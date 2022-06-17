@@ -15,7 +15,13 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             fetch('{{ path("api_qr_code_options") }}')
-                .then(response => response.json())
+                .then(async response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error((await response.json()).error);
+                    }
+                })
                 .then(data => {
                     establishmentId = data.establishmentId;
                     establishmentImg = data.establishmentImg;
@@ -23,13 +29,16 @@
                     qrCodeOptions = data.qrCodeOptions;
                     print_qr_code()
                 })
+                .catch(error => {
+                    alert(error);
+                });
         })
 
         function print_qr_code() {
             document.getElementById('qr-code-container').innerHTML = '';
 
             let tables = JSON.parse(localStorage.getItem('tables_list'));
-            let qrCodeNb = 1;
+            let qrCodeNb = 0;
             let pageDiv = document.createElement('div');
             let p
             pageDiv.classList.add('page');
@@ -37,12 +46,16 @@
             localStorage.clear();
 
             tables.forEach((table) => {
+                if (!table.tableId || !table.tableName) {
+                    alert('Données QrCodes invalides')
+                    window.close()
+                }
                 qrCodeNb++;
                 if (qrCodeNb > 9) {
                     document.getElementById('qr-code-container').appendChild(pageDiv);
                     pageDiv = document.createElement('div');
                     pageDiv.classList.add('page');
-                    qrCodeNb = 1;
+                    qrCodeNb = 0;
                 }
                 const qrCode = new QRCodeStyling({
                     width: 500,

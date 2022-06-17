@@ -14,8 +14,14 @@ class QrCodeApi extends AbstractController
     #[Route('/restaurant/qr-code-options}', name: 'api_qr_code_options', methods: ['GET'])]
     public function getQrCode(EstablishmentRepository $establishmentRepository): JsonResponse
     {
-//        $qrCodes = $establishmentRepository->find($establishmentId);
-        $qrCodeTemplate = QrCodeTemplate::BASIC;
+        $qrCodeTemplate = QrCodeTemplate::tryFrom($this->getUser()->getEstablishment()->getQrCodeTemplate());
+
+        if (!$qrCodeTemplate) {
+            return new JsonResponse(['error' => 'Template QrCode introuvable'], Response::HTTP_NOT_FOUND);
+        } elseif (!$this->getUser()->getEstablishment()->getId() || $this->getUser()->getEstablishment()->getCustomColor()) {
+            return new JsonResponse(['error' => 'Infos établissement manquantes'], Response::HTTP_NOT_FOUND);
+        }
+
         $infos = [
             'qrCodeOptions' => [
                 'dotsOption' => $qrCodeTemplate->getDotsOption(),
@@ -23,12 +29,10 @@ class QrCodeApi extends AbstractController
                 'cornerDotsOption' => $qrCodeTemplate->getCornerDotOption(),
             ],
             'establishmentId' => $this->getUser()->getEstablishment()->getId(),
-//            'establishmentImg' => "/assets/img/toukan_orange.png",
-//            'establishmentColor' => "#F49B22",
             'establishmentImg' => "/assets/img/meltdown_logo.png",
-            'establishmentColor' => "#97e300",
+            'establishmentColor' => $this->getUser()->getEstablishment()->getCustomColor(),
+//            'establishmentImg' => "/assets/img/toukan_orange.png",
 //            'establishmentImg' => "/assets/img/netto_logo.png",
-//            'establishmentColor' => "#fc3503",
         ];
         return new JsonResponse($infos, Response::HTTP_OK);
     }
