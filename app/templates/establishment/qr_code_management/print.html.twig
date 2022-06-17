@@ -1,80 +1,92 @@
 {% extends 'base_printing.html.twig' %}
 
-{% block title %}QR Code printing page{% endblock %}
-
+{% block title %}Mes tables{% endblock %}
 {% block javascripts %}
     <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
     <link rel="stylesheet" href="{{ asset("build/qr-code-printing.css") }}" media="print">
 {% endblock %}
-
 {% block body %}
-    <div id="qr-code-container"></div>
-
+    <div id="qr-code-container" style="display: none"></div>
     <script>
+        let establishmentId;
+        let establishmentImg;
+        let establishmentColor;
+        let qrCodeOptions;
+
         document.addEventListener('DOMContentLoaded', () => {
             fetch('{{ path("api_qr_code_options") }}')
                 .then(response => response.json())
                 .then(data => {
-                    let establishmentId = data.establishmentId;
-                    let establishmentImg = data.establishmentImg;
-                    let establishmentColor = data.establishmentColor;
-                    let qrCodeOptions = data.qrCodeOptions;
-                    let tables = document.querySelectorAll("input[name='qrCodeToPrint']:checked");
-                    let qrCodeNb = 1;
-                    let pageDiv = document.createElement('div');
-                    pageDiv.classList.add('page');
-
-                    tables.forEach((tableId) => {
-                        qrCodeNb++;
-                        if (qrCodeNb > 9) {
-                            document.getElementById('qr-code-container').appendChild(pageDiv);
-                            pageDiv = document.createElement('div');
-                            pageDiv.classList.add('page');
-                            qrCodeNb = 1;
-                        }
-                        const qrCode = new QRCodeStyling({
-                            width: 500,
-                            height: 500,
-                            type: "canvas",
-                            data: `https://toukan.fr/restaurant/${establishmentId}/table/${tableId}`,
-                            image: establishmentImg,
-                            qrOptions: {
-                                errorCorrectionLevel: "H"
-                            },
-                            dotsOptions: {
-                                color: establishmentColor,
-                                type: qrCodeOptions.dotsOption
-                            },
-                            cornersSquareOptions: {
-                                type: qrCodeOptions.cornerSquareOption,
-                                color: establishmentColor
-                            },
-                            cornersDotOptions: {
-                                type: qrCodeOptions.cornerDotsOption,
-                                color: establishmentColor
-                            },
-                            backgroundOptions: {
-                                color: "white",
-                            },
-                            imageOptions: {
-                                crossOrigin: "anonymous",
-                                margin: 0,
-                                imageSize: 0.5,
-                            }
-                        })
-                        let p = document.createElement('p')
-                        p.innerHTML = "Table " + tableId;
-                        qrCode.append(pageDiv);
-                        pageDiv.appendChild(p);
-                    });
-                    if (qrCodeNb <= 9) {
-                        document.getElementById('qr-code-container').appendChild(pageDiv);
-                    }
-                    setTimeout(() => {
-                        window.print();
-                        window.close()
-                    }, 500);
-                });
+                    establishmentId = data.establishmentId;
+                    establishmentImg = data.establishmentImg;
+                    establishmentColor = data.establishmentColor;
+                    qrCodeOptions = data.qrCodeOptions;
+                    print_qr_code()
+                })
         })
+
+        function print_qr_code() {
+            document.getElementById('qr-code-container').innerHTML = '';
+
+            let tables = JSON.parse(localStorage.getItem('tables_list'));
+            let qrCodeNb = 1;
+            let pageDiv = document.createElement('div');
+            let p
+            pageDiv.classList.add('page');
+
+            localStorage.clear();
+
+            tables.forEach((table) => {
+                qrCodeNb++;
+                if (qrCodeNb > 9) {
+                    document.getElementById('qr-code-container').appendChild(pageDiv);
+                    pageDiv = document.createElement('div');
+                    pageDiv.classList.add('page');
+                    qrCodeNb = 1;
+                }
+                const qrCode = new QRCodeStyling({
+                    width: 500,
+                    height: 500,
+                    type: "canvas",
+                    data: `https://toukan.fr/restaurant/${establishmentId}/table/${table.tableId}`,
+                    image: establishmentImg,
+                    qrOptions: {
+                        errorCorrectionLevel: "H"
+                    },
+                    dotsOptions: {
+                        color: establishmentColor,
+                        type: qrCodeOptions.dotsOption
+                    },
+                    cornersSquareOptions: {
+                        type: qrCodeOptions.cornerSquareOption,
+                        color: establishmentColor
+                    },
+                    cornersDotOptions: {
+                        type: qrCodeOptions.cornerDotsOption,
+                        color: establishmentColor
+                    },
+                    backgroundOptions: {
+                        color: "white",
+                    },
+                    imageOptions: {
+                        crossOrigin: "anonymous",
+                        margin: 0,
+                        imageSize: 0.5,
+                    }
+                })
+                p = document.createElement('p')
+                p.innerHTML = table.tableName;
+                qrCode.append(pageDiv);
+                pageDiv.appendChild(p);
+            });
+            if (qrCodeNb <= 9) {
+                document.getElementById('qr-code-container').appendChild(pageDiv);
+            }
+
+            setTimeout(() => {
+                window.print();
+                window.close();
+            }, 500);
+        }
     </script>
 {% endblock %}

@@ -19,7 +19,6 @@
 
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-create-table', 'modal_title' : 'Table', 'context' : 'table-create'} %}
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-table', 'modal_title' : 'Table', 'context' : 'table-edit'} %}
-    <div id="qr-code-container" style="display: none"></div>
     <script>
         function set_frame_src(entity_id, context) {
             let path = ''
@@ -33,21 +32,7 @@
         }
     </script>
     <script>
-        let establishmentId;
-        let establishmentImg = new Image();
-        let establishmentColor;
-        let qrCodeOptions;
-
         document.addEventListener('DOMContentLoaded', () => {
-            fetch('{{ path("api_qr_code_options") }}')
-                .then(response => response.json())
-                .then(data => {
-                    establishmentId = data.establishmentId;
-                    establishmentImg = data.establishmentImg;
-                    establishmentColor = data.establishmentColor;
-                    qrCodeOptions = data.qrCodeOptions;
-                })
-
             document.getElementById('qr_code_print_selection').addEventListener('click', () => {
                 print_qr_code();
             });
@@ -60,69 +45,16 @@
         })
 
         function print_qr_code(tableNode) {
-            document.getElementById('qr-code-container').innerHTML = '';
-
             let tables = tableNode || document.querySelectorAll("input[name='qrCodeToPrint']:checked");
-            let qrCodeNb = 1;
-            let pageDiv = document.createElement('div');
-            let p
-            pageDiv.classList.add('page');
 
-            tables.forEach((tableId) => {
-                qrCodeNb++;
-                if (qrCodeNb > 9) {
-                    document.getElementById('qr-code-container').appendChild(pageDiv);
-                    pageDiv = document.createElement('div');
-                    pageDiv.classList.add('page');
-                    qrCodeNb = 1;
+            localStorage.setItem('tables_list', JSON.stringify(Array.from(tables).map(table => {
+                return {
+                    tableId: table.dataset.tableId,
+                    tableName: table.dataset.tableName,
                 }
-                const qrCode = new QRCodeStyling({
-                    width: 500,
-                    height: 500,
-                    type: "canvas",
-                    data: `https://toukan.fr/restaurant/${establishmentId}/table/${tableId.dataset.tableId}`,
-                    image: establishmentImg,
-                    qrOptions: {
-                        errorCorrectionLevel: "H"
-                    },
-                    dotsOptions: {
-                        color: establishmentColor,
-                        type: qrCodeOptions.dotsOption
-                    },
-                    cornersSquareOptions: {
-                        type: qrCodeOptions.cornerSquareOption,
-                        color: establishmentColor
-                    },
-                    cornersDotOptions: {
-                        type: qrCodeOptions.cornerDotsOption,
-                        color: establishmentColor
-                    },
-                    backgroundOptions: {
-                        color: "white",
-                    },
-                    imageOptions: {
-                        crossOrigin: "anonymous",
-                        margin: 0,
-                        imageSize: 0.5,
-                    }
-                })
-                p = document.createElement('p')
-                p.innerHTML = "Table " + tableId.dataset.tableName;
-                qrCode.append(pageDiv);
-                pageDiv.appendChild(p);
-            });
-            if (qrCodeNb <= 9) {
-                document.getElementById('qr-code-container').appendChild(pageDiv);
-            }
+            })));
 
-            setTimeout(() => {
-                // let popup = window.open('', '_blank', 'width=800,height=600');
-                // popup.document.head.innerHTML = document.head.innerHTML;
-                // popup.document.body.innerHTML = document.body.innerHTML;
-                // popup.print();
-                // popup.close();
-                window.print();
-            }, 500);
+            window.open('{{ path('app_qr_code_print') }}', '', 'width=800,height=600');
         }
     </script>
 {% endblock %}
