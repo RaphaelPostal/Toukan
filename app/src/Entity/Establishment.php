@@ -66,7 +66,7 @@ class Establishment
     private ?string $custom_color = '#F49B22';
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options="{'default': 1}")
      */
     private $qrCodeTemplate;
 
