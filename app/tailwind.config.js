@@ -10,6 +10,7 @@ module.exports = {
         'toukan-red' : '#F70303',
         'toukan-light-blue' : '#1488F3',
         'toukan-blue' : '#575A89',
+        'toukan-dark-blue' : '#3F3D56',
         'toukan-green' : '#04D733',
         'toukan-dark-gray' : '#2E2E2E',
         'toukan-light-gray' : '#EDEDED',
