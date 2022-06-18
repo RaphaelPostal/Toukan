@@ -89,7 +89,7 @@ class CheckoutSubscriptionController extends AbstractController
 
         $prices = array_values(array_filter($prices->data, fn($price) => $price->product->metadata->allow_app_usage));
 
-        return $this->render('establishment/pricing/index.html.twig', [
+        return $this->render('establishment/pricing/waiter_index.html.twig', [
             'prices' => $prices,
         ]);
     }
