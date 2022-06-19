@@ -1,22 +1,39 @@
     {% set total = 0 %}
     {% for product in order.getProductOrders() %}
-        <div id="product-card">
-            <a href="{{ path('client_order_basket_product_minus', {'productOrder':product.id, 'establishment':establishment.id, 'table':table.id, 'order':order.id}) }}">-</a>
-            {{ product.getQuantity() }}
-            <a href="{{ path('client_order_basket_product_plus', {'productOrder':product.id, 'establishment':establishment.id, 'table':table.id, 'order':order.id}) }}">+</a>
-            {{ product.getProduct().getTitle() }}
-            {% if product.sauce %}
-                - sauce {{ product.getSauce().getTitle() }}
-            {% endif %}
-            {% if product.drink %}
-                - {{ product.getDrink().getTitle() }}
-            {% endif %}
-            {% if product.dessert %}
-            - {{ product.getDessert().getTitle() }}
-            {% endif %}<br>
-            = {{ product.getProduct().getPrice() * product.getQuantity() }}€
-            <a href="{{ path('client_order_basket_product_delete', {'productOrder':product.id, 'establishment':establishment.id, 'table':table.id, 'order':order.id}) }}">Supprimer</a>
-            {% set total = total + product.getProduct().getPrice() * product.getQuantity() %}<br><br>
+    <div class="flex m-3">
+        <div class="custom-shadow flex rounded-2xl w-9/12" id="product-card">
+            <img class="max-h-28 mt-3 mb-3" src="{{asset('assets/uploads/'~establishmentId~'/'~product.getProduct().getImage())}}" />
+            <div class="flex justify-center flex-col mt-3 mb-3">
+                <p class="font-bold">{{ product.getProduct().getTitle() }}</p>
+                <div class="flex items-center">
+                    <p class="font-bold">Quantité :</p>
+                    <a class="border-toukan border-2 font-bold w-7 h-7 m-1 text-center rounded-lg" href="{{ path('client_order_basket_product_minus', {'productOrderId':product.id, 'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}">-</a>
+                    <p class="bg-toukan font-bold text-white w-8 h-7 m-1 text-center rounded-lg">{{ product.getQuantity() }}</p>
+                    <a class="border-toukan border-2 font-bold w-7 h-7 m-1 text-center rounded-lg" href="{{ path('client_order_basket_product_plus', {'productOrderId':product.id, 'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}">+</a>
+                </div>
+                <br>
+                <p class="font-bold text-right">{{ product.getProduct().getPrice() * product.getQuantity() }}€</p>
+                {% set total = total + product.getProduct().getPrice() * product.getQuantity() %}
+            </div>
         </div>
+        <a class="m-2 text-center flex justify-center items-center flex-col" href="{{ path('client_order_basket_product_delete', {'productOrderId':product.id, 'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}">
+            <img class="max-h-7" src="{{asset('assets/img/delete.png')}}" />
+            Supprimer
+        </a>
+    </div>
     {% endfor %}
-    TOTAL : {{ total }}€
+
+    {{ form_start(form) }}
+        {{form_label(form.custom_infos, 'Ajouter un commantaire', {'label_attr': {'class': 'font-bold h-12 w-full ml-3 mr-3'}})}}
+        <br>
+        {{form_widget(form.custom_infos, {'attr':{'class':'bg-light-gray text-xs h-12 w-11/12 outline-none ml-3 mr-3 rounded-lg pl-1 pb-3'}})}}
+        <div class="w-full fixed text-white bottom-0 h-44">
+            <i class="text-white fa-solid fa-check absolute bottom-11 text-4xl text-center z-10 w-full"></i>
+            {{form_widget(form.save, {'attr':{'class':'text-white absolute w-full text-2xl bottom-3 z-10'}})}}
+            <svg class="flex absolute bottom-0" viewBox="0 0 375 89" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M191 1.0407C91.8 0.240703 22.3333 11.3742 0 22.0408V128.041H375V22.0408C355 12.0408 290.2 1.8407 191 1.0407Z" fill="#2E2E2E" stroke="black"/>
+            </svg>
+        </div>
+    {{ form_end(form) }}
+    <div class="h-1 bg-black w-11/12 m-3"></div>
+    <p class="w-11/12 ml-3 mr-3 p-2 font-bold mb-28 flex justify-between">Total <span>{{ total }}€</span></p>
