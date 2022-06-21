@@ -16,47 +16,50 @@
     </div>
 
     <div class="flex flex-row justify-center w-full py-4">
-        <div class="inline-flex w-full px-2 justify-center">
+        <div class="inline-flex w-full px-2 justify-center order-container">
             {% for order in orders %}
-                <div class="flex flex-col items-center w-1/4 md:w-1/3 bg-toukan-dark-blue rounded-2xl shadow-lg p-2 text-white ">
-                    <div class="text-3xl font-bold">
-                        {{ order.establishmentTable.number }}
-                    </div>
-                    <div class="text-sm mb-4 font-bold">
-                        reçue à {{ order.createdAt | date('H:i') }}
-                    </div>
-                    {% set total = 0 %}
-                    {% for product in order %}
-                        <div class="w-full inline-flex justify-space-between">
-                            <div class="text-left w-3/4 text-xl">
-                                {{ product.quantity }} {{ product.getProduct().getTitle() }}
-                            </div>
-                            <div class="text-right w-1/4 text-xl">
-                                {{ product.getProduct().getPrice() * product.quantity }}€
-                            </div>
+                {% if order.status is same as('in_progress') %}
+                    <div class="flex flex-col items-center w-1/4 md:w-1/3 bg-toukan-dark-blue rounded-2xl shadow-lg p-2 text-white ">
+                        <div class="text-3xl font-bold">
+                            {{ order.establishmentTable.number }}
                         </div>
-                        <div class="inline-flex w-full justify-start">
-                        <div class="text-sm italic text-left ">
-                            {% if product.getSauce() %}• {{ product.getSauce().getTitle() }}{% endif %}
-                            {% if product.getDessert() %}• {{ product.getDessert().getTitle() }}{% endif %}
-                            {% if product.getDrink() %}• {{ product.getDrink().getTitle() }}{% endif %}
+                        <div class="text-sm mb-4 font-bold">
+                            reçue à {{ order.createdAt | date('H:i') }}
                         </div>
+                        {% set total = 0 %}
+                        {% for product in order %}
+                            <div class="w-full inline-flex justify-space-between">
+                                <div class="text-left w-3/4 text-xl">
+                                    {{ product.quantity }} {{ product.getProduct().getTitle() }}
+                                </div>
+                                <div class="text-right w-1/4 text-xl">
+                                    {{ product.getProduct().getPrice() * product.quantity }}€
+                                </div>
+                            </div>
+                            <div class="inline-flex w-full justify-start">
+                                <div class="text-sm italic text-left ">
+                                    {% if product.getSauce() %}• {{ product.getSauce().getTitle() }}{% endif %}
+                                    {% if product.getDessert() %}• {{ product.getDessert().getTitle() }}{% endif %}
+                                    {% if product.getDrink() %}• {{ product.getDrink().getTitle() }}{% endif %}
+                                </div>
+                            </div>
                             {% set total = total + product.getProduct().getPrice() * product.getQuantity() %}
-                    {% endfor %}
-                </div>
-                <hr class="w-5/6 mt-3">
-                <div class="w-full inline-flex justify-space-between font-bold">
-                    <div class="text-left w-3/4 text-xl">
-                        TOTAL
+                        {% endfor %}
                     </div>
-                    <div class="text-right w-1/4 text-xl">
-                        {{ total }}€
+                    <hr class="w-5/6 mt-3">
+                    <div class="w-full inline-flex justify-space-between font-bold">
+                        <div class="text-left w-3/4 text-xl">
+                            TOTAL
+                        </div>
+                        <div class="text-right w-1/4 text-xl">
+                            {{ total }}€
+                        </div>
+                        <a href=""
+                           class="bg-toukan-blue text-white rounded-lg text-lg font-bold p-2 shadow-lg ml-4 mb-2">
+                            Commande servie
+                        </a>
                     </div>
-                </div>
-                    <a href="" class="bg-toukan-blue text-white rounded-lg text-lg font-bold p-2 shadow-lg ml-4 mb-2">
-                        Commande servie
-                    </a>
-                </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>
