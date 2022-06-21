@@ -112,6 +112,19 @@ class OrderController extends AbstractController
     {
         $form = $this->createForm(OrderCommentsType::class);
         $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $order->setEstablishment($establishment);
+            $order->setCustomInfos($form->get('custom_infos')->getData());
+            $order->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+            $order->setStatus(Order::STATUS_IN_PROGRESS);
+            $entityManager->persist($order);
+            $entityManager->flush();
+            return $this->redirectToRoute('client_order_confirm', [
+                'establishment' => $establishment,
+                'table' => $table,
+                'order' => $order
+            ]);
+        }
         $productOrder->setQuantity($productOrder->getQuantity() + 1);
         $entityManager->persist($productOrder);
         $entityManager->flush();
@@ -130,12 +143,26 @@ class OrderController extends AbstractController
     public function deleteProduct(Request $request,
                                   ProductOrderRepository $productOrderRepository,
                                   ProductOrder $productOrder,
+                                  EntityManagerInterface $entityManager,
                                   Order $order,
                                   Table $table,
                                   Establishment $establishment): Response
     {
         $form = $this->createForm(OrderCommentsType::class);
         $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $order->setEstablishment($establishment);
+            $order->setCustomInfos($form->get('custom_infos')->getData());
+            $order->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+            $order->setStatus(Order::STATUS_IN_PROGRESS);
+            $entityManager->persist($order);
+            $entityManager->flush();
+            return $this->redirectToRoute('client_order_confirm', [
+                'establishment' => $establishment,
+                'table' => $table,
+                'order' => $order
+            ]);
+        }
         $productOrderRepository->remove($productOrder);
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
         return $this->render('client/order/stream/product.stream.html.twig', [
@@ -157,6 +184,19 @@ class OrderController extends AbstractController
     {
         $form = $this->createForm(OrderCommentsType::class);
         $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $order->setEstablishment($establishment);
+            $order->setCustomInfos($form->get('custom_infos')->getData());
+            $order->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
+            $order->setStatus(Order::STATUS_IN_PROGRESS);
+            $entityManager->persist($order);
+            $entityManager->flush();
+            return $this->redirectToRoute('client_order_confirm', [
+                'establishment' => $establishment,
+                'table' => $table,
+                'order' => $order
+            ]);
+        }
         $productOrder->setQuantity($productOrder->getQuantity() - 1);
         $entityManager->persist($productOrder);
         $entityManager->flush();
