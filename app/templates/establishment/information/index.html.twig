@@ -3,25 +3,42 @@
 {% block title %}Mes informations{% endblock %}
 
 {% block body %}
-    <h2 class="text-2xl font-bold">Compte</h2>
-    <div id="establishment-information">
-        {% include 'establishment/partials/_information.html.twig' with {'establishment' : establishment} %}
+<div class="flex mt-12">
+    <div class="flex-1 justify-center item-center w-6/12">
+        <h2 class="text-2xl text-center font-bold underline">Compte</h2>
+
+        <div class="w-2/4 m-auto text-right">
+            <div id="establishment-information">
+                {% include 'establishment/partials/_information.html.twig' with {'establishment' : establishment} %}
+            </div>
+
+            <p>Modifier mon mot de passe
+                <button id="button-edit-password" type="button" class="text-center transition duration-150 ease-in-out mt-3" data-bs-toggle="modal" data-bs-target="#modal-form-edit-password">
+                    <i class="fas fa-pen"></i>
+                </button>
+            </p>
+
+            <div class="flex flex-col justify-end items-end" id="establishment-image">
+                {% include 'establishment/partials/_image.html.twig' with {'establishment' : establishment} %}
+            </div>
+
+            <div class="flex flex-col justify-end items-end" id="establishment-color">
+                {% include 'establishment/partials/_color.html.twig' with {'establishment' : establishment} %}
+            </div>
+        </div>
     </div>
-
-    <p>Modifier mon mot de passe
-        <button id="button-edit-password" type="button" class="transition duration-150 ease-in-out mt-3" data-bs-toggle="modal" data-bs-target="#modal-form-edit-password">
-            <i class="fas fa-pen"></i>
-        </button>
-    </p>
-
-    <div id="establishment-image">
-        {% include 'establishment/partials/_image.html.twig' with {'establishment' : establishment} %}
+    <div class="w-6/12 border-l-2 border-toukan border-solid flex flex-col items-center justify-between">
+        <h2 class="text-2xl text-center font-bold underline">Aperçu</h2>
+        <div class="bg-cover h-96 w-4/12 relative flex justify-center flex-col" style="background-image:url('{{asset('uploads/images/'~establishment.id~'/'~establishment.image)}}'); box-shadow: inset 0px -127px 131px -25px rgba(0,0,0,0.69);">
+                        <h1 class="text-white ml-3 w-4/6 text-5xl font-bold">{{establishment.name}}</h1>
+                        <h2 class="text-white ml-3 w-4/6 text-2xl font-bold">{{establishment.address['street']}}</h2>
+                        <div class="bg-light-gray" style="clip-path: ellipse(49% 20% at 50% 80%)"></div>
+                        <svg class="flex mt-3 absolute top-72" viewBox="0 0 377 119" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M175 62.5C76.6 61.7 17.3333 20.5 0 0V118.5H377V0C353.5 28 298 63.5 175 62.5Z" fill="#EDEDED"/>
+                        </svg>
+        </div>
     </div>
-
-    <div id="establishment-color">
-        {% include 'establishment/partials/_color.html.twig' with {'establishment' : establishment} %}
-    </div>
-
+</div>
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-establishment', 'modal_title' : 'Vos informations', 'context' : 'establishment-information-edit'} %}
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-password', 'modal_title' : 'Modifier votre mot de passe', 'context' : 'establishment-password-edit'} %}
     {% include 'establishment/partials/_modal.html.twig' with {'modal_id' : 'modal-form-edit-image', 'modal_title' : 'Modifier votre image', 'context' : 'establishment-image-edit'} %}

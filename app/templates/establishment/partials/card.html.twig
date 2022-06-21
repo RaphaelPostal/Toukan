@@ -1,42 +1,47 @@
         {% for section in card.sections %}
-            <table class="mt-5">
-                <thead>
-                    <th>
-                        {{ section.title }}
-                    </th>
-                    <th>
-                        <button type="button" onclick="set_frame_src({{ section.id }}, 'section_product_create')" class="transition duration-150 ease-in-out admin-button-add" data-bs-toggle="modal" data-bs-target="#modal-form-section-create-product">
-                            {{ 'add_product'|trans({}, 'card_management') }}
-                        </button>
-                    </th>
-                    <th>
-                        <button type="button" onclick="set_frame_src({{ section.id }}, 'section_edit')" class="transition duration-150 ease-in-out admin-button-edit" data-bs-toggle="modal" data-bs-target="#modal-form-edit-section">
-                            {{ 'edit'|trans({}, 'card_management') }}
-                        </button>
-                    </th>
-                    <th>
-                        <form method="post" action="{{ path('app_section_delete', {'id': section.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ section.id) }}">
-                            <button class="btn admin-button-delete">{{ 'delete'|trans({}, 'card_management') }}</button>
-                        </form>
-                    </th>
+            <table class="mt-5 w-full">
+                <thead class="h-14">
+                    <tr class="bg-gray-200 m-1">
+                        <th class="w-1/6 h-14">
+                            {{ section.title }}
+                        </th>
+                        <th class="w-1/6">
+                            <button type="button" onclick="set_frame_src({{ section.id }}, 'section_product_create')" class="p-1 rounded-md transition duration-150 ease-in-out admin-button-add text-white" data-bs-toggle="modal" data-bs-target="#modal-form-section-create-product">
+                               <i class="fa-solid fa-plus mr-2"></i> {{ 'add_product'|trans({}, 'card_management') }}
+                            </button>
+                        </th>
+                        <th class="w-1/6">
+                            <button type="button" onclick="set_frame_src({{ section.id }}, 'section_edit')" class="p-1 rounded-md transition duration-150 ease-in-out bg-indigo-900 text-white" data-bs-toggle="modal" data-bs-target="#modal-form-edit-section">
+                                <i class="fa-solid fa-pen mr-2"></i>{{ 'edit'|trans({}, 'card_management') }}
+                            </button>
+                        </th>
+                        <th class="w-1/6">
+                            <form method="post" action="{{ path('app_section_delete', {'id': section.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ section.id) }}">
+                                <button class="btn p-1 rounded-md admin-button-delete text-white"><i class="mr-2 fa-solid fa-trash-can"></i>{{ 'delete'|trans({}, 'card_management') }}</button>
+                            </form>
+                        </th>
+                    </tr>
                 </thead>
 
-                <tbody>
+                <tbody class="text-center">
                 {% for product in section.products %}
-                    <tr>
-                        <td>
+                    <tr class="h-14">
+                        <td class="w-1/6">
+                            <i class="fa-solid fa-right-long"></i>
+                        </td>
+                        <td class="w-1/6">
                             {{ product.title }}
                         </td>
-                        <td>
-                            <button type="button" onclick="set_frame_src({{ product.id }}, 'section_product_edit')" class="transition duration-150 ease-in-out admin-button-edit" data-bs-toggle="modal" data-bs-target="#modal-form-edit-product">
-                                {{ 'edit'|trans({}, 'card_management') }}
+                        <td class="w-1/6">
+                            <button type="button" onclick="set_frame_src({{ product.id }}, 'section_product_edit')" class="p-1 rounded-md transition duration-150 ease-in-out bg-indigo-900 text-white" data-bs-toggle="modal" data-bs-target="#modal-form-edit-product">
+                                <i class="mr-2 fa-solid fa-pen"></i>{{ 'edit'|trans({}, 'card_management') }}
                             </button>
                         </td>
-                        <td>
+                        <td class="w-1/6">
                             <form method="post" action="{{ path('app_product_delete', {'id': product.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
-                                <button class="btn admin-button-delete">{{ 'delete'|trans({}, 'card_management') }}</button>
+                                <button class="btn p-1 rounded-md admin-button-delete text-white"><i class="mr-2 fa-solid fa-trash-can"></i>{{ 'delete'|trans({}, 'card_management') }}</button>
                             </form>
                         </td>
                     </tr>
