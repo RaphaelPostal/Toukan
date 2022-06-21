@@ -9,7 +9,15 @@
     </div>
 
     <script>
-        setInterval(function() {
+        document.addEventListener('DOMContentLoaded', () => {
+            getPosition()
+
+            setInterval(function () {
+                getPosition()
+            }, 5000)
+        })
+
+        const getPosition = () => {
             let page = `{{ path('client_order_confirm_update', {'establishment':establishment.id, 'table':table.id, 'order':order.id}) }}`
 
             fetch(page).then(function (response) {
@@ -17,7 +25,7 @@
             }).then(function (data) {
                 document.getElementById('waiting-pos').innerHTML = data
             })
-        }, 5000)
+        }
     </script>
 {% endblock %}
 

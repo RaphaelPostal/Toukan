@@ -50,9 +50,9 @@ class OrderController extends AbstractController
             $entityManager->persist($order);
             $entityManager->flush();
             return $this->redirectToRoute('client_order_confirm', [
-                'establishment' => $establishment,
-                'table' => $table,
-                'order' => $order
+                'establishment' => $establishment->getId(),
+                'table' => $table->getId(),
+                'order' => $order->getId()
             ]);
         }
         $establishment = $establishmentRepository->find($establishment);
@@ -126,9 +126,9 @@ class OrderController extends AbstractController
             $entityManager->persist($order);
             $entityManager->flush();
             return $this->redirectToRoute('client_order_confirm', [
-                'establishment' => $establishment,
-                'table' => $table,
-                'order' => $order
+                'establishment' => $establishment->getId(),
+                'table' => $table->getId(),
+                'order' => $order->getId()
             ]);
         }
         $productOrder->setQuantity($productOrder->getQuantity() + 1);
@@ -164,9 +164,9 @@ class OrderController extends AbstractController
             $entityManager->persist($order);
             $entityManager->flush();
             return $this->redirectToRoute('client_order_confirm', [
-                'establishment' => $establishment,
-                'table' => $table,
-                'order' => $order
+                'establishment' => $establishment->getId(),
+                'table' => $table->getId(),
+                'order' => $order->getId()
             ]);
         }
         $productOrderRepository->remove($productOrder);
@@ -198,9 +198,9 @@ class OrderController extends AbstractController
             $entityManager->persist($order);
             $entityManager->flush();
             return $this->redirectToRoute('client_order_confirm', [
-                'establishment' => $establishment,
-                'table' => $table,
-                'order' => $order
+                'establishment' => $establishment->getId(),
+                'table' => $table->getId(),
+                'order' => $order->getId()
             ]);
         }
         $productOrder->setQuantity($productOrder->getQuantity() - 1);
@@ -230,10 +230,7 @@ class OrderController extends AbstractController
             'toukan/order/confirm',
             json_encode(
                 [
-                    'order' => $order,
-                    'table' => $table,
-                    'establishment' => $establishment,
-                    'waitingListRank' => $waitingListRank
+                    'status' => true
                 ]
             )
         );
