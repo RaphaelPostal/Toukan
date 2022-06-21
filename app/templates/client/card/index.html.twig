@@ -24,7 +24,7 @@
                 {% for product in section.products %}
                     <div class="relative flex justify-between flex-col rounded-2xl custom-shadow m-2 w-5/12">
                         <div onclick="showDetails({{ product.id }})">
-                            <img class="text-center w-11/12 m-auto max-height" src="{{asset('assets/uploads/'~card.establishment.id~'/'~product.image)}}">
+                            <img class="text-center w-11/12 m-auto max-height" src="{{asset('uploads/products/'~card.establishment.id~'/'~product.image)}}">
                             <div class="h-px w-9/12 bg-black m-auto"></div>
                             <h4 class="text-center my-1 w-11/12 m-auto">{{product.title}}</h4>
                             <p class="border-solid bg-white border-toukan rounded-2xl pl-2 pr-2 border-2 absolute top-2 left-2">{{product.price|number_format(2, '.', ',')}} €</p>
@@ -41,7 +41,7 @@
                                     <i onclick="showDetails({{ product.id }})" class="fa-solid fa-2xl fa-arrow-left"></i>
                                     <h2 class="border-solid w-auto text-xl border-toukan rounded-2xl ml-5 pl-2 pr-2 border-2">{{product.title}}</h2>
                                 </div>
-                                <img class="text-center w-11/12 m-auto mt-2 max-height" src="{{asset('assets/uploads/'~card.establishment.id~'/'~product.image)}}">
+                                <img class="text-center w-11/12 m-auto mt-2 max-height" src="{{asset('uploads/products/'~card.establishment.id~'/'~product.image)}}">
                                 <p class="border-solid bg-white rounded-2xl pl-2 pr-2 border-2 absolute -mt-6 ml-4">{{product.price|number_format(2, '.', ',')}} €</p>
                                 <div class="h-px my-1 w-9/12 bg-black m-auto"></div>
                                 {% if product.description %}

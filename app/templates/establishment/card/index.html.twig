@@ -9,15 +9,15 @@
     </div>
 
     <!-- Button trigger modal -->
-    <button id="button-add-section" type="button" class="transition duration-150 ease-in-out admin-button-add mt-3" data-bs-toggle="modal" data-bs-target="#modal-form-create-section">
-        {{ 'add_section'|trans({}, 'card_management') }}
+    <button id="button-add-section" type="button" class="p-1 rounded-md transition duration-150 ease-in-out admin-button-add mt-3 text-white" data-bs-toggle="modal" data-bs-target="#modal-form-create-section">
+        <i class="fa-solid fa-plus mr-2"></i> {{ 'add_section'|trans({}, 'card_management') }}
     </button>
 
     <div id="establishment-sauces">
         {% include 'establishment/partials/sauces.html.twig' %}
     </div>
 
-    <button id="button-add-sauce" type="button" class="transition duration-150 ease-in-out admin-button-add mt-3 flex" data-bs-toggle="modal" data-bs-target="#modal-form-create-sauce">
+    <button id="button-add-sauce" type="button" class="p-1 rounded-md transition duration-150 ease-in-out admin-button-add mt-3 flex text-white" data-bs-toggle="modal" data-bs-target="#modal-form-create-sauce">
         {{ 'add_sauce'|trans({}, 'card_management') }} <img class="custom-icon" src="{{ asset('assets/img/icons/icon_sauce.svg') }}" alt="">
     </button>
 

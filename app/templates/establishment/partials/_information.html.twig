@@ -1,12 +1,16 @@
-<p>{{ user.email }}</p>
-<p>{{ establishment.name }}</p>
-<p>{{ establishment.address['street'] }}</p>
-<p>{{ establishment.address['zipcode'] }}</p>
-<p>{{ establishment.address['city'] }}</p>
+<div class="flex justify-end">
+    <div>
+        <p>{{ user.email }}</p>
+        <p>{{ establishment.name }}</p>
+        <p>{{ establishment.address['street'] }}</p>
+        <p>{{ establishment.address['zipcode'] }}</p>
+        <p>{{ establishment.address['city'] }}</p>
+    </div>
 
-{#<p>{{ establishment.address }}</p>#}
-<p>{{ establishment.phone }}
-    <button id="button-edit-info" type="button" class="transition duration-150 ease-in-out mt-3" data-bs-toggle="modal" data-bs-target="#modal-form-edit-establishment">
-        <i class="fas fa-pen"></i>
-    </button>
-</p>
+    {#<p>{{ establishment.address }}</p>#}
+    <p>{{ establishment.phone }}
+        <button id="button-edit-info" type="button" class="transition duration-150 ease-in-out mt-3" data-bs-toggle="modal" data-bs-target="#modal-form-edit-establishment">
+            <i class="fas fa-pen"></i>
+        </button>
+    </p>
+</div>
