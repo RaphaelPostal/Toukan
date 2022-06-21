@@ -1,26 +1,30 @@
     {% set total = 0 %}
     {% for product in order.getProductOrders() %}
-    <div class="flex m-3">
-        <div class="custom-shadow flex rounded-2xl w-9/12" id="product-card">
-            <img class="max-h-28 mt-3 mb-3" src="{{asset('assets/uploads/'~establishmentId~'/'~product.getProduct().getImage())}}" />
-            <div class="flex justify-center flex-col mt-3 mb-3">
-                <p class="font-bold">{{ product.getProduct().getTitle() }}</p>
-                <div class="flex items-center">
-                    <p class="font-bold">Quantité :</p>
-                    <a class="border-toukan border-2 font-bold w-7 h-7 m-1 text-center rounded-lg" href="{{ path('client_order_basket_product_minus', {'productOrderId':product.id, 'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}">-</a>
-                    <p class="bg-toukan font-bold text-white w-8 h-7 m-1 text-center rounded-lg">{{ product.getQuantity() }}</p>
-                    <a class="border-toukan border-2 font-bold w-7 h-7 m-1 text-center rounded-lg" href="{{ path('client_order_basket_product_plus', {'productOrderId':product.id, 'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}">+</a>
+        <div class="flex m-3">
+            <div class="custom-shadow flex rounded-2xl w-9/12" id="product-card">
+                <img class="max-h-28 mt-3 mb-3"
+                     src="{{ asset('assets/uploads/'~establishment.id~'/'~product.getProduct().getImage()) }}"/>
+                <div class="flex justify-center flex-col mt-3 mb-3">
+                    <p class="font-bold">{{ product.getProduct().getTitle() }}</p>
+                    <div class="flex items-center">
+                        <p class="font-bold">Quantité :</p>
+                        <a class="border-toukan border-2 font-bold w-7 h-7 m-1 text-center rounded-lg"
+                           href="{{ path('client_order_basket_product_minus', {'productOrder':product.id, 'establishment':establishment.id, 'table':table.id, 'order':order.id}) }}">-</a>
+                        <p class="bg-toukan font-bold text-white w-8 h-7 m-1 text-center rounded-lg">{{ product.getQuantity() }}</p>
+                        <a class="border-toukan border-2 font-bold w-7 h-7 m-1 text-center rounded-lg"
+                           href="{{ path('client_order_basket_product_plus', {'productOrder':product.id, 'establishment':establishment.id, 'table':table.id, 'order':order.id}) }}">+</a>
+                    </div>
+                    <br>
+                    <p class="font-bold text-right">{{ product.getProduct().getPrice() * product.getQuantity() }}€</p>
+                    {% set total = total + product.getProduct().getPrice() * product.getQuantity() %}
                 </div>
-                <br>
-                <p class="font-bold text-right">{{ product.getProduct().getPrice() * product.getQuantity() }}€</p>
-                {% set total = total + product.getProduct().getPrice() * product.getQuantity() %}
             </div>
+            <a class="m-2 text-center flex justify-center items-center flex-col"
+               href="{{ path('client_order_basket_product_delete', {'productOrder':product.id, 'establishment':establishment.id, 'table':table.id, 'order':order.id}) }}">
+                <img class="max-h-7" src="{{ asset('assets/img/delete.png') }}"/>
+                Supprimer
+            </a>
         </div>
-        <a class="m-2 text-center flex justify-center items-center flex-col" href="{{ path('client_order_basket_product_delete', {'productOrderId':product.id, 'establishmentId':establishmentId, 'tableId':tableId, 'orderId':orderId}) }}">
-            <img class="max-h-7" src="{{asset('assets/img/delete.png')}}" />
-            Supprimer
-        </a>
-    </div>
     {% endfor %}
 
     {{ form_start(form) }}
