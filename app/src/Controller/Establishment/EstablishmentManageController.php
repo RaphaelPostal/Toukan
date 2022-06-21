@@ -42,6 +42,9 @@ class EstablishmentManageController extends AbstractController
         $form = $this->createForm(EstablishmentInfoType::class, $establishment, [
             'action' => $this->generateUrl('app_establishment_information_edit'),
             'email' => $user->getEmail(),
+            'street' => $establishment->getAddress()['street'],
+            'zipcode' => $establishment->getAddress()['zipcode'],
+            'city' => $establishment->getAddress()['city'],
         ]);
 
         $form->handleRequest($request);
@@ -53,6 +56,12 @@ class EstablishmentManageController extends AbstractController
             $establishmentRepository->add($establishment);
 
             $entityManager->flush($user);
+
+            $address['street'] = $form->get('street')->getData();
+            $address['city'] = $form->get('city')->getData();
+            $address['zipcode'] = $form->get('zipcode')->getData();
+
+            $establishment->setAddress($address);
 
             if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
                 // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
