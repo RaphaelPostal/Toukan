@@ -22,6 +22,7 @@ class CardController extends AbstractController
     {
         if($orderRepository->isTableOrdered($table) == false){
             $order = new Order();
+            $order->setEstablishment($establishment);
             $order->setEstablishmentTable($table);
             $order->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
             $order->setStatus(Order::STATUS_ORDERING);

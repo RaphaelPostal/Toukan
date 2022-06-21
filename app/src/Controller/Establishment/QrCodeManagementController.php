@@ -8,17 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class QrCodeManagementController extends AbstractController
 {
-    #[Route('/qr-code/management', name: 'app_qr_code_management')]
-    public function index(): Response
-    {
-        return $this->render('establishment/qr_code_management/index.html.twig', [
-            'controller_name' => 'QrCodeManagementController',
-        ]);
-    }
-
     #[Route('/qr-code/print', name: 'app_qr_code_print')]
     public function printQrCode(): Response
     {
-        return $this->render('establishment/qr_code_management/print.html.twig', ['establishmentId' => 1]);
+        return $this->render('establishment/qr_code_management/print.html.twig', ['establishmentId' => $this->getUser()->getEstablishment()->getId()]);
     }
 }

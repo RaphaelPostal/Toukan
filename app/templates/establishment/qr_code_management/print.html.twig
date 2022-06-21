@@ -61,7 +61,7 @@
                     width: 500,
                     height: 500,
                     type: "canvas",
-                    data: `https://toukan.fr/restaurant/${establishmentId}/table/${table.tableId}`,
+                    data: "{{ absolute_url(path('app_client_card', {establishment: establishmentId, table: 1})) }}".slice(0, -1) + table.tableId,
                     image: establishmentImg,
                     qrOptions: {
                         errorCorrectionLevel: "H"

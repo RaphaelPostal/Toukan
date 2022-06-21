@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\EstablishmentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -70,10 +71,16 @@ class Establishment
      */
     private $qrCodeTemplate;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="establishment", orphanRemoval=true)
+     */
+    private $orders;
+
     public function __construct()
     {
         $this->cards = new ArrayCollection();
         $this->tables = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -203,6 +210,36 @@ class Establishment
     public function setQrCodeTemplate(int $qrCodeTemplate): self
     {
         $this->qrCodeTemplate = $qrCodeTemplate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->setEstablishment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getEstablishment() === $this) {
+                $order->setEstablishment(null);
+            }
+        }
 
         return $this;
     }
