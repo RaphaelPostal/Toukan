@@ -29,8 +29,9 @@ class QrCodeApi extends AbstractController
                 'cornerDotsOption' => $qrCodeTemplate->getCornerDotOption(),
             ],
             'establishmentId' => $this->getUser()->getEstablishment()->getId(),
-            'establishmentImg' => "/assets/img/meltdown_logo.png",
+            'establishmentImg' => "/uploads/images/" . $this->getUser()->getEstablishment()->getId() . "/logo-chat.jpg",
             'establishmentColor' => $this->getUser()->getEstablishment()->getCustomColor(),
+//            'establishmentImg' => "/assets/img/meltdown_logo.png",
 //            'establishmentImg' => "/assets/img/toukan_orange.png",
 //            'establishmentImg' => "/assets/img/netto_logo.png",
         ];

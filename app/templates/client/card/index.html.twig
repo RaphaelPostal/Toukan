@@ -88,18 +88,19 @@
                                 {% endif %}
                                 {% if product.allergens %}
                                     <h3 class="ml-4 my-2 text-left text-2xl font-bold">
-                                        <i class="fa-solid fa-carrot"></i>
+                                        <i class="fa-solid fa-seedling"></i>
                                         <span>{{ 'card.allergens'|trans }}</span>
                                         <hr class="bg-toukan w-1/2 h-0.5">
                                     </h3>
                                     <p class="ml-4 text-left">{{ product.allergens }}</p>
                                 {% endif %}
                                 {% if product.sauceChoosable and card.sauces|length>0 %}
-                                    <h3 class="ml-4 text-left text-2xl font-bold mb-2">
-                                        <img class="custom-icon" src="{{ asset('assets/img/icons/icon_sauce_black.svg') }}" alt="">
+                                    <h3 class="ml-4 text-left text-2xl font-bold mb-2 flex">
+                                        <img class="custom-icon"
+                                             src="{{ asset('assets/img/icons/icon_sauce_black.svg') }}" alt="">
                                         <span>Sauce</span>
-                                        <hr class="bg-toukan w-1/2 h-0.5">
                                     </h3>
+                                    <hr class="bg-toukan w-1/2 h-0.5">
                                     <div class="flex flex-wrap">
                                         <select class="ml-4 my-2 text-left" name="sauce" id="sauce-selector-{{ product.id }}">
                                             <option value="0">-- Sauce --</option>
