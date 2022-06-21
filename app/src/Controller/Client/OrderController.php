@@ -110,6 +110,8 @@ class OrderController extends AbstractController
                                        Table $table,
                                        Establishment $establishment): Response
     {
+        $form = $this->createForm(OrderCommentsType::class);
+        $form->handleRequest($request);
         $productOrder->setQuantity($productOrder->getQuantity() + 1);
         $entityManager->persist($productOrder);
         $entityManager->flush();
@@ -119,7 +121,8 @@ class OrderController extends AbstractController
             'productOrder' => $productOrder,
             'order' => $order,
             'table' => $table,
-            'establishment' => $establishment
+            'establishment' => $establishment,
+            'form' => $form->createView()
         ]);
     }
 
@@ -131,13 +134,17 @@ class OrderController extends AbstractController
                                   Table $table,
                                   Establishment $establishment): Response
     {
+        $form = $this->createForm(OrderCommentsType::class);
+        $form->handleRequest($request);
         $productOrderRepository->remove($productOrder);
         $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
         return $this->render('client/order/stream/product.stream.html.twig', [
             'productOrder' => $productOrder,
             'order' => $order,
             'table' => $table,
-            'establishment' => $establishment]);
+            'establishment' => $establishment,
+            'form' => $form->createView()
+            ]);
     }
 
     #[Route('/product/{productOrder}/minus', name: 'client_order_basket_product_minus')]
@@ -148,6 +155,8 @@ class OrderController extends AbstractController
                                        Table $table,
                                        Establishment $establishment): Response
     {
+        $form = $this->createForm(OrderCommentsType::class);
+        $form->handleRequest($request);
         $productOrder->setQuantity($productOrder->getQuantity() - 1);
         $entityManager->persist($productOrder);
         $entityManager->flush();
@@ -158,6 +167,7 @@ class OrderController extends AbstractController
             'order' => $order,
             'table' => $table,
             'establishment' => $establishment,
+            'form' => $form->createView()
         ]);
     }
 
