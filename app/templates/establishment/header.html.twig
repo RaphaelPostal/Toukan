@@ -1,7 +1,10 @@
 {% trans_default_domain 'navbar' %}
 <aside class="block w-max bg-toukan h-screen sticky top-0 p-4 text-xl no-print" data-turbo="false">
-    <nav class="flex flex-col justify-between h-full">
-        <ul>
+    <nav class="flex flex-col justify-around items-center min-h-full">
+        <ul class="text-white">
+            <li>
+                <img src="{{ asset('assets/img/toukan_blanc.svg') }}"/>
+            <li>
             <li class="py-2">
                 <a class="whitespace-nowrap" href="{{ path('establishment_card_index') }}">
                     <i class="fa-solid fa-clipboard-list fa-fw pr-1"></i>
@@ -26,10 +29,16 @@
                     {{ 'profile'|trans({}, 'navbar') }}
                 </a>
             </li>
+            <li class="py-2">
+                <a class="whitespace-nowrap" href="{{ path('direct_index') }}">
+                    <i class="fa-solid fa-clipboard-list fa-fw pr-1"></i>
+                    {{ 'direct'|trans({}, 'navbar') }}
+                </a>
+            </li>
         </ul>
         <ul>
             <li class="py-2">
-                <a class="text-red-500" href="{{ path('app_logout') }}">
+                <a class="text-white" href="{{ path('app_logout') }}">
                     <i class="fa-solid fa-power-off fa-fw pr-1"></i>
                     {{ 'logout'|trans({}, 'navbar') }}
                 </a>

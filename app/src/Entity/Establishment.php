@@ -81,6 +81,7 @@ class Establishment
         $this->cards = new ArrayCollection();
         $this->tables = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->qrCodeTemplate = 1;
     }
 
     public function getId(): ?int
