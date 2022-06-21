@@ -25,6 +25,12 @@ use Symfony\UX\Turbo\TurboBundle;
 #[Route('/client/establishment/{establishment}/table/{table}/order/{order}')]
 class OrderController extends AbstractController
 {
+
+    public function __construct(
+        private readonly HubInterface $hub
+    )
+    {}
+
     #[Route('/', name: 'client_order_basket')]
     public function showBasket(OrderRepository         $orderRepository,
                                EntityManagerInterface  $entityManager,
@@ -216,7 +222,6 @@ class OrderController extends AbstractController
                                  Table           $table,
                                  Establishment   $establishment,
                                  OrderRepository $orderRepository,
-                                 HubInterface    $hub
     ): Response
     {
         $waitingListRank = (is_countable($orderRepository->getPreviousOrders($order)) ? count($orderRepository->getPreviousOrders($order)) : 0) + 1;
@@ -232,7 +237,7 @@ class OrderController extends AbstractController
                 ]
             )
         );
-        $hub->publish($update);
+        $this->hub->publish($update);
 
         return $this->render('client/order/confirm.html.twig', [
             'waitingListRank' => $waitingListRank,
