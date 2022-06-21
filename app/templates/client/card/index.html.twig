@@ -56,7 +56,7 @@
                                     <p class="ml-4 text-left">{{ product.menuInformation }}</p>
                                     {% if product.drinkChoosable %}
                                         <div class="flex flex-wrap">
-                                            <select class="ml-4 text-left" name="drink" id="drink-selector">
+                                            <select class="ml-4 text-left" name="drink" id="drink-selector-{{ product.id }}">
                                                 <option value="0">-- Boisson --</option>
                                                 {% for boisson in section.products %}
                                                     {% if boisson.type == 'drink' %}
@@ -68,7 +68,7 @@
                                     {% endif %}
                                     {% if product.dessertChoosable %}
                                         <div class="flex flex-wrap">
-                                            <select class="ml-4 text-left" name="dessert" id="dessert-selector">
+                                            <select class="ml-4 text-left" name="dessert" id="dessert-selector-{{ product.id }}">
                                                 <option value="0">-- Dessert --</option>
                                                 {% for dessert in section.products %}
                                                     {% if dessert.type == 'dessert' %}
@@ -101,7 +101,7 @@
                                         <hr class="bg-toukan w-1/2 h-0.5">
                                     </h3>
                                     <div class="flex flex-wrap">
-                                        <select class="ml-4 my-2 text-left" name="sauce" id="sauce-selector">
+                                        <select class="ml-4 my-2 text-left" name="sauce" id="sauce-selector-{{ product.id }}">
                                             <option value="0">-- Sauce --</option>
                                             {% for sauce in card.sauces %}
                                                 <option value="{{ sauce.id }}">{{ sauce.title }}</option>
@@ -139,11 +139,12 @@
 
         function makeRequest(e) {
             let product = e.getAttribute("aria-valuetext");
-            let sauce = document.getElementById('sauce-selector').value;
-            let drink = document.getElementById('drink-selector').value;
-            let dessert = document.getElementById('dessert-selector').value;
+            let sauce = document.getElementById('sauce-selector-'+product)?.value;
+            let drink = document.getElementById('drink-selector-'+product)?.value;
+            let dessert = document.getElementById('dessert-selector-'+product)?.value;
             let blankUrl = `{{ path('client_order_add_product', {'establishment':establishment.id, 'table':table.id, 'order':order.id, 'product':'productId', 'sauce':'sauceId', 'drink':'drinkId', 'dessert':'dessertId'}) }}`
             let url = blankUrl.replace('productId', product).replace('sauceId', sauce).replace('drinkId', drink).replace('dessertId', dessert);
+            console.log(url)
 
             fetch(url).then(function (response) {
                 return response.json();

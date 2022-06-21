@@ -6,7 +6,6 @@ use App\Entity\Establishment;
 use App\Entity\Order;
 use App\Entity\Product;
 use App\Entity\ProductOrder;
-use App\Entity\Sauce;
 use App\Entity\Table;
 use App\Form\OrderCommentsType;
 use App\Repository\EstablishmentRepository;
@@ -18,26 +17,27 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mercure\HubInterface;
+use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\UX\Turbo\TurboBundle;
 
 #[Route('/client/establishment/{establishment}/table/{table}/order/{order}')]
-
 class OrderController extends AbstractController
 {
     #[Route('/', name: 'client_order_basket')]
-    public function showBasket(OrderRepository $orderRepository,
-                               EntityManagerInterface $entityManager,
+    public function showBasket(OrderRepository         $orderRepository,
+                               EntityManagerInterface  $entityManager,
                                EstablishmentRepository $establishmentRepository,
                                Request $request,
                                Establishment $establishment,
                                Table $table,
                                Order $order): Response
     {
-        $establishmentId = null;
         $form = $this->createForm(OrderCommentsType::class);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
+            $order->setEstablishment($establishment);
             $order->setCustomInfos($form->get('custom_infos')->getData());
             $order->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris')));
             $order->setStatus(Order::STATUS_IN_PROGRESS);
@@ -162,12 +162,28 @@ class OrderController extends AbstractController
     }
 
     #[Route('/confirm', name: 'client_order_confirm')]
-    public function confirmOrder(Order $order,
-                                Table $table,
-                                Establishment $establishment,
-                                OrderRepository $orderRepository): Response
+    public function confirmOrder(Order           $order,
+                                 Table           $table,
+                                 Establishment   $establishment,
+                                 OrderRepository $orderRepository,
+                                 HubInterface    $hub
+    ): Response
     {
         $waitingListRank = (is_countable($orderRepository->getPreviousOrders($order)) ? count($orderRepository->getPreviousOrders($order)) : 0) + 1;
+
+        $update = new Update(
+            'toukan/order/confirm',
+            json_encode(
+                [
+                    'order' => $order,
+                    'table' => $table,
+                    'establishment' => $establishment,
+                    'waitingListRank' => $waitingListRank
+                ]
+            )
+        );
+        $hub->publish($update);
+
         return $this->render('client/order/confirm.html.twig', [
             'waitingListRank' => $waitingListRank,
             'order' => $order,

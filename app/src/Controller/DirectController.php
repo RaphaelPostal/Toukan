@@ -12,16 +12,20 @@ class DirectController extends AbstractController
     #[Route('/waiter', name: 'direct_waiter')]
     public function waiterIndex(): Response
     {
+        $orders = $this->getUser()->getEstablishment()->getOrders();
+
         return $this->render('establishment/direct/waiter_index.html.twig', [
-            'controller_name' => 'DirectController',
+            'orders' => $orders,
         ]);
     }
 
     #[Route('/kitchen', name: 'direct_kitchen')]
     public function kitchenIndex(): Response
     {
+        $orders = $this->getUser()->getEstablishment()->getOrders();
+
         return $this->render('establishment/direct/kitchen_index.html.twig', [
-            'controller_name' => 'DirectController',
+            'orders' => $orders,
         ]);
     }
 }
