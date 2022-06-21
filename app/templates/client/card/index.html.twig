@@ -36,14 +36,14 @@
                     </div>
                     <div id="details-{{ product.id }}" class="fixed w-full h-full text-center top-0 z-10 overflow-hidden hidden bg-white p-4">
                         <div class="flex justify-center items-center h-full w-full">
-                            <div class="h-fit w-fit">
-                                <div class="inline-flex items-center mb-12">
-                                    <i onclick="showDetails({{ product.id }})" class="fa-solid fa-2xl fa-arrow-left"></i>
+                            <div class="h-full w-full">
+                                <div class="flex justify-between items-center mb-12">
+                                    <div class=""><i onclick="showDetails({{ product.id }})" class="fa-solid fa-2xl fa-arrow-left mr-2"></i>Retour</div>
                                     <h2 class="border-solid w-auto text-xl border-toukan rounded-2xl ml-5 pl-2 pr-2 border-2">{{product.title}}</h2>
                                 </div>
                                 <img class="text-center w-11/12 m-auto mt-2 max-height" src="{{asset('uploads/products/'~card.establishment.id~'/'~product.image)}}">
-                                <p class="border-solid bg-white rounded-2xl pl-2 pr-2 border-2 absolute -mt-6 ml-4">{{product.price|number_format(2, '.', ',')}} €</p>
-                                <div class="h-px my-1 w-9/12 bg-black m-auto"></div>
+                                <p class="border-solid bg-white rounded-2xl pl-2 pr-2 border-2 absolute -mt-6 ml-12">{{product.price|number_format(2, '.', ',')}} €</p>
+                                <div class="h-1 mt-2 mb-4 my-1 w-9/12 bg-black m-auto"></div>
                                 {% if product.description %}
                                     <p class="text-center w-11/12 m-auto">{{product.description}}</p>
                                 {% endif %}
