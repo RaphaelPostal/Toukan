@@ -9,6 +9,12 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/establishment/direct')]
 class DirectController extends AbstractController
 {
+    #[Route('/', name: 'direct_index')]
+    public function index(): Response
+    {
+        return $this->render('establishment/direct/index.html.twig');
+    }
+
     #[Route('/waiter', name: 'direct_waiter')]
     public function waiterIndex(): Response
     {
