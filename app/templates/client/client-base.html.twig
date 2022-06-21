@@ -51,6 +51,7 @@
                         <path d="M177.5 26.5C81.9 27.3 19.3333 9.16667 0 0V83H375V0C349 13.5 297 25.5 177.5 26.5Z"
                               fill="#EDEDED"/>
                     </svg>
+                <a class="absolute top-44 left-2 bold" href="{{ path('app_client_card', {'establishment': establishment.id, 'table': table.id}) }}"><i class="fa-solid fa-arrow-left mr-2"></i> Retour</a>
                 </header>
             {% endif %}
             {% block body %}{% endblock %}
