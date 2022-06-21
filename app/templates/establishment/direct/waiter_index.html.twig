@@ -25,39 +25,24 @@
                     <div class="text-sm mb-4 font-bold">
                         reçue à {{ order.createdAt | date('H:i') }}
                     </div>
-                    <div class="w-full inline-flex justify-space-between">
-                        <div class="text-left w-3/4 text-xl">
-                            1x Steak Frites
+                    {% set total = 0 %}
+                    {% for product in order %}
+                        <div class="w-full inline-flex justify-space-between">
+                            <div class="text-left w-3/4 text-xl">
+                                {{ product.quantity }} {{ product.getProduct().getTitle() }}
+                            </div>
+                            <div class="text-right w-1/4 text-xl">
+                                {{ product.getProduct().getPrice() * product.quantity }}€
+                            </div>
                         </div>
-                        <div class="text-right w-1/4 text-xl">
-                            12€
+                        <div class="inline-flex w-full justify-start">
+                        <div class="text-sm italic text-left ">
+                            {% if product.getSauce() %}• {{ product.getSauce().getTitle() }}{% endif %}
+                            {% if product.getDessert() %}• {{ product.getDessert().getTitle() }}{% endif %}
+                            {% if product.getDrink() %}• {{ product.getDrink().getTitle() }}{% endif %}
                         </div>
-                    </div>
-                    <div class="inline-flex w-full justify-start">
-                    <div class="text-sm italic text-left ">
-                    sauce magic bogoss
-                    </div>
-                </div>
-                <div class="w-full inline-flex justify-space-between">
-                    <div class="text-left w-3/4 text-xl">
-                        1x Burger
-                    </div>
-                    <div class="text-right w-1/4 text-xl">
-                        12€
-                    </div>
-                </div>
-                <div class="inline-flex w-full justify-start">
-                    <div class="text-sm italic text-left ">
-                        sauce bbq - coca
-                    </div>
-                </div>
-                <div class="w-full inline-flex justify-space-between">
-                    <div class="text-left w-3/4 text-xl">
-                        2x Surprise du chef
-                    </div>
-                    <div class="text-right w-1/4 text-xl">
-                        12€
-                    </div>
+                            {% set total = total + product.getProduct().getPrice() * product.getQuantity() %}
+                    {% endfor %}
                 </div>
                 <hr class="w-5/6 mt-3">
                 <div class="w-full inline-flex justify-space-between font-bold">
@@ -65,7 +50,7 @@
                         TOTAL
                     </div>
                     <div class="text-right w-1/4 text-xl">
-                        50€
+                        {{ total }}€
                     </div>
                 </div>
                     <a href="" class="bg-toukan-blue text-white rounded-lg text-lg font-bold p-2 shadow-lg ml-4 mb-2">
