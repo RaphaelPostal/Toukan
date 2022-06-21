@@ -4,19 +4,19 @@
 
 {% block body %}
 
-    <div class="flex flex-row justify-center w-full py-4">
-        <div class="inline-flex items-center">
-            <div class="text-3xl font-bold">
+    <div class="menu-container">
+        <div class="menu">
+            <div class="in-progress">
                 Commandes en cours
             </div>
-            <a href="" class="bg-toukan text-white rounded-lg text-lg font-bold p-2 shadow-lg ml-4 mb-2">
+            <a href="" class="to-pay">
                 A régler
             </a>
         </div>
     </div>
 
-    <div class="flex flex-row justify-center w-full py-4">
-        <div class="inline-flex w-full px-2 justify-center">
+    <div class="orders-section">
+        <div class="orders-container">
             {% for order in orders %}
                 <div class="order">
                     <div class="order-table-number">
