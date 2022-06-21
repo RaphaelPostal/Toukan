@@ -30,17 +30,11 @@
 
         <main class="">
             {% if app.request.get('_route') == 'app_client_card' %}
-<<<<<<< HEAD
-                <header class="bg-cover h-96 mb-20 flex justify-center flex-col" style="background-image:url('{{asset('uploads/images/'~establishment.id~'/'~establishment.image)}}'); box-shadow: inset 0px -127px 131px -25px rgba(0,0,0,0.69);">
-                    <h1 class="text-white ml-3 w-4/6 text-5xl font-bold">{{establishment.name}}</h1>
-                    <h2 class="text-white ml-3 w-4/6 text-2xl font-bold">{{establishment.address['street']}}</h2>
-=======
                 <header class="bg-cover h-96 mb-20 flex justify-center flex-col"
                         style="background-image:url('{{ asset('assets/uploads/'~establishment.id~'/'~establishment.image) }}'); box-shadow: inset 0px -127px 131px -25px rgba(0,0,0,0.69);">
                     <h1 class="text-white ml-3 w-4/6 text-5xl font-bold">{{ establishment.name }}</h1>
                     <h2 class="text-white ml-3 w-4/6 text-2xl font-bold">{{ establishment.address['street'] }}
                         , {{ establishment.address['zipcode'] }} {{ establishment.address['city'] }}</h2>
->>>>>>> master
                     <div class="bg-light-gray" style="clip-path: ellipse(49% 20% at 50% 80%)"></div>
                     <svg class="flex mt-3 absolute top-72" viewBox="0 0 377 119" fill="none"
                          xmlns="http://www.w3.org/2000/svg">
@@ -49,12 +43,6 @@
                     </svg>
                 </header>
             {% else %}
-<<<<<<< HEAD
-                <header class="bg-cover h-40 mb-20 flex" style="background-image:url('{{asset('uploads/images/'~establishment.id~'/'~establishment.image)}}'); box-shadow: inset 0px -127px 131px -25px rgba(0,0,0,0.69);">
-                    <h1 class="text-white w-4/6 text-5xl m-3 font-bold">{{establishment.name}}</h1>
-                    <svg class="mt-3 absolute flex top-28 custom-shadow" viewBox="0 0 375 83" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M177.5 26.5C81.9 27.3 19.3333 9.16667 0 0V83H375V0C349 13.5 297 25.5 177.5 26.5Z" fill="#EDEDED"/>
-=======
                 <header class="bg-cover h-40 mb-20 flex"
                         style="background-image:url('{{ asset('assets/uploads/'~establishment.id~'/'~establishment.image) }}'); box-shadow: inset 0px -127px 131px -25px rgba(0,0,0,0.69);">
                     <h1 class="text-white w-4/6 text-5xl m-3 font-bold">{{ establishment.name }}</h1>
@@ -62,7 +50,6 @@
                          xmlns="http://www.w3.org/2000/svg">
                         <path d="M177.5 26.5C81.9 27.3 19.3333 9.16667 0 0V83H375V0C349 13.5 297 25.5 177.5 26.5Z"
                               fill="#EDEDED"/>
->>>>>>> master
                     </svg>
                 </header>
             {% endif %}
