@@ -36,10 +36,11 @@
                             </div>
                         </div>
                         <div class="inline-flex w-full justify-start">
-                        <div class="text-sm italic text-left ">
-                            {% if product.getSauce() %}• {{ product.getSauce().getTitle() }}{% endif %}
-                            {% if product.getDessert() %}• {{ product.getDessert().getTitle() }}{% endif %}
-                            {% if product.getDrink() %}• {{ product.getDrink().getTitle() }}{% endif %}
+                            <div class="text-sm italic text-left ">
+                                {% if product.getSauce() %}• {{ product.getSauce().getTitle() }}{% endif %}
+                                {% if product.getDessert() %}• {{ product.getDessert().getTitle() }}{% endif %}
+                                {% if product.getDrink() %}• {{ product.getDrink().getTitle() }}{% endif %}
+                            </div>
                         </div>
                             {% set total = total + product.getProduct().getPrice() * product.getQuantity() %}
                     {% endfor %}
@@ -52,7 +53,6 @@
                     <div class="text-right w-1/4 text-xl">
                         {{ total }}€
                     </div>
-                </div>
                     <a href="" class="bg-toukan-blue text-white rounded-lg text-lg font-bold p-2 shadow-lg ml-4 mb-2">
                         Commande servie
                     </a>
